@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "aiogramprojecttemplatev4"
+version = "0.1.0"
+description = ""
+authors = ["taimaskhanov11 <81189712+taimaskhanov11@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+loguru = "^0.6.0"
+pydantic = "^1.9.1"
+tortoise-orm = {extras = ["asyncpg"], version = "^0.19.2"}
+PyYAML = "^6.0"
+APScheduler = "^3.9.1"
+aiogram = {version = "3.0.0b3", allow-prereleases = true, extras = ["i18n"]}
+cachetools = "^5.2.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

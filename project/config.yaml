@@ -1,0 +1,10 @@
+bot:
+  token: your_token
+  admins:
+    - 000000000
+db:
+  user: postgres
+  password: postgres
+  database: crying
+  host: localhost
+  port: 5432
