@@ -1,4 +1,4 @@
-from .base import User, Channel
+from .user import User, Channel
 
 __all__ = (
     "User",

@@ -12,7 +12,7 @@ class ThrottlingMiddleware(BaseMiddleware):
     # }
     # cache = TTLCache(maxsize=10_000, ttl=10)
 
-    def __init__(self, ttl: int = 10) -> None:
+    def __init__(self, ttl: float = 10) -> None:
         self.cache = TTLCache(maxsize=10_000, ttl=ttl)
 
     async def __call__(self,

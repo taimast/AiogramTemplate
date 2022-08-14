@@ -15,7 +15,7 @@ class ChannelSubscriptionFilter(BaseFilter):
         if isinstance(message, types.CallbackQuery):
             message = message.message
 
-        if not is_subscribed_to_channel(user.id, bot, temp_data.subscription_channels):
+        if not await is_subscribed_to_channel(user.id, bot, temp_data.subscription_channels):
             await message.answer(_(f"📍 Для того, чтобы пользоваться ботом, нужно подписаться на каналы:"),
                                  reply_markup=common_markups.is_subscribed_to_channel(temp_data.subscription_channels))
             return False

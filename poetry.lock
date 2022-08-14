@@ -179,6 +179,23 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "glqiwiapi"
+version = "2.13"
+description = "The ultrarapid and multifunctional wrapper over QIWI and YooMoney"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+aiohttp = ">=3.8.0,<4.0.0"
+pydantic = ">=1.9.0,<2.0.0"
+pytz = "2022.1"
+
+[package.extras]
+fast = ["uvloop (>=0.16.0,<0.17.0)", "aiofiles (>=0.8.0,<0.9.0)"]
+docs = ["towncrier (>=21.3.0,<22.0.0)", "sphinxemoji", "sphinx-prompt (>=1.5.0,<2.0.0)", "sphinx-notfound-page", "sphinx-intl (>=2.0.1,<3.0.0)", "sphinx-copybutton (>=0.5.0,<0.6.0)", "sphinx-autobuild (>=2021.3.14,<2022.0.0)", "pymdown-extensions (>=9.4,<10.0)", "pygments (>=2.4,<3.0)", "markdown-include (>=0.6,<0.8)", "furo (>=2022.2.23,<2023.0.0)", "Sphinx-Substitution-Extensions (>=2020.9.30,<2023.0.0)", "Sphinx (>=4.2.0,<5.0.0)"]
+
+[[package]]
 name = "idna"
 version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -372,7 +389,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "dceb1f0a11215dffb8b31ed86fa7ec75fa21f3160ffae29551f769cbc526a4e1"
+content-hash = "b3e8334e10e0ce907a7498a68564bd18c0c4d74bc18e371b8700e41f06fbfc54"
 
 [metadata.files]
 aiofiles = [
@@ -552,6 +569,7 @@ frozenlist = [
     {file = "frozenlist-1.3.0-cp39-cp39-win_amd64.whl", hash = "sha256:772965f773757a6026dea111a15e6e2678fbd6216180f82a48a40b27de1ee2ab"},
     {file = "frozenlist-1.3.0.tar.gz", hash = "sha256:ce6f2ba0edb7b0c1d8976565298ad2deba6f8064d2bebb6ffce2ca896eb35b0b"},
 ]
+glqiwiapi = []
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},

@@ -18,7 +18,7 @@ async def start(message: types.Message | types.CallbackQuery, user: User, state:
     await message.answer("Стартовое меню!")
 
 
-async def check_subscribe(call: types.CallbackQuery, state: FSMContext, bot: Bot, temp_data:TempData):
+async def check_subscribe(call: types.CallbackQuery, state: FSMContext, bot: Bot, temp_data: TempData):
     await state.clear()
     if await is_subscribed_to_channel(call.from_user.id, bot, temp_data.subscription_channels):
         await call.message.answer(_("✅ Подписки найдены, введите {} чтобы продолжить").format(md.hpre("start")),

@@ -1,8 +1,11 @@
 import asyncio
+import logging
 
 from aiogram import Bot, F, Dispatcher
 from aiogram.dispatcher.fsm.storage.memory import MemoryStorage
+from aiogram.dispatcher.webhook.aiohttp_server import setup_application, SimpleRequestHandler
 from aiogram.types import BotCommand
+from aiohttp import web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from project.crying.apps.bot.handlers.admin import register_admin_handlers
@@ -34,6 +37,7 @@ async def main():
         level="TRACE",
         steaming=True,
         write=True,
+        base_logger=True,
     )
 
     # Инициализация базы данных
@@ -55,7 +59,7 @@ async def main():
 
     # Регистрация мидлварей
     dp.update.outer_middleware(BotMiddleware())
-    dp.update.outer_middleware(ThrottlingMiddleware(ttl=10))
+    dp.update.outer_middleware(ThrottlingMiddleware(ttl=0.5))
     user_middleware = UserMiddleware()
     dp.message.outer_middleware(user_middleware)
     dp.callback_query.outer_middleware(user_middleware)
@@ -83,7 +87,58 @@ async def main():
     scheduler.start()
 
     # Запуск бота
-    await dp.start_polling(bot, skip_updates=True, temp_data=temp_data)
+    try:
+        if not config.webhook:
+            logging.info("Запуск бота в обычном режиме")
+            await bot.delete_webhook()
+            await dp.start_polling(
+                bot,
+                skip_updates=True,
+                allowed_updates=dp.resolve_used_update_types(),
+                temp_data=temp_data,
+            )
+
+        else:
+            logging.info("Запуск бота в вебхук режиме")
+
+            # Выключаем логи от aiohttp
+            logging.getLogger("aiohttp").setLevel(logging.WARNING)
+
+            # Установка вебхука
+            await bot.set_webhook(
+                certificate=config.webhook.get_certfile(),
+                url=config.webhook.url,
+                drop_pending_updates=True,
+                allowed_updates=dp.resolve_used_update_types(),
+            )
+
+            # Создание запуска aiohttp
+            app = web.Application()
+            # SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path=config.webhook.path)
+            SimpleRequestHandler(dispatcher=dp, bot=bot, temp_data=temp_data).register(
+                app, path=config.webhook.path
+            )
+
+            # setup_application(app, dp, temp_data=temp_data, _=i18n.gettext)
+            setup_application(app, dp)
+
+            runner = web.AppRunner(app)
+            await runner.setup()
+
+            site = web.TCPSite(
+                runner,
+                host=config.webhook.host,
+                port=config.webhook.port,
+                ssl_context=config.webhook.get_ssl_context(),
+            )
+
+            await site.start()
+
+            # Бесконечный цикл
+            await asyncio.Event().wait()
+
+    finally:
+        await bot.session.close()
 
 
 if __name__ == "__main__":

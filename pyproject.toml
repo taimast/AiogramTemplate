@@ -13,6 +13,7 @@ PyYAML = "^6.0"
 APScheduler = "^3.9.1"
 aiogram = {version = "3.0.0b3", allow-prereleases = true, extras = ["i18n"]}
 cachetools = "^5.2.0"
+glqiwiapi = "^2.13"
 
 [tool.poetry.dev-dependencies]
 
