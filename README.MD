@@ -17,7 +17,7 @@
 ## Создание проекта
 
 - Создать новый проект с помощью `poetry new <project_name>`
-- Из папки с вашим проектом запустить скрипт `init_project.py` с полным путем к проекту
+- Из папки с вашим проектом запустить скрипт `init_project.py`
 - Например `python3 /home/user/AiogramProjectTemplateV4/init_project.py -d y -l en`
   - `d` - установка зависимостей, default = `y`
   - `l` - язык локализации
