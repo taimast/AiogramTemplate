@@ -1,6 +1,6 @@
 from aiogram import Router, types
-from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.dispatcher.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
 
 from project.crying.apps.bot.markups.admin import statistics_markups, admin_markups
 from project.crying.db.models import User

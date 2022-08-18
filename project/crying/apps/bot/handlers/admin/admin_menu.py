@@ -1,7 +1,6 @@
 from aiogram import Router, types
-from aiogram.dispatcher.fsm.context import FSMContext
-# from aiogram.dispatcher.filters
-from aiogram.dispatcher.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
 from aiogram.utils.chat_action import ChatActionSender
 
 from project.crying.apps.bot import utils

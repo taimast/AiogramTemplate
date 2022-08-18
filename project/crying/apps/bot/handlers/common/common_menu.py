@@ -1,5 +1,5 @@
 from aiogram import Router, types
-from aiogram.dispatcher.fsm.context import FSMContext
+from aiogram.fsm.context import FSMContext
 from aiogram.utils import markdown as md
 
 from project.crying.apps.bot.markups.common import common_markups

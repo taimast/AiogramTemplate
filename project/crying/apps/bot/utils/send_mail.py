@@ -1,6 +1,7 @@
 import asyncio
 import contextlib
 from enum import Enum
+from typing import Optional
 
 from aiogram import exceptions, Bot
 from aiogram import types
@@ -23,10 +24,10 @@ class MailSender(BaseModel):
     status: MailStatus = MailStatus.run
     message: types.Message
     mail: str
-    markup: types.InlineKeyboardMarkup | None
+    markup: Optional[types.InlineKeyboardMarkup]
 
-    status_markup: types.InlineKeyboardMarkup | None
-    status_message: types.Message | None
+    status_markup: Optional[types.InlineKeyboardMarkup]
+    status_message: Optional[types.Message]
 
     quantity: int = 0
     num: int = 0

@@ -2,9 +2,9 @@ import asyncio
 import logging
 
 from aiogram import Bot, F, Dispatcher
-from aiogram.dispatcher.fsm.storage.memory import MemoryStorage
-from aiogram.dispatcher.webhook.aiohttp_server import setup_application, SimpleRequestHandler
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
+from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
 from aiohttp import web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 

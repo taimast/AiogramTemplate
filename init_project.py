@@ -74,7 +74,7 @@ def set_project_name_in_files(workdir: Path, project_name: str):
 
 
 def install_dependencies():
-    aiogram_version = '"aiogram=^3.0.0b3" -E i18n --allow-prereleases'
+    aiogram_version = '"aiogram=^3.0.0b4" -E i18n --allow-prereleases'
     dependencies = "loguru pydantic tortoise-orm[asyncpg] pyyaml APScheduler cachetools"
     os.system(f"poetry add {aiogram_version}")
     os.system(f"poetry add {dependencies}")
