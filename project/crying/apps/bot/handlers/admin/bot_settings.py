@@ -2,8 +2,8 @@ import asyncio
 import random
 
 from aiogram import Router, types
-from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.dispatcher.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
 
 from project.crying.apps.bot.markups.admin import bot_settings_markups
 from project.crying.apps.bot.utils import TempData

@@ -46,8 +46,3 @@ def init_logging(level="INFO", steaming=True, write=False, base_logger=False):
             rotation="00:00",
             compression="zip",
         )
-
-
-if __name__ == "__main__":
-    init_logging(old_logger=True, level="TRACE", old_level=logging.INFO, steaming=True, write=True)
-    logger.info("hi")

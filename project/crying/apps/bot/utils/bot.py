@@ -10,7 +10,6 @@ class TempData(BaseModel):
     """ Список каналов для подписки """
     mail_sender: MailSender | None
     """ Объект для отправки писем """
-    # bot_settings: BotSettings
     bot_running: bool
     """ Флаг запуска бота """
 
@@ -19,16 +18,4 @@ class TempData(BaseModel):
 
     class Config:
         arbitrary_types_allowed = True
-
-
-class BotSettings(BaseModel):
-    running: bool
-
-    def stop(self):
-        self.running = False
-
-    def start(self):
-        self.running = True
-
-    def is_running(self):
-        return self.running
+        copy_on_model_validation = False

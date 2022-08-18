@@ -1,5 +1,5 @@
 from aiogram import types, Bot
-from aiogram.dispatcher.filters import BaseFilter
+from aiogram.filters import BaseFilter
 
 from project.crying.apps.bot.markups.common import common_markups
 from project.crying.apps.bot.middleware.language import _

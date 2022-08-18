@@ -1,6 +1,6 @@
 from aiogram import F, Router, types
-from aiogram.dispatcher.fsm.context import FSMContext
-from aiogram.dispatcher.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import StatesGroup, State
 from loguru import logger
 
 from project.crying.apps.bot.callback_data.base_callback import ChannelCallback, Action

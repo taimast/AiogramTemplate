@@ -1,6 +1,7 @@
 from enum import Enum
+from typing import Optional
 
-from aiogram.dispatcher.filters.callback_data import CallbackData
+from aiogram.filters.callback_data import CallbackData
 
 
 class Action(str, Enum):
@@ -17,5 +18,5 @@ class UserCallback(CallbackData, prefix="user"):
 
 
 class ChannelCallback(CallbackData, prefix="channel"):
-    pk: int | None
+    pk: Optional[int]
     action: str
