@@ -14,7 +14,7 @@ def start() -> ReplyKeyboardMarkup:
 def is_subscribed_to_channel(channels: list[Channel]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for num, channel in enumerate(channels, 1):
-        builder.button(text=_("Канал #{}").format(num), url=f"https://t.me/{channel.at_username}")
+        builder.button(text=_("Канал #{}").format(num), url=f"https://t.me/{channel.username}")
     builder.button(text=_("✅ Я подписался"), callback_data="check_subscribe")
     builder.adjust(1)
     return builder.as_markup()

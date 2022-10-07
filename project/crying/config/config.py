@@ -8,7 +8,7 @@ import yaml
 from aiogram.types import FSInputFile
 from pydantic import BaseModel, BaseSettings, Field, SecretStr, validator, FilePath
 from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, SecretsSettingsSource
-
+from project.crying.config.cli import cli_settings
 from project.crying.config.merchant import Qiwi, Yookassa, CryptoCloud
 
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -19,11 +19,10 @@ for DIR in [LOG_DIR, MEDIA_DIR]:
     DIR.mkdir(exist_ok=True)
 
 I18N_DOMAIN = "crying"
-LOCALES_DIR = BASE_DIR / "project/crying/apps/bot/locales"
+LOCALES_DIR = BASE_DIR / "crying/apps/bot/locales"
 TIME_ZONE = zoneinfo.ZoneInfo("Europe/Moscow")
 MODELS_DIR = "project.crying.db.models"
 
-PAYMENT_LIFETIME = 60  # minutes
 
 DEBUG = os.getenv("DEBUG")
 
@@ -114,9 +113,9 @@ class Settings(BaseSettings):
     merchants: Optional[MerchantGroup]
 
     class Config:
-        env_file = r"..\..\.env" if DEBUG else r"..\..\.env_dev"
+        env_file = r"..\..\.env" if cli_settings.is_prod else r"..\..\.env_dev"
         env_file_encoding = "utf-8"
-        config_file = "config.yaml" if DEBUG else "config_dev.yaml"
+        config_file = "config.yaml" if cli_settings.is_prod else "config_dev.yaml"
         case_sensitive = True
 
         @classmethod

@@ -1,6 +1,7 @@
 import abc
 import datetime
 import uuid
+import zoneinfo
 from abc import ABC
 from base64 import b64encode
 from functools import lru_cache
@@ -11,9 +12,10 @@ from glQiwiApi import QiwiP2PClient
 from glQiwiApi.qiwi.clients.p2p.types import Bill
 from pydantic import BaseModel, SecretStr, validator
 
-from project.crying.config import config, TIME_ZONE
-from project.crying.config.config import PAYMENT_LIFETIME
 from project.crying.config.yookassa_models import YooPayment
+
+PAYMENT_LIFETIME = 60  # minutes
+TIME_ZONE = zoneinfo.ZoneInfo("Europe/Moscow")
 
 
 class Merchant(BaseModel, ABC):
@@ -139,4 +141,4 @@ class Qiwi(Merchant):
 
     async def is_paid(self, invoice_id: str) -> bool:
         async with self.client:
-            return (await config.payment.qiwi.get_bill_status(invoice_id)) == "PAID"
+            return (await self.client.get_bill_status(invoice_id)) == "PAID"

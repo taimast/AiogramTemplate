@@ -16,7 +16,7 @@ sudo apt-get install python3.10-distutils -y
 sudo apt-get install python3.8-distutils -y
 sudo apt-get install python-dev-tools -y
 sudo apt-get install python3-dev -y
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3.10 -
+curl -sSL https://install.python-poetry.org | python3 -
 poetry install --no-dev
 sudo apt --fix-broken install -y
 sudo apt-get install build-essential

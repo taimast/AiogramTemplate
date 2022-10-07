@@ -10,7 +10,7 @@ class Channel(Model):
 
     @property
     def at_username(self):
-        return self.username[1:]
+        return f"@{self.username}"
 
 
 class TimestampMixin:

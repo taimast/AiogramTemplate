@@ -7,7 +7,7 @@ from tortoise import fields, models
 from tortoise.transactions import atomic
 
 from project.crying.config import config, TIME_ZONE
-from project.crying.config.config import PAYMENT_LIFETIME
+from project.crying.config.merchant import PAYMENT_LIFETIME
 from project.crying.config.yookassa_models import YooPayment
 from .base import TimestampMixin
 from .subscription import SubscriptionTemplate
