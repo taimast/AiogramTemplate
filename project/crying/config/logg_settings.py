@@ -24,12 +24,12 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=depth, exception=record.exc_info).log(level, record.getMessage())
 
 
-def init_logging(level="INFO", steaming=True, write=False, base_logger=False):
+def init_logging(level="INFO", stream=True, write=False, base_logger=False):
     logger.remove()
     if base_logger:
         logging.basicConfig(handlers=[InterceptHandler()], level=0)
 
-    if steaming:
+    if stream:
         logger.add(
             sink=sys.stdout,
             level=level,
