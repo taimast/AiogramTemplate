@@ -15,6 +15,7 @@ from project.crying.apps.bot.middleware import BotMiddleware, ThrottlingMiddlewa
 from project.crying.apps.bot.middleware.language import language_middleware
 from project.crying.apps.bot.utils import add_me
 from project.crying.apps.bot.utils.bot import TempData
+from project.crying.config.cli import cli_settings
 from project.crying.config.config import config
 from project.crying.config.logg_settings import init_logging
 from project.crying.db import init_db
@@ -33,12 +34,7 @@ async def set_commands(bot: Bot):
 
 async def main():
     # Настройка логирования
-    init_logging(
-        level="TRACE",
-        steaming=True,
-        write=True,
-        base_logger=True,
-    )
+    init_logging(**cli_settings.log.dict())
 
     # Инициализация базы данных
     await init_db()
