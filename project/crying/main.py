@@ -37,7 +37,7 @@ async def main():
     config = Settings()
     pprint(cli_settings.dict())
     init_logging(cli_settings.log)
-    pprint(config.dict())
+    pprint(config)
     return
     # Инициализация базы данных
     await init_db(config.db)

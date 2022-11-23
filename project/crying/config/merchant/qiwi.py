@@ -5,10 +5,10 @@ from glQiwiApi import QiwiP2PClient
 from glQiwiApi.qiwi.clients.p2p.types import Bill
 from pydantic import validator
 
-from .base import BaseMerchant, PAYMENT_LIFETIME, TIME_ZONE
+from .base import Merchant, PAYMENT_LIFETIME, TIME_ZONE
 
 
-class Qiwi(BaseMerchant):
+class Qiwi(Merchant):
     client: Optional[QiwiP2PClient]
 
     class Config:

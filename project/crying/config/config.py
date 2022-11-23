@@ -1,12 +1,13 @@
 import zoneinfo
 from pathlib import Path
+from pprint import pprint
 from typing import Optional, Any, Callable
 
 import yaml
 from pydantic import BaseModel, BaseSettings, Field, SecretStr, root_validator
 from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, SecretsSettingsSource
 
-from .merchant.base import BaseMerchant, Merchant
+from .merchant.base import Merchant
 from .webhook import Webhook
 
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -55,20 +56,20 @@ class MerchantGroup(BaseModel):
     yookassa: Optional[Merchant]
     crypto_cloud: Optional[Merchant]
 
-    @root_validator()
+    @root_validator(pre=True)
     def validate_merchants(cls, values):
         try:
             if qiwi := values.get("qiwi"):
                 from .merchant.qiwi import Qiwi
-                values["qiwi"] = Qiwi(**qiwi.dict())
+                values["qiwi"] = Qiwi(**qiwi)
             if yookassa := values.get("yookassa"):
                 from .merchant.yookassa import Yookassa
-                values["yookassa"] = Yookassa(**yookassa.dict())
+                values["yookassa"] = Yookassa(**yookassa)
             if crypto_cloud := values.get("crypto_cloud"):
                 from .merchant.crypto_cloud import CryptoCloud
-                values["crypto_cloud"] = CryptoCloud(**crypto_cloud.dict())
+                values["crypto_cloud"] = CryptoCloud(**crypto_cloud)
         except ImportError as e:
-            raise ImportError(f"Can't import merchant: {e}")
+            raise ImportError(f"Don't forget to install extra requirements for merchant: {e.name}")
         return values
 
 

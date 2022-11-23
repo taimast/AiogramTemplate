@@ -6,7 +6,7 @@ from functools import lru_cache
 import aiohttp
 from pydantic import BaseModel
 
-from .base import BaseMerchant
+from .base import Merchant
 
 
 class Confirmation(BaseModel):
@@ -32,7 +32,7 @@ class YooPayment(BaseModel):
         return self.paid
 
 
-class Yookassa(BaseMerchant):
+class Yookassa(Merchant):
     create_url: str = "https://api.yookassa.ru/v3/payments"
 
     @property

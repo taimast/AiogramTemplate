@@ -14,7 +14,7 @@ TIME_ZONE = zoneinfo.ZoneInfo("Europe/Moscow")
 # класс с методами для работы с мерчантами
 
 
-class BaseMerchant(BaseModel, ABC):
+class Merchant(BaseModel, ABC):
     shop_id: Optional[str]
     api_key: SecretStr
     create_url: Optional[str] = None
@@ -28,11 +28,3 @@ class BaseMerchant(BaseModel, ABC):
     async def is_paid(self, invoice_id: str) -> bool:
         pass
 
-
-class Merchant(BaseMerchant):
-
-    async def create_invoice(self, amount: int | float | str) -> Any:
-        pass
-
-    async def is_paid(self, invoice_id: str) -> bool:
-        pass
