@@ -1,7 +1,7 @@
-from .base import Channel
+from .base import ChannelForSubscription
 from .user import User
 
 __all__ = (
     "User",
-    "Channel",
+    "ChannelForSubscription"
 )

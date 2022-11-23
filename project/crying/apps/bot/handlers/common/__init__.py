@@ -2,6 +2,7 @@ from aiogram import Dispatcher, Router
 
 from .common_menu import register_common
 
+
 router = Router()
 
 

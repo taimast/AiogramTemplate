@@ -8,11 +8,9 @@ from .config import (
     TIME_ZONE,
     Bot,
     Database,
-    config,
 )
 
 __all__ = (
-    'config',
     'Bot',
     'Database',
     'BASE_DIR',
