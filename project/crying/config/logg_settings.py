@@ -41,7 +41,10 @@ class Format:
                    "<fg 136,136,198>[{line:>4}]</fg 136,136,198> <r>|</r> "
                    "<fg 255,198,109>{module}</fg 255,198,109> - "
                    "<lvl>{message}</lvl>")
-    default: str = "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+    default: str = ("<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | "
+                    "<level>{level: <8}</level> | "
+                    "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
+                    "<level>{message}</level>")
     # default: str = None
 
 
@@ -69,7 +72,7 @@ def init_logging(log_settings: LogSettings):
         logging.basicConfig(handlers=[InterceptHandler()], level=0)
 
     handlers = []
-    if log_settings.stdout:
+    if log_settings.stdout is not None:
         handlers.append(dict(
             sink=sys.stderr,
             level=log_settings.stdout,
@@ -78,7 +81,7 @@ def init_logging(log_settings: LogSettings):
             backtrace=True,
             diagnose=True,
         ))
-    if log_settings.file:
+    if log_settings.file is not None:
         handlers.append(dict(
             sink=Path(LOG_DIR) / log_settings.file_name,
             level=log_settings.file,
