@@ -7,7 +7,7 @@ from project.crying.db.models import User
 router = Router()
 
 
-async def start(message: types.Message | types.CallbackQuery, user: User, state: FSMContext):
+async def start(message: types.Message | types.CallbackQuery, state: FSMContext):
     await state.clear()
     if isinstance(message, types.CallbackQuery):
         message = message.message
@@ -20,5 +20,6 @@ def register_common(dp: Router):
     callback = router.callback_query.register
     message = router.message.register
 
+    # message(start,  StateFilter("*"))
     message(start, Command(commands="start"), StateFilter("*"))
     callback(start, Text("start"), StateFilter("*"))

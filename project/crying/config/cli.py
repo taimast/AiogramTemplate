@@ -7,7 +7,7 @@ from loguru import logger
 from pydantic import BaseModel
 
 from project.crying.config.config import Settings
-from project.crying.config.logg_settings import LogSettings
+from project.crying.config.logg_settings import LogSettings, Level
 
 
 class Mode(str, Enum):
@@ -38,6 +38,7 @@ class CLIArgsSettings(BaseModel):
 
         if args_settings.mode is Mode.PROD:
             args_settings.log.stdout = None
+            args_settings.log.file = Level.INFO
             args_settings.config_file = args_settings.config_file or "config.yaml"
             args_settings.env_file = args_settings.env_file or r"..\..\.env"
         else:
