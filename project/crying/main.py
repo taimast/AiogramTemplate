@@ -52,13 +52,14 @@ def register_middlewares(dp: Dispatcher):
     # dp.callback_query.middleware(language_middleware)
 
 
-def init_scheduler():
-    # todo L1 24.11.2022 0:44 taima: Add register jobs function
-    """Инициализация планировщика задач"""
-    scheduler = AsyncIOScheduler(timezone="Europe/Moscow")
+# Initializing and start Scheduler function
+async def start_scheduler():
+    """Инициализация и запуск планировщика задач."""
+    # Инициализация планировщика
+    scheduler = AsyncIOScheduler()
 
-    # Создание фоновых задач
-    scheduler.add_job(making_backup, "interval", hours=1)
+    # Создание бекапа базы данных
+    scheduler.add_job(making_backup, 'cron', hour=0, minute=0)
 
     # Запуск планировщика
     scheduler.start()
@@ -134,8 +135,8 @@ async def main():
     # Регистрация мидлварей
     register_middlewares(dp)
 
-    # Инициализация планировщика задач
-    init_scheduler()
+    # Запуск планировщика
+    await start_scheduler()
 
     # Установка команд бота
     await set_commands(bot)
