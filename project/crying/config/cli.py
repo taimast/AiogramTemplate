@@ -23,22 +23,6 @@ class CLIArgsSettings(BaseModel):
     config_file: str | None
     env_file: str | None
 
-    @classmethod
-    def add_log_group(cls, parser):
-        log_subparser = parser.add_argument_group("log", "Log settings")
-        log_subparser.add_argument("-ll", "--log-level", type=str, default="INFO", help="Log level")
-        log_subparser.add_argument("-ls", "--log-stream", action="store_true", help="Log to stream")
-        log_subparser.add_argument("-lw", "--log-write", action="store_true", help="Log to file")
-        log_subparser.add_argument("-lb", "--log-base-logger", action="store_true", help="Log to base logger")
-        return log_subparser
-
-    @classmethod
-    def add_log_subparser(cls, parser: argparse.ArgumentParser):
-        log_subparser = parser.add_subparsers(title="log", description="Log settings", dest="log")
-        new_parser = log_subparser.add_parser("log", help="Log settings")
-        new_parser.add_argument("-ll", "--log-level", type=str, default="INFO", help="Log level")
-        new_parser.add_argument("-ls", "--log-stream", action="store_true", help="Log to stream")
-        return log_subparser
 
     @classmethod
     def parse_args(cls) -> 'CLIArgsSettings':
@@ -67,6 +51,3 @@ class CLIArgsSettings(BaseModel):
         settings_cls.__config__.config_file = self.config_file
         settings_cls.__config__.env_file = self.env_file
 
-    @property
-    def is_prod(self) -> bool:
-        return self.mode is Mode.PROD

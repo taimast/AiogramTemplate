@@ -1,6 +1,5 @@
 import zoneinfo
 from pathlib import Path
-from pprint import pprint
 from typing import Optional, Any, Callable
 
 import yaml
@@ -26,7 +25,6 @@ MODELS_DIR = "project.crying.db.models"
 def load_yaml(file: str | Path) -> dict[str, Any] | list[Any]:
     with open(BASE_DIR / file, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
-
 
 
 class Bot(BaseModel):
@@ -75,8 +73,8 @@ class MerchantGroup(BaseModel):
 
 class Settings(BaseSettings):
     bot: Bot
-    webhook: Optional[Webhook]
     db: Database
+    webhook: Optional[Webhook]
     merchant: Optional[MerchantGroup]
 
     class Config:
