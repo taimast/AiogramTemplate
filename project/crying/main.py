@@ -17,7 +17,7 @@ from project.crying.apps.bot.middleware.language import language_middleware
 from project.crying.config.cli import CLIArgsSettings
 from project.crying.config.config import Settings
 from project.crying.config.logg_settings import init_logging
-from project.crying.db import init_db
+from project.crying.db import init_db, close_db
 from project.crying.db.utils.backup import making_backup
 
 
@@ -35,10 +35,8 @@ async def main():
     cli_settings = CLIArgsSettings.parse_args()
     cli_settings.update_settings(Settings)
     config = Settings()
-    pprint(cli_settings.dict())
     init_logging(cli_settings.log)
-    pprint(config)
-    return
+
     # Инициализация базы данных
     await init_db(config.db)
 
@@ -46,6 +44,7 @@ async def main():
     bot = Bot(token=config.bot.token.get_secret_value(), parse_mode="html")
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
+    dp.workflow_data.update(config=config)
 
     # Настройка фильтра только для приватных сообщений
     dp.message.filter(F.chat.type == "private")
@@ -104,11 +103,10 @@ async def main():
 
             # Создание запуска aiohttp
             app = web.Application()
-            # SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path=config.webhook.path)
             SimpleRequestHandler(dispatcher=dp, bot=bot).register(
                 app, path=config.webhook.path
             )
-            # setup_application(app, dp, temp_data=temp_data, _=i18n.gettext)
+
             setup_application(app, dp)
 
             runner = web.AppRunner(app)
@@ -126,10 +124,10 @@ async def main():
             # Бесконечный цикл
             await asyncio.Event().wait()
             # todo L1 09.11.2022 1:32 taima: убрать этот костыль
-
     finally:
         await bot.session.close()
-
+        await dp.storage.close()
+        await close_db()
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,17 +1,21 @@
 from asyncpg import ConnectionDoesNotExistError
 from loguru import logger
 from tortoise import Tortoise
+from tortoise.exceptions import DBConnectionError
+
+from project.crying.config import Database, MODELS_DIR, TIME_ZONE
 
 __all__ = (
     "init_db",
+    "close_db",
     "models",
     "utils"
 )
 
-from tortoise.exceptions import DBConnectionError
 
-from project.crying.config import Database, config, MODELS_DIR, TIME_ZONE
-
+async def close_db():
+    await Tortoise.close_connections()
+    logger.info(f"Database closed")
 
 async def init_db(db: Database):
     logger.debug(f"Initializing Database {db.database}[{db.host}]...")
