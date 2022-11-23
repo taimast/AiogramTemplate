@@ -29,7 +29,7 @@ class Level(str, Enum):
 
 class LogSettings(BaseModel):
     stdout: Level | None = Level.INFO
-    file: Level | None = Level.INFO
+    file: Level | None = None
     file_name: str = "crying.log"
     redirect_base_logger: bool = True
 

@@ -1,6 +1,7 @@
 from typing import Callable, Any, Awaitable
 
 from aiogram import BaseMiddleware
+from aiogram.dispatcher.event.handler import CallableMixin
 from aiogram.types import Message, CallbackQuery
 from loguru import logger
 
@@ -15,6 +16,8 @@ class UserMiddleware(BaseMiddleware):
             event: Message | CallbackQuery,
             data: dict[str, Any]
     ) -> Any:
+
+        logger.info(dir(handler))
         user = event.from_user
         logger.debug(f"Get user for User {user.id}")
         user, is_new = await User.get_or_create(
