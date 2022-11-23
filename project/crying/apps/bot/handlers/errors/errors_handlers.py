@@ -1,14 +1,16 @@
 import sys
 
 from aiogram import Dispatcher, Router
-from aiogram.exceptions import TelegramBadRequest
+from aiogram.exceptions import TelegramBadRequest, TelegramAPIError
+from aiogram.types.error_event import ErrorEvent
 from loguru import logger
 
 router = Router()
 
 
-async def error_handler(update, exception: TelegramBadRequest):
-    if isinstance(exception, TelegramBadRequest):
+async def error_handler(update: ErrorEvent):
+    exception = update.exception
+    if isinstance(exception, (TelegramBadRequest, TelegramAPIError)):
         _type, _, tb = sys.exc_info()
         logger.opt(exception=(_type, None, tb)).error("An error occurred")
         return True

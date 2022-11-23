@@ -40,7 +40,8 @@ def get_project_dir(project_path):
                                                "templates",
                                                "venv",
                                                "__pycache__",
-                                               "backup"):
+                                               "backup",
+                                               ".git"):
             return item
 
 
@@ -74,10 +75,11 @@ def set_project_name_in_files(workdir: Path, project_name: str):
 
 
 def install_dependencies():
-    aiogram_version = '"aiogram=^3.0.0b5" -E i18n --allow-prereleases'
-    dependencies = "loguru pydantic tortoise-orm[asyncpg] pyyaml APScheduler cachetools"
+    aiogram_version = 'aiogram@latest -E i18n --allow-prereleases'
+    dependencies = "loguru pydantic tortoise-orm[asyncpg] pyyaml APScheduler cachetools glQiwiApi apscheduler"
     os.system(f"poetry add {aiogram_version}")
     os.system(f"poetry add {dependencies}")
+    os.system(f"poetry add git+https://github.com/taimast/aiogram-admin.git")
 
 
 def init_localize(project_name: str, localization: str):

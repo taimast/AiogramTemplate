@@ -1,6 +1,8 @@
 import datetime
 import typing
 
+from tortoise import fields
+
 from project.crying.config import TIME_ZONE
 from project.crying.db.models.base import AbstractUser
 
@@ -10,6 +12,7 @@ if typing.TYPE_CHECKING:
 
 class User(AbstractUser):
     subscription: "Subscription"
+    locale = fields.CharField(5, null=True)
 
     @classmethod
     async def count_all(cls) -> int:

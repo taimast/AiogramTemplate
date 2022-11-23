@@ -21,3 +21,6 @@
 - Например `python3 /home/user/AiogramProjectTemplateV4/init_project.py -d y -l en`
   - `d` - установка зависимостей, default = `y`
   - `l` - язык локализации
+
+# ceft create
+`openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`

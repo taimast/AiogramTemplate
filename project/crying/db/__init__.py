@@ -1,4 +1,4 @@
-import asyncpg
+from asyncpg import ConnectionDoesNotExistError
 from loguru import logger
 from tortoise import Tortoise
 
@@ -8,7 +8,9 @@ __all__ = (
     "utils"
 )
 
-from project.crying.config import Database, config, MODELS_DIR
+from tortoise.exceptions import DBConnectionError
+
+from project.crying.config import Database, config, MODELS_DIR, TIME_ZONE
 
 
 async def init_db(db: Database = config.db):
@@ -16,11 +18,12 @@ async def init_db(db: Database = config.db):
     data = {
         "db_url": db.url,
         "modules": {"models": [MODELS_DIR]},
+        "timezone": str(TIME_ZONE),
     }
     try:
         await Tortoise.init(**data)
         await Tortoise.generate_schemas()
-    except asyncpg.exceptions.ConnectionDoesNotExistError as e:
+    except (ConnectionDoesNotExistError, DBConnectionError) as e:
         logger.warning(e)
         logger.info("Creating a new database ...")
         await Tortoise.init(**data, _create_db=True)
