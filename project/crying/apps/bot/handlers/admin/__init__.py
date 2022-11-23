@@ -1,6 +1,6 @@
 from aiogram import Dispatcher, Router, F
 
-from project.crying.config.config import config
+
 from .admin_menu import register_admin
 
 router = Router()

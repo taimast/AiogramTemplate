@@ -11,12 +11,17 @@ tortoise-orm = {extras = ["asyncpg"], version = "^0.19.2"}
 PyYAML = "^6.0"
 APScheduler = "^3.9.1"
 cachetools = "^5.2.0"
-glqiwiapi = "^2.16"
 pydantic = "^1.10.2"
 aiogram = {version = "^3.0.0b5", allow-prereleases = true, extras = ["i18n"]}
+glqiwiapi = {version = "^2.18.2", optional = true}
+
+
 
 
 [tool.poetry.dev-dependencies]
+
+[tool.poetry.extras]
+qiwi = ["glqiwiapi"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

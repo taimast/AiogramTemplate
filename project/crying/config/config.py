@@ -3,9 +3,10 @@ from pathlib import Path
 from typing import Optional, Any, Callable
 
 import yaml
-from pydantic import BaseModel, BaseSettings, Field, SecretStr
+from pydantic import BaseModel, BaseSettings, Field, SecretStr, root_validator
 from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, SecretsSettingsSource
 
+from .merchant.base import BaseMerchant, Merchant
 from .webhook import Webhook
 
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -25,9 +26,6 @@ def load_yaml(file: str | Path) -> dict[str, Any] | list[Any]:
     with open(BASE_DIR / file, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
-
-def yaml_settings(settings: BaseSettings) -> dict:
-    return load_yaml(settings.__config__.config_file)
 
 
 class Bot(BaseModel):
@@ -51,18 +49,34 @@ class Database(BaseModel):
                 f"/{self.database}")
 
 
-# class MerchantGroup(BaseModel):
-#     qiwi: Optional[Qiwi]
-#     yookassa: Optional[Yookassa]
-#     crypto_cloud: Optional[CryptoCloud]
+# todo L1 23.11.2022 5:27 taima: Подумать что делать с этим
+class MerchantGroup(BaseModel):
+    qiwi: Optional[Merchant]
+    yookassa: Optional[Merchant]
+    crypto_cloud: Optional[Merchant]
+
+    @root_validator()
+    def validate_merchants(cls, values):
+        try:
+            if qiwi := values.get("qiwi"):
+                from .merchant.qiwi import Qiwi
+                values["qiwi"] = Qiwi(**qiwi.dict())
+            if yookassa := values.get("yookassa"):
+                from .merchant.yookassa import Yookassa
+                values["yookassa"] = Yookassa(**yookassa.dict())
+            if crypto_cloud := values.get("crypto_cloud"):
+                from .merchant.crypto_cloud import CryptoCloud
+                values["crypto_cloud"] = CryptoCloud(**crypto_cloud.dict())
+        except ImportError as e:
+            raise ImportError(f"Can't import merchant: {e}")
+        return values
 
 
 class Settings(BaseSettings):
     bot: Bot
     webhook: Optional[Webhook]
     db: Database
-
-    # merchants: Optional[MerchantGroup]
+    merchant: Optional[MerchantGroup]
 
     class Config:
         env_file = r"..\..\.env"

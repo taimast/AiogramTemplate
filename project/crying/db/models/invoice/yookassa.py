@@ -1,7 +1,7 @@
 from loguru import logger
 from tortoise import fields
 
-from project.crying.config import config
+
 from project.crying.config.merchant.yookassa import YooPayment
 from project.crying.db.models import User
 from project.crying.db.models.subscription import SubscriptionTemplate

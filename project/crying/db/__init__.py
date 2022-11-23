@@ -13,7 +13,7 @@ from tortoise.exceptions import DBConnectionError
 from project.crying.config import Database, config, MODELS_DIR, TIME_ZONE
 
 
-async def init_db(db: Database = config.db):
+async def init_db(db: Database):
     logger.debug(f"Initializing Database {db.database}[{db.host}]...")
     data = {
         "db_url": db.url,

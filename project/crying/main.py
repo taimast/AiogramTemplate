@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from pprint import pprint
 
 from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -34,17 +35,17 @@ async def main():
     cli_settings = CLIArgsSettings.parse_args()
     cli_settings.update_settings(Settings)
     config = Settings()
-
+    pprint(cli_settings.dict())
     init_logging(cli_settings.log)
-
+    pprint(config.dict())
+    return
     # Инициализация базы данных
-    await init_db()
+    await init_db(config.db)
 
     # Инициализация бота
     bot = Bot(token=config.bot.token.get_secret_value(), parse_mode="html")
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
-
 
     # Настройка фильтра только для приватных сообщений
     dp.message.filter(F.chat.type == "private")

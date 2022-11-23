@@ -1,7 +1,7 @@
 from loguru import logger
 from tortoise import fields
 
-from project.crying.config import config
+
 from .base import AbstractInvoice
 
 
