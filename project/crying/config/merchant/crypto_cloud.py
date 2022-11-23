@@ -3,10 +3,10 @@ import datetime
 import aiohttp
 from loguru import logger
 
-from .base import BaseMerchant, TIME_ZONE, PAYMENT_LIFETIME
+from .base import Merchant, TIME_ZONE, PAYMENT_LIFETIME
 
 
-class CryptoCloud(BaseMerchant):
+class CryptoCloud(Merchant):
     create_url: str = "https://api.cryptocloud.plus/v1/invoice/create"
     status_url: str = "https://api.cryptocloud.plus/v1/invoice/info"
     id_prefix = "INV-"
