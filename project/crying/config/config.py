@@ -1,5 +1,6 @@
 import zoneinfo
 from pathlib import Path
+from pprint import pprint
 from typing import Optional, Any, Callable
 
 import yaml
@@ -68,6 +69,7 @@ class MerchantGroup(BaseModel):
                 values["crypto_cloud"] = CryptoCloud(**crypto_cloud)
         except ImportError as e:
             raise ImportError(f"Don't forget to install extra requirements for merchant: {e.name}")
+        pprint(values)
         return values
 
 

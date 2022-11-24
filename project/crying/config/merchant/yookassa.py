@@ -1,17 +1,13 @@
+import asyncio
 import datetime
 import uuid
 from base64 import b64encode
-from functools import lru_cache
+from pprint import pprint
+from typing import Optional
 
-import aiohttp
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from .base import Merchant
-
-
-class Confirmation(BaseModel):
-    confirmation_url: str
-    type: str
 
 
 class Amount(BaseModel):
@@ -19,12 +15,31 @@ class Amount(BaseModel):
     value: float
 
 
-class YooPayment(BaseModel):
-    id: uuid.UUID
+class Confirmation(BaseModel):
+    confirmation_url: Optional[str]
+    return_url: Optional[str]
+    type: str = "redirect"
+
+
+class YooPaymentRequest(BaseModel):
     amount: Amount
-    description: str
+    description: str | None
+    confirmation: Confirmation
+    capture: bool = True
+
+    # необязательный expire_at. Не указано в документации, но в примере указано
+    # "expires_at": str(datetime.datetime.now(TIME_ZONE) + datetime.timedelta(minutes=15))
+
+    @validator("description", always=True)
+    def description_validator(cls, v, values):
+        if not v:
+            v = f"Product {values.get('amount')}"
+        return v
+
+
+class YooPayment(YooPaymentRequest):
+    id: uuid.UUID
     created_at: datetime.datetime
-    confirmation: Confirmation | None
     paid: bool
     status: str
 
@@ -36,9 +51,8 @@ class Yookassa(Merchant):
     create_url: str = "https://api.yookassa.ru/v3/payments"
 
     @property
-    @lru_cache
     def headers(self) -> dict:
-        user_and_pass = b64encode(f"{self.shop_id}:{self.api_key}".encode()).decode("ascii")
+        user_and_pass = b64encode(f"{self.shop_id}:{self.api_key.get_secret_value()}".encode()).decode("ascii")
         return {
             "Authorization": f"Basic {user_and_pass}",
             "Content-type": "application/json",
@@ -51,28 +65,33 @@ class Yookassa(Merchant):
             currency: str = "RUB",
             return_url: str = f"https://t.me/"  # todo L2 14.08.2022 19:02 taima: прописать url
     ) -> "YooPayment":
-        data = {
-            "amount": {"value": amount, "currency": currency},
-            "confirmation": {"type": "redirect", "return_url": return_url},
-            "capture": True,
-            "description": description or "Product {amount} {currency}",
-            # "expires_at": str(datetime.datetime.now(tz) + datetime.timedelta(minutes=15))
-        }
-        async with aiohttp.ClientSession(headers=self.headers | {"Idempotence-Key": str(uuid.uuid4())}) as session:
-            async with session.post(self.create_url, json=data) as response:
-                return YooPayment.parse_obj(await response.json())
+        """ Создание платежа """
+
+        data = YooPaymentRequest(
+            amount=Amount(currency=currency, value=amount),
+            confirmation=Confirmation(return_url=return_url),
+            description=description,
+        )
+        # todo L1 24.11.2022 17:07 taima: Может быт ошибка, если не указать Idempotence-Key
+        #  Idempotence-Key получает и кеша и может быть не уникальным
+        #  https://yookassa.ru/developers/api?identifier=payments#idempotence
+        idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}
+        response = await self.make_request("POST", self.create_url, json=data.dict(), headers=idempotence_key)
+        pprint(response)
+        return YooPayment(**response)
 
     async def is_paid(self, invoice_id: uuid.UUID) -> bool:
-        return (await self.get_invoice(invoice_id)).is_paid()
+        """ Проверка статуса платежа """
+        obj = await self.get_invoice(invoice_id)
+        return obj.paid
 
     async def get_invoice(self, invoice_id: uuid.UUID) -> "YooPayment":
-        async with aiohttp.ClientSession(headers=self.headers) as session:
-            async with session.get(f"{self.create_url}/{invoice_id}") as response:
-                res = await response.json()
-                return YooPayment.parse_obj(res)
+        """ Получение информации о платеже """
+        res = await self.make_request("GET", f"{self.create_url}/{invoice_id}")
+        return YooPayment.parse_obj(res)
 
     async def cancel(self, bill_id: uuid.UUID) -> "YooPayment":
-        async with aiohttp.ClientSession(headers=self.headers | {"Idempotence-Key": str(uuid.uuid4())}) as session:
-            async with session.post(f"{self.create_url}/{bill_id}/cancel", json={}) as response:
-                res = await response.json()
-                return YooPayment.parse_obj(res)
+        """ Отмена платежа """
+        idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}
+        res = await self.make_request("POST", f"{self.create_url}/{bill_id}/cancel", headers=idempotence_key)
+        return YooPayment.parse_obj(res)

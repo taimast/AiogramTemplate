@@ -8,6 +8,8 @@ from pydantic import validator
 from .base import Merchant, PAYMENT_LIFETIME, TIME_ZONE
 
 
+# todo L1 24.11.2022 18:29 taima: Использовать кастомную платежную систему вместо модуля glQiwiApi
+#  Каждый раз открывается и закрывается сессия, что не есть хорошо
 class Qiwi(Merchant):
     client: Optional[QiwiP2PClient]
 
