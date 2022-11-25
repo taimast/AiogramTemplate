@@ -1,5 +1,4 @@
 import asyncio
-from asyncio import TaskGroup
 from enum import Enum
 from pprint import pprint
 
@@ -7,7 +6,9 @@ from loguru import logger
 from pydantic import BaseModel
 
 from project.crying.config.logg_settings import init_logging
-from project.crying.config.merchant.crypto_cloud import CryptoCloud, CryptoInvoiceRequest
+from project.crying.config.merchant.crypto_cloud import CryptoCloud, CryptoPaymentRequest, \
+    Currency
+from project.crying.config.merchant.qiwi import Qiwi
 from project.crying.config.merchant.yookassa import Yookassa
 
 
@@ -57,13 +58,13 @@ async def main4():
     c = CryptoInvoiceRequest(amount=1, currency="RUB",  order_id="1234")
     pprint(c.dict())
     # await c.close_session()
-async def main3():
+async def yookassa_probe():
     # c = Yookassa(shop_id="SrL65kqO7lp3bhCt",
     #                 api_key="***REMOVED***")
-    # c = Yookassa(shop_id="878719",
-    #             api_key="***REMOVED***")
-    c = Yookassa(shop_id="886879",
+    c = Yookassa(shop_id="878719",
                 api_key="***REMOVED***")
+    # c = Yookassa(shop_id="886879",
+    #             api_key="***REMOVED***")
     # c = Yookassa(shop_id="886927",
     #             api_key="***REMOVED***")
 
@@ -73,7 +74,7 @@ async def main3():
     # res = await c.create_invoice(amount=1, currency="RUB", order_id="1234")
 
     tasks = []
-    for i in range(10):
+    for i in range(1):
         tasks.append(c.create_invoice(amount=1, currency="RUB"))
             # await tg.spawn(c2.create_invoice, amount=1, currency="RUB", order_id="1234")
     invoices = await asyncio.gather(*tasks)
@@ -85,7 +86,7 @@ async def main3():
     # return
     while True:
         for i in invoices:
-            pprint(await c.get_invoice(i.id))
+            pprint((await c.get_invoice(i.id)))
         await asyncio.sleep(2)
     # c = CryptoInvoiceRequest(amount=1, currency="RUB",  order_id="1234")
     # pprint(c.dict())
@@ -95,10 +96,30 @@ async def main3():
 async def main5():
     c = CryptoCloud(shop_id="SrL65kqO7lp3bhCt",
                     api_key="***REMOVED***")
-    res =  await c.create_invoice(amount=1, currency="RUB", order_id="1234")
+    res = await c.create_invoice(amount=1, currency="RUB", order_id="1234")
     pprint(res)
 
 
+async def qiwi_probe():
+    # 48e7qUxn9T7RyYE1MVZswX1FRSbE6iyCj2gCRwwF3Dnh5XrasNTx3BGPiMsyXQFNKQhvukniQG8RTVhYm3iPwJr3mhe3Tk4LfuV6eMPynhSEXDtnKErDTvnvRVXhPo41457rgSWZxhGVe3fRMMfLvEhwwW4vFMab63heBMpThiaeWnokBgqFsZ6raGTGi
+    c = Qiwi(shop_id="SrL65kqO7lp3bhCt",
+             api_key="eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6InM5MW5lZi0wMCIsInVzZXJfaWQiOiI3OTg5NDc3NzgxNyIsInNlY3JldCI6ImRlYjM2Yjk5NTJkYzgzNGVhZmYzNDA3ODczYWE2ZTFmY2M4ZjRlOTE1NDJjMjdhMzdiOWI0ZDUzMDE1MDRjNTYifX0=")
+    res = await c.create_invoice(amount=1, order_id="1234")
+    while True:
+        pprint(await c.is_paid(res.id))
+        await asyncio.sleep(2)
+    pprint(res)
+
+async def crypto_cloud_probe():
+    c = CryptoCloud(shop_id="SrL65kqO7lp3bhCt",
+                    api_key="***REMOVED***")
+    res = await c.create_invoice(amount=1, currency="RUB", order_id="1234")
+    pprint(res)
+
+    while True:
+        pprint(await c.is_paid(res.invoice_id))
+        await asyncio.sleep(2)
+
 if __name__ == '__main__':
     # main2()
-    asyncio.run(main3())
+    asyncio.run(crypto_cloud_probe())

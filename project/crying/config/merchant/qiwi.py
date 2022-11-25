@@ -19,7 +19,8 @@ class Qiwi(Merchant):
     @validator("client", always=True)
     def client_validator(cls, v, values):
         if not v:
-            v = QiwiP2PClient(secret_p2p=values.get("api_key"))
+            api_key = values.get("api_key")
+            v = QiwiP2PClient(secret_p2p=api_key.get_secret_value())
         return v
 
     async def create_invoice(
@@ -29,13 +30,11 @@ class Qiwi(Merchant):
             order_id: str = None,
             email: str = None,
     ) -> Bill:
-        async with self.client:
-            return await self.client.create_p2p_bill(
-                amount=amount,
-                comment=description or f"Product {amount}",
-                expire_at=datetime.datetime.now(TIME_ZONE) + datetime.timedelta(seconds=PAYMENT_LIFETIME),
-            )
+        return await self.client.create_p2p_bill(
+            amount=amount,
+            comment=description or f"Product {amount}",
+            expire_at=datetime.datetime.now(TIME_ZONE) + datetime.timedelta(seconds=PAYMENT_LIFETIME),
+        )
 
     async def is_paid(self, invoice_id: str) -> bool:
-        async with self.client:
-            return (await self.client.get_bill_status(invoice_id)) == "PAID"
+        return (await self.client.get_bill_status(invoice_id)) == "PAID"

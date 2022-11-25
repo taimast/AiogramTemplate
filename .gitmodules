@@ -1,0 +1,3 @@
+[submodule "aiogram-admin"]
+	path = aiogram-admin
+	url = https://github.com/taimast/aiogram-admin.git
