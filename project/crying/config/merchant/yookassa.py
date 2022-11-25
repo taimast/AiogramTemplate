@@ -1,7 +1,7 @@
-import asyncio
 import datetime
 import uuid
 from base64 import b64encode
+from enum import Enum
 from pprint import pprint
 from typing import Optional
 
@@ -21,13 +21,24 @@ class Confirmation(BaseModel):
     type: str = "redirect"
 
 
+class Recipient(BaseModel):
+    account_id: str
+    gateway_id: str
+
+class Status(str, Enum):
+    WAITING_FOR_CAPTURE = "waiting_for_capture"
+    SUCCEEDED = "succeeded"
+    CANCELED = "canceled"
+    PENDING = "pending"
+
+
 class YooPaymentRequest(BaseModel):
     amount: Amount
     description: str | None
     confirmation: Confirmation
     capture: bool = True
 
-    # необязательный expire_at. Не указано в документации, но в примере указано
+    # необязательный expire_at. Не указано в документации. Всегда равен 1 часу
     # "expires_at": str(datetime.datetime.now(TIME_ZONE) + datetime.timedelta(minutes=15))
 
     @validator("description", always=True)
@@ -36,12 +47,14 @@ class YooPaymentRequest(BaseModel):
             v = f"Product {values.get('amount')}"
         return v
 
-
 class YooPayment(YooPaymentRequest):
     id: uuid.UUID
     created_at: datetime.datetime
+    confirmation: Confirmation | None
     paid: bool
-    status: str
+    status: Status
+    recipient: Recipient | None
+    income_amount: Amount | None
 
     def is_paid(self) -> bool:
         return self.paid
@@ -82,12 +95,12 @@ class Yookassa(Merchant):
 
     async def is_paid(self, invoice_id: uuid.UUID) -> bool:
         """ Проверка статуса платежа """
-        obj = await self.get_invoice(invoice_id)
-        return obj.paid
+        return (await self.get_invoice(invoice_id)).paid
 
     async def get_invoice(self, invoice_id: uuid.UUID) -> "YooPayment":
         """ Получение информации о платеже """
         res = await self.make_request("GET", f"{self.create_url}/{invoice_id}")
+        pprint(res)
         return YooPayment.parse_obj(res)
 
     async def cancel(self, bill_id: uuid.UUID) -> "YooPayment":
