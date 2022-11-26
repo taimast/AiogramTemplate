@@ -30,12 +30,14 @@ async def set_commands(bot: Bot):
     await bot.set_my_commands(commands)
 
 
-def register_handlers(dp: Dispatcher):
+def setup_routers(dp: Dispatcher):
     """Регистрация обработчиков"""
     # Обработчики общего назначения
     register_common_handlers(dp)
+
     # Обработчики админки
     register_admin_handlers(dp)
+
     # Обработчики ошибок
     register_error(dp)
 
@@ -130,7 +132,7 @@ async def main():
     dp.message.filter(F.chat.type == "private")
 
     # Регистрация обработчиков
-    register_handlers(dp)
+    setup_routers(dp)
 
     # Регистрация мидлварей
     register_middlewares(dp)

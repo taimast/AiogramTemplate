@@ -16,23 +16,15 @@ class UserMiddleware(BaseMiddleware):
             event: Message | CallbackQuery,
             data: dict[str, Any]
     ) -> Any:
-
-        logger.info(dir(handler))
         user = event.from_user
-        logger.debug(f"Get user for User {user.id}")
-        user, is_new = await User.get_or_create(
-            id=user.id,
-            defaults={
-                "username": user.username,
-                "first_name": user.first_name,
-                "last_name": user.last_name,
-                "language": user.language_code,
-            },
-        )
-        user_data = {"user": user, "is_new": False}
-        if is_new:
-            data.update(is_new=True)
+        logger.debug("Get user for User {}", user.id)
+        is_new = False
+        db_user = await User.get_or_none(id=user.id)
+        if not db_user:
             logger.info(f"Новый пользователь {user=}")
+            db_user = await User.create(**user.dict())
+            is_new = True
 
-        data.update(user_data)
+        data.update(user=db_user, is_new=is_new)
         return await handler(event, data)
+
