@@ -10,8 +10,13 @@
   - Настройки бота
   - Экспорт пользователей
 - Проверка на спам
-- Настройка локализации
+- Настройки локализации через Fluent
 - Создание бекапа базы данных
+- Мерчанты
+  - [CryptoCloud](https://cryptocloud.plus/) 
+  - [Qiwi](https://qiwi.com/p2p-admin/api/)
+  - [YooKassa](https://yookassa.ru/developers/)
+  - ~~[Payeer](https://payeer.com/)~~ 
 
 
 ## Создание проекта
