@@ -4,6 +4,7 @@ import shutil
 import subprocess
 from distutils import dir_util
 from pathlib import Path
+from pprint import pprint
 
 TEMPLATE_DIR = Path(__file__).parent / "project"
 
@@ -14,11 +15,7 @@ def parse_args():
     parser.add_argument("-d", "--dependencies", action="store_true", default=False)
     parser.add_argument("-l", "--localization", type=str)
     args = parser.parse_args()
-    if args.project_dir:
-        project_dir = Path(args.project_dir)
-    else:
-        project_dir = Path.cwd()
-    return project_dir, args.dependencies, args.localization
+    return args.project_dir, args.dependencies, args.localization
 
 
 def read_file(file: Path):
@@ -93,12 +90,23 @@ def init_localize(project_name: str, localization: str):
 def main():
     # subprocess.Popen(['poetry', 'show', '--tree'])
     project_path, dependencies, localization = parse_args()
+    if not project_path:
+        permission = input("Путь до проекта не указан, установить в текущую директорию? [y/n]: ")
+        if permission == "y":
+            project_path = Path.cwd()
+        else:
+            exit("Укажите путь до проекта через аргумент -p")
+
+    project_path = Path(project_path)
     if not project_path.exists():
-        subprocess.Popen(['poetry', 'new', project_path.name]).wait()
-        print("✅ Создан проект")
+        permission = input(f"Директория {project_path} не существует, создать как новый проект? [y/n]: ")
+        if permission == "y":
+            subprocess.Popen(['poetry', 'new', project_path.name]).wait()
+            print("✅ Проект создан")
+        else:
+            exit("❌ Проект не создан. Укажите путь до проекта через аргумент -p")
 
     print(f"Настройка проекта {project_path}.")
-
     workdir: Path = get_project_dir(project_path)
     project_name = workdir.name
     print(workdir)
