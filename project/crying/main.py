@@ -30,13 +30,13 @@ async def set_commands(bot: Bot):
     await bot.set_my_commands(commands)
 
 
-def setup_routers(dp: Dispatcher):
+def setup_routers(dp: Dispatcher, settings: Settings):
     """Регистрация обработчиков"""
     # Обработчики общего назначения
     register_common_handlers(dp)
 
     # Обработчики админки
-    register_admin_handlers(dp)
+    register_admin_handlers(dp, settings.bot.admins)
 
     # Обработчики ошибок
     register_error(dp)
