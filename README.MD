@@ -18,9 +18,11 @@
 
 - Создать новый проект с помощью `poetry new <project_name>`
 - Из папки с вашим проектом запустить скрипт `init_project.py`
-- Например `python3 /home/user/AiogramProjectTemplateV4/init_project.py -d y -l en`
-  - `d` - установка зависимостей, default = `y`
+- Например `python3 init_project.py -p <your_project_dir> -d -l en`
+  - `d` - установка зависимостей, default = `True`
   - `l` - язык локализации
+  - <your_project_dir> - путь до папки с проектом, если не указан, то будет использована текущая папка.
+Если не существует, то будет создан новый проект с помощью `poetry new <project_name>`
 
 # ceft create
 `openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`
