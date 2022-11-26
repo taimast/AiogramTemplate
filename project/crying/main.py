@@ -8,14 +8,15 @@ from aiogram.types import BotCommand
 from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
 from aiohttp import web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from fluent.runtime import FluentResourceLoader
 from loguru import logger
 
 from project.crying.apps.bot.handlers.admin import register_admin_handlers
 from project.crying.apps.bot.handlers.common import register_common_handlers
 from project.crying.apps.bot.handlers.errors.errors_handlers import register_error
-from project.crying.apps.bot.middleware import UserMiddleware
+from project.crying.apps.bot.middleware import UserMiddleware, L10nMiddleware
 from project.crying.config.cli import CLIArgsSettings
-from project.crying.config.config import Settings
+from project.crying.config.config import Settings, LOCALES_DIR
 from project.crying.config.logg_settings import init_logging, Level
 from project.crying.db import init_db, close_db
 from project.crying.db.utils.backup import making_backup
@@ -42,7 +43,7 @@ def setup_routers(dp: Dispatcher, settings: Settings):
     register_error(dp)
 
 
-def register_middlewares(dp: Dispatcher):
+def setup_middlewares(dp: Dispatcher):
     """Регистрация middleware"""
     # dp.update.outer_middleware(ThrottlingMiddleware(ttl=0.5))
     user_middleware = UserMiddleware()
@@ -53,6 +54,15 @@ def register_middlewares(dp: Dispatcher):
     # dp.message.middleware(language_middleware)
     # dp.callback_query.middleware(language_middleware)
 
+    l10n_middleware = L10nMiddleware(
+        loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
+        default_locale="ru",
+        locales=["en"],
+        resource_ids=["common.ftl"]
+    )
+    logger.info("Загружены локали: " + ", ".join(l10n_middleware.locales))
+    dp.message.middleware(l10n_middleware)
+    dp.callback_query.middleware(l10n_middleware)
 
 # Initializing and start Scheduler function
 async def start_scheduler():
@@ -131,11 +141,11 @@ async def main():
     # Настройка фильтра только для приватных сообщений
     dp.message.filter(F.chat.type == "private")
 
-    # Регистрация обработчиков
+    # Настройка роутеров обработчиков
     setup_routers(dp, settings)
 
-    # Регистрация мидлварей
-    register_middlewares(dp)
+    # Настройка мидлварей
+    setup_middlewares(dp)
 
     # Запуск планировщика
     await start_scheduler()

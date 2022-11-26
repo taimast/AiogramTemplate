@@ -95,6 +95,7 @@ def main():
     project_path, dependencies, localization = parse_args()
     if not project_path.exists():
         subprocess.Popen(['poetry', 'new', project_path.name]).wait()
+        print("✅ Создан проект")
 
     print(f"Настройка проекта {project_path}.")
 

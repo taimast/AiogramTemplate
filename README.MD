@@ -26,3 +26,11 @@
 
 # ceft create
 `openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`
+
+## Локализация
+
+Локализация происходит с помощью [Fluent](https://projectfluent.org)
+
+Для использования локализации необходимо создать файлы локализации расширением `.ftl`, в папке с названием языка, например `en` или `ru`
+
+Документация по [Fluent](https://projectfluent.org/fluent/guide/)

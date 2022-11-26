@@ -179,6 +179,29 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 
 [[package]]
+name = "fluent-runtime"
+version = "0.3.1"
+description = "Localization library for expressive translations."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+attrs = "*"
+babel = "*"
+"fluent.syntax" = ">=0.17,<0.19"
+pytz = "*"
+six = "*"
+
+[[package]]
+name = "fluent-syntax"
+version = "0.18.1"
+description = "Localization library for expressive translations."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "frozenlist"
 version = "1.3.3"
 description = "A list-like structure which implements collections.abc.MutableSequence"
@@ -405,7 +428,7 @@ qiwi = ["glqiwiapi"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "d3eeb734a2906be933c2c938fadd1fcd481ac2c81f0f0e620f55a78c1a639e3d"
+content-hash = "01e758ff2ed1e642555b6cba8a12f03d984d377e550082d82af33eec1b89c7a9"
 
 [metadata.files]
 aiofiles = [
@@ -582,6 +605,14 @@ charset-normalizer = [
 colorama = [
     {file = "colorama-0.4.6-py2.py3-none-any.whl", hash = "sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"},
     {file = "colorama-0.4.6.tar.gz", hash = "sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"},
+]
+fluent-runtime = [
+    {file = "fluent.runtime-0.3.1-py2.py3-none-any.whl", hash = "sha256:1da9bf779e6b8cbfb5a71dd59cd7e193f8dc8da318bda7163bc41e9ae15f8574"},
+    {file = "fluent.runtime-0.3.1.tar.gz", hash = "sha256:f3a879b9d0a2129b3f8e8755f0291c445f272f3d0d26a408c7b76f608acf3409"},
+]
+fluent-syntax = [
+    {file = "fluent.syntax-0.18.1-py2.py3-none-any.whl", hash = "sha256:0e63679fa4f1b3042565220a5127b4bab842424f07d6a13c12299e3b3835486a"},
+    {file = "fluent.syntax-0.18.1.tar.gz", hash = "sha256:3a55f5e605d1b029a65cc8b6492c86ec4608e15447e73db1495de11fd46c104f"},
 ]
 frozenlist = [
     {file = "frozenlist-1.3.3-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:ff8bf625fe85e119553b5383ba0fb6aa3d0ec2ae980295aaefa552374926b3f4"},
