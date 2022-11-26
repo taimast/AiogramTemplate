@@ -11,6 +11,7 @@ ReplyMarkup = TypeVar("ReplyMarkup", types.InlineKeyboardMarkup, types.ReplyKeyb
 async def split_sending(message: types.Message,
                         answer_text: str,
                         reply_markup: ReplyMarkup = None):
+    """ Split message if it's length is more than 4096 symbols """
     answer_length = len(answer_text)
     if answer_length > MESSAGE_LIMIT:
         for _from in range(0, answer_length, MESSAGE_LIMIT):
