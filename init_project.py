@@ -11,7 +11,7 @@ TEMPLATE_DIR = Path(__file__).parent / "project"
 
 def parse_args():
     parser = argparse.ArgumentParser(description="config_file")
-    parser.add_argument("-p", "--project-dir", type=str)
+    parser.add_argument("-p", "--project", type=str)
     parser.add_argument("-d", "--dependencies", action="store_true", default=False)
     parser.add_argument("-l", "--localization", type=str)
     args = parser.parse_args()
