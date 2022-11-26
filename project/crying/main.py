@@ -132,7 +132,7 @@ async def main():
     dp.message.filter(F.chat.type == "private")
 
     # Регистрация обработчиков
-    setup_routers(dp)
+    setup_routers(dp, settings)
 
     # Регистрация мидлварей
     register_middlewares(dp)
