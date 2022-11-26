@@ -1,6 +1,7 @@
 import argparse
 import os
 import shutil
+import subprocess
 from distutils import dir_util
 from pathlib import Path
 
@@ -10,7 +11,7 @@ TEMPLATE_DIR = Path(__file__).parent / "project"
 def parse_args():
     parser = argparse.ArgumentParser(description="config_file")
     parser.add_argument("-p", "--project-dir", type=str)
-    parser.add_argument("-d", "--dependencies", type=bool)
+    parser.add_argument("-d", "--dependencies", action="store_true", default=False)
     parser.add_argument("-l", "--localization", type=str)
     args = parser.parse_args()
     if args.project_dir:
@@ -92,6 +93,9 @@ def init_localize(project_name: str, localization: str):
 def main():
     # subprocess.Popen(['poetry', 'show', '--tree'])
     project_path, dependencies, localization = parse_args()
+    if not project_path.exists():
+        subprocess.Popen(['poetry', 'new', project_path.name]).wait()
+
     print(f"Настройка проекта {project_path}.")
 
     workdir: Path = get_project_dir(project_path)
