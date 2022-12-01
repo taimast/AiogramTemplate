@@ -46,7 +46,7 @@ class Merchant(BaseModel, ABC):
             return await res.json()
 
     @abc.abstractmethod
-    async def create_invoice(self, amount: int | float | str) -> Any:
+    async def create_invoice(self, amount: int | float | str, **kwargs) -> Any:
         pass
 
     @abc.abstractmethod
