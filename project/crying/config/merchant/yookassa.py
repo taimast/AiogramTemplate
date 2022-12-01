@@ -17,6 +17,8 @@ class Amount(BaseModel):
 
 class Confirmation(BaseModel):
     confirmation_url: Optional[str]
+    type: str = "redirect"
+class ConfirmationRequest(BaseModel):
     return_url: Optional[str]
     type: str = "redirect"
 
@@ -35,7 +37,7 @@ class Status(str, Enum):
 class YooPaymentRequest(BaseModel):
     amount: Amount
     description: str | None
-    confirmation: Confirmation
+    confirmation: ConfirmationRequest
     capture: bool = True
 
     # необязательный expire_at. Не указано в документации. Всегда равен 1 часу
@@ -50,7 +52,7 @@ class YooPaymentRequest(BaseModel):
 class YooPayment(YooPaymentRequest):
     id: uuid.UUID
     created_at: datetime.datetime
-    confirmation: Confirmation | None
+    confirmation: Confirmation
     paid: bool
     status: Status
     recipient: Recipient | None
@@ -60,7 +62,7 @@ class YooPayment(YooPaymentRequest):
         return self.paid
 
 
-class Yookassa(Merchant):
+class YooKassa(Merchant):
     create_url: str = "https://api.yookassa.ru/v3/payments"
 
     @property

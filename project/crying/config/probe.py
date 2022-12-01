@@ -9,7 +9,7 @@ from project.crying.config.logg_settings import init_logging
 from project.crying.config.merchant.crypto_cloud import CryptoCloud, CryptoPaymentRequest, \
     Currency
 from project.crying.config.merchant.qiwi import Qiwi
-from project.crying.config.merchant.yookassa import Yookassa
+from project.crying.config.merchant.yookassa import YooKassa
 
 
 class Level(str, Enum):
@@ -61,8 +61,8 @@ async def main4():
 async def yookassa_probe():
     # c = Yookassa(shop_id="SrL65kqO7lp3bhCt",
     #                 api_key="***REMOVED***")
-    c = Yookassa(shop_id="878719",
-                api_key="***REMOVED***")
+    c = YooKassa(shop_id="878719",
+                 api_key="***REMOVED***")
     # c = Yookassa(shop_id="886879",
     #             api_key="***REMOVED***")
     # c = Yookassa(shop_id="886927",
@@ -73,20 +73,22 @@ async def yookassa_probe():
 
     # res = await c.create_invoice(amount=1, currency="RUB", order_id="1234")
 
-    tasks = []
-    for i in range(1):
-        tasks.append(c.create_invoice(amount=1, currency="RUB"))
-            # await tg.spawn(c2.create_invoice, amount=1, currency="RUB", order_id="1234")
-    invoices = await asyncio.gather(*tasks)
-    invoices_ids = [i.id for i in invoices]
-    pprint(len(invoices_ids))
-    pprint(len(set(invoices_ids)))
-
+    # tasks = []
+    # for i in range(1):
+    #     tasks.append(c.create_invoice(amount=1, currency="RUB"))
+    #         # await tg.spawn(c2.create_invoice, amount=1, currency="RUB", order_id="1234")
+    # invoices = await asyncio.gather(*tasks)
+    #
+    # invoices_ids = [i.id for i in invoices]
+    # pprint(len(invoices_ids))
+    # pprint(len(set(invoices_ids)))
+    invoice = await c.create_invoice(amount=1, currency="RUB")
+    print(invoice)
     # await c.close_session()
     # return
     while True:
-        for i in invoices:
-            pprint((await c.get_invoice(i.id)))
+        # for i in invoice:
+        pprint((await c.get_invoice(invoice.id)))
         await asyncio.sleep(2)
     # c = CryptoInvoiceRequest(amount=1, currency="RUB",  order_id="1234")
     # pprint(c.dict())
@@ -122,4 +124,4 @@ async def crypto_cloud_probe():
 
 if __name__ == '__main__':
     # main2()
-    asyncio.run(crypto_cloud_probe())
+    asyncio.run(yookassa_probe())

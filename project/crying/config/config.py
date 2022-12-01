@@ -34,12 +34,15 @@ class Bot(BaseModel):
 
 
 class Database(BaseModel):
-    user: str
-    password: SecretStr
-    database: str
-    host: str
-    port: int
+    user: str = "postgres"
+    password: SecretStr = SecretStr("postgres")
+    database: str = "autoanswer"
+    host: str = "localhost"
+    port: int = 5432
     timezone: str = "Europe/Moscow"
+
+    class Config:
+        allow_mutation = False
 
     @property
     def url(self):
@@ -55,6 +58,9 @@ class MerchantGroup(BaseModel):
     yookassa: Optional[Merchant]
     crypto_cloud: Optional[Merchant]
 
+    class Config:
+        allow_mutation = False
+
     @root_validator(pre=True)
     def validate_merchants(cls, values):
         try:
@@ -62,8 +68,8 @@ class MerchantGroup(BaseModel):
                 from .merchant.qiwi import Qiwi
                 values["qiwi"] = Qiwi(**qiwi)
             if yookassa := values.get("yookassa"):
-                from .merchant.yookassa import Yookassa
-                values["yookassa"] = Yookassa(**yookassa)
+                from .merchant.yookassa import YooKassa
+                values["yookassa"] = YooKassa(**yookassa)
             if crypto_cloud := values.get("crypto_cloud"):
                 from .merchant.crypto_cloud import CryptoCloud
                 values["crypto_cloud"] = CryptoCloud(**crypto_cloud)
@@ -84,7 +90,7 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         config_file = "config.yaml"
         case_sensitive = True
-
+        allow_mutation = False
         @classmethod
         def customise_sources(
                 cls,

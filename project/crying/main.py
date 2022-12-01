@@ -43,7 +43,7 @@ def setup_routers(dp: Dispatcher, settings: Settings):
     register_error(dp)
 
 
-def setup_middlewares(dp: Dispatcher):
+def setup_middlewares(dp: Dispatcher, l10n_middleware: L10nMiddleware):
     """Регистрация middleware"""
     # dp.update.outer_middleware(ThrottlingMiddleware(ttl=0.5))
     user_middleware = UserMiddleware()
@@ -54,18 +54,19 @@ def setup_middlewares(dp: Dispatcher):
     # dp.message.middleware(language_middleware)
     # dp.callback_query.middleware(language_middleware)
 
-    l10n_middleware = L10nMiddleware(
-        loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
-        default_locale="ru",
-        locales=["en"],
-        resource_ids=["common.ftl"]
-    )
-    logger.info("Загружены локали: " + ", ".join(l10n_middleware.locales))
+    # l10n_middleware = L10nMiddleware(
+    #     loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
+    #     default_locale="ru",
+    #     locales=["en"],
+    #     resource_ids=["common.ftl"]
+    # )
+    # logger.info("Загружены локали: " + ", ".join(l10n_middleware.locales))
     dp.message.middleware(l10n_middleware)
     dp.callback_query.middleware(l10n_middleware)
 
 # Initializing and start Scheduler function
-async def start_scheduler():
+async def start_scheduler(l10n_middleware: L10nMiddleware):
+
     """Инициализация и запуск планировщика задач."""
     # Инициализация планировщика
     scheduler = AsyncIOScheduler()
@@ -144,11 +145,19 @@ async def main():
     # Настройка роутеров обработчиков
     setup_routers(dp, settings)
 
+    # Инициализация мидлвари i10n
+    l10n_middleware = L10nMiddleware(
+        loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
+        default_locale="ru",
+        locales=["en"],
+        resource_ids=["common.ftl"]
+    )
+
     # Настройка мидлварей
-    setup_middlewares(dp)
+    setup_middlewares(dp, l10n_middleware)
 
     # Запуск планировщика
-    await start_scheduler()
+    await start_scheduler(l10n_middleware)
 
     # Установка команд бота
     await set_commands(bot)

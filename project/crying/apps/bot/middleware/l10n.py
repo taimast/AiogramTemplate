@@ -3,8 +3,8 @@ from typing import Callable, Dict, Any, Awaitable
 from aiogram import BaseMiddleware
 from aiogram.types import Message
 from fluent.runtime import FluentResourceLoader, FluentLocalization as _FluentLocalization
-from project.crying.db.models import User
 
+from project.crying.db.models import User
 
 
 class FluentLocalization(_FluentLocalization):
@@ -30,6 +30,12 @@ class L10nMiddleware(BaseMiddleware):
                 [default_locale, locale], resource_ids, loader
             )
 
+    def get_locale(self, user: User) -> FluentLocalization:
+        locale = user.locale
+        if locale not in self.locales:
+            locale = "ru"
+        return self.locales[locale]
+
     async def __call__(
             self,
             handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
@@ -37,8 +43,5 @@ class L10nMiddleware(BaseMiddleware):
             data: Dict[str, Any]
     ) -> Any:
         user: User = data["user"]
-        locale = user.locale
-        if locale not in self.locales:
-            locale = "ru"
-        data["l10n"] = self.locales[locale]
+        data["l10n"] = self.get_locale(user)
         await handler(event, data)
