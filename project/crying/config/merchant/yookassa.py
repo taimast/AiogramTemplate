@@ -87,12 +87,8 @@ class YooKassa(Merchant):
             confirmation=Confirmation(return_url=return_url),
             description=description,
         )
-        # todo L1 24.11.2022 17:07 taima: Может быт ошибка, если не указать Idempotence-Key
-        #  Idempotence-Key получает и кеша и может быть не уникальным
-        #  https://yookassa.ru/developers/api?identifier=payments#idempotence
         idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}
         response = await self.make_request("POST", self.create_url, json=data.dict(), headers=idempotence_key)
-        pprint(response)
         return YooPayment(**response)
 
     async def is_paid(self, invoice_id: uuid.UUID) -> bool:
@@ -102,7 +98,6 @@ class YooKassa(Merchant):
     async def get_invoice(self, invoice_id: uuid.UUID) -> "YooPayment":
         """ Получение информации о платеже """
         res = await self.make_request("GET", f"{self.create_url}/{invoice_id}")
-        pprint(res)
         return YooPayment.parse_obj(res)
 
     async def cancel(self, bill_id: uuid.UUID) -> "YooPayment":

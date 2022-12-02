@@ -15,6 +15,7 @@ pydantic = "^1.10.2"
 aiogram = {version = "^3.0.0b5", allow-prereleases = true, extras = ["i18n"]}
 glqiwiapi = {version = "^2.18.2", optional = true}
 fluent-runtime = "^0.3.1"
+aiogram-admin = {git = "https://github.com/taimast/aiogram-admin.git"}
 
 
 

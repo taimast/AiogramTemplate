@@ -1,12 +1,12 @@
-import typing
+from typing import Self
+
 from loguru import logger
 from tortoise import fields
 
-from project.crying.config import config
-if typing.TYPE_CHECKING:
-    from project.crying.db.models import User, SubscriptionTemplate
-
+from project.crying.config.merchant.crypto_cloud import CryptoCloud
 from .base import AbstractInvoice
+from ..subscription import SubscriptionTemplate
+from ..user import User
 
 
 class InvoiceCrypto(AbstractInvoice):
@@ -37,20 +37,22 @@ class InvoiceCrypto(AbstractInvoice):
     currency = fields.CharField(5, default="RUB", description="USD, RUB, EUR, GBP")
     order_id = fields.CharField(50, null=True, description="Custom product ID")
 
-    async def check_payment(self) -> bool:
-        return await config.merchants.crypto_cloud.is_paid(self.invoice_id)
+    async def check_payment(self, merchant: CryptoCloud) -> bool:
+        return await merchant.is_paid(self.invoice_id)
 
     @classmethod
     async def create_invoice(
             cls,
-            user: "User",
-            subscription_template: "SubscriptionTemplate",
+            merchant: CryptoCloud,
+            user: User,
+            subscription_template: SubscriptionTemplate,
             amount: int | float | str,
             currency="RUB",
             email: str = None,
             order_id: str = None,
-    ) -> "InvoiceCrypto":
-        data = await config.merchants.crypto_cloud.create_invoice(
+            # **kwargs,
+    ) -> Self:
+        crypto_payment = await merchant.create_invoice(
             amount=amount,
             currency=currency,
             order_id=order_id,
@@ -60,12 +62,13 @@ class InvoiceCrypto(AbstractInvoice):
         created_invoice = await cls.create(
             amount=amount,
             currency=currency,
-            order_id=order_id,
-            email=email,
-            invoice_id=data["invoice_id"],
-            pay_url=data["pay_url"],
+            invoice_id=crypto_payment.invoice_id,
+            pay_url=crypto_payment.pay_url,
+
             user=user,
             subscription_template=subscription_template,
+            order_id=order_id,
+            email=email,
         )
 
         logger.info(f"InvoiceCrypto created [{user.id}][{created_invoice.invoice_id}] {created_invoice.pay_url}")

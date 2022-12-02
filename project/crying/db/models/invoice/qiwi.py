@@ -1,8 +1,13 @@
+from typing import Self
+
+from glQiwiApi.qiwi.clients.p2p.types import Bill
 from loguru import logger
 from tortoise import fields
 
-
+from project.crying.config.merchant.base import Merchant
 from .base import AbstractInvoice
+from ..subscription.subscription import SubscriptionTemplate
+from ..user import User
 
 
 class InvoiceQiwi(AbstractInvoice):
@@ -21,28 +26,33 @@ class InvoiceQiwi(AbstractInvoice):
     user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE, related_name="invoice_qiwis")
     comment = fields.CharField(255, null=True)
 
-    async def check_payment(self) -> bool:
-        return await config.merchants.qiwi.is_paid(self.invoice_id)
+    async def check_payment(self, merchant: Merchant) -> bool:
+        return await merchant.is_paid(self.invoice_id)
 
     @classmethod
     async def create_invoice(
             cls,
-            user: "User",
-            subscription_template: 'SubscriptionTemplate',
+            merchant: Merchant,
+            user: User,
+            subscription_template: SubscriptionTemplate,
             amount: int | float | str,
             comment: str = None,
             email: str = None,
-    ) -> "InvoiceQiwi":
-        bill = await config.merchants.qiwi.create_invoice(
+    ) -> Self:
+        bill: Bill = await merchant.create_invoice(
             amount=amount,
             description=comment,
         )
         logger.info(f"InvoiceQiwi created [{user}][{bill.id}] {bill.pay_url}")
-        return await cls.create(
-            **bill.dict(exclude={"id", "amount"}),
+        created_invoice = await cls.create(
+            amount=bill.amount.value,
+            currency=bill.amount.currency,
+            invoice_id=bill.id,
+            pay_url=bill.pay_url,
+
             user=user,
             subscription_template=subscription_template,
-            amount=bill.amount.value,
-            invoice_id=bill.id,
             email=email,
         )
+        logger.info(f"InvoiceQiwi created [{user.id}][{created_invoice.invoice_id}] {created_invoice.pay_url}")
+        return created_invoice

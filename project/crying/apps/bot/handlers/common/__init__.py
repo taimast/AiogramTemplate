@@ -1,11 +1,5 @@
 from aiogram import Dispatcher, Router
-
-from .common_menu import register_common
-
+from . import common_menu
 
 router = Router()
-
-
-def register_common_handlers(dp: Dispatcher):
-    register_common(router)
-    dp.include_router(router)
+router.include_router(common_menu.router)

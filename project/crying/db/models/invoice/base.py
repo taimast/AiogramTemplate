@@ -1,13 +1,13 @@
 import datetime
+from typing import Self
 
 from tortoise import models, fields
 from tortoise.transactions import atomic
 
-from project.crying.config import TIME_ZONE
-from project.crying.config.merchant.base import PAYMENT_LIFETIME
-
-from project.crying.db.models import User
-from project.crying.db.models.subscription import SubscriptionTemplate
+from project.crying.config.config import TIME_ZONE
+from project.crying.config.merchant.base import PAYMENT_LIFETIME, Merchant
+from ..subscription import SubscriptionTemplate
+from ..user import User
 
 
 class AbstractInvoice(models.Model):
@@ -15,7 +15,8 @@ class AbstractInvoice(models.Model):
     subscription_template: 'SubscriptionTemplate' = fields.ForeignKeyField(
         "models.SubscriptionTemplate", null=True, on_delete=fields.SET_NULL
     )
-    user: User = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE)
+    user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE)
+    user_id: int
     currency = fields.CharField(5, default="RUB", description="RUB")
     amount = fields.DecimalField(17, 7)
     invoice_id = fields.CharField(50, index=True)
@@ -30,8 +31,12 @@ class AbstractInvoice(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return f"[{self.__class__.__name__}] {self.user} {self.amount} {self.currency}"
+
     @atomic()
     async def successfully_paid(self):
+        """Успешная оплата"""
         await self.fetch_related("user__subscription", "subscription_template")
         self.user.subscription.title = self.subscription_template.title
         self.user.subscription.duration += self.subscription_template.duration
@@ -40,9 +45,18 @@ class AbstractInvoice(models.Model):
         await self.user.subscription.save()
         await self.save(update_fields=["is_paid"])
 
-    async def check_payment(self) -> bool:
-        pass
+    async def check_payment(self, merchant: Merchant) -> bool:
+        """Проверка оплаты"""
+        raise NotImplementedError
 
     @classmethod
-    async def create_invoice(cls, **kwargs):
-        pass
+    async def create_invoice(
+            cls,
+            merchant: Merchant,
+            user: User,
+            subscription_template: SubscriptionTemplate,
+            amount: int | float | str,
+            **kwargs,
+    )-> Self:
+        """Создание счета"""
+        raise NotImplementedError
