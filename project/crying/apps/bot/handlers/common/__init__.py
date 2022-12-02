@@ -1,5 +1,5 @@
 from aiogram import Dispatcher, Router
-from . import common_menu
+from . import base
 
 router = Router()
-router.include_router(common_menu.router)
+router.include_router(base.router)
