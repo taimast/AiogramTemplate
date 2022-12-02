@@ -1,5 +1,5 @@
 bot:
-  token: 2026036530:AAGefWnyNUiuNsnoQCJG8ej_m7KUG_OO-Yw
+  token: your_token
   admins:
     - 000000000
 db:
