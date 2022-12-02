@@ -15,7 +15,7 @@ def parse_args():
     parser.add_argument("-d", "--dependencies", action="store_true", default=False)
     parser.add_argument("-l", "--localization", type=str)
     args = parser.parse_args()
-    return args.project_dir, args.dependencies, args.localization
+    return args.project, args.dependencies, args.localization
 
 
 def read_file(file: Path):

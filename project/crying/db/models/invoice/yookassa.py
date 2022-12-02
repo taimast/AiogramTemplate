@@ -1,11 +1,12 @@
+from typing import Self
+
 from loguru import logger
 from tortoise import fields
 
-
-from project.crying.config.merchant.yookassa import YooPayment
-from project.crying.db.models import User
-from project.crying.db.models.subscription import SubscriptionTemplate
+from project.crying.config.merchant.yookassa import YooPayment, YooKassa
 from .base import AbstractInvoice
+from ..subscription import SubscriptionTemplate
+from ..user import User
 
 
 class InvoiceYooKassa(AbstractInvoice):
@@ -21,30 +22,34 @@ class InvoiceYooKassa(AbstractInvoice):
     user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE, related_name="invoice_yookassas")
     comment = fields.CharField(255, null=True)
 
-    async def check_payment(self) -> bool:
-        return await config.merchants.yookassa.is_paid(self.invoice_id)
+    async def check_payment(self, merchant: YooKassa) -> bool:
+        return await merchant.is_paid(self.invoice_id)
 
     @classmethod
     async def create_invoice(
             cls,
+            merchant: YooKassa,
             user: "User",
             subscription_template: "SubscriptionTemplate",
             amount: int | float | str,
             comment: str = None,
             email: str = None,
-            lifetime: int = 30,
-    ) -> "InvoiceYooKassa":
-        yoo_payment: YooPayment = await config.merchants.yookassa.create_invoice(
+    ) -> Self:
+        yoo_payment: YooPayment = await merchant.create_invoice(
             amount=amount,
             description=comment,
         )
-        logger.info(f"InvoiceYooKassa created [{user}][{yoo_payment.id}] {yoo_payment.confirmation.confirmation_url}")
-        return await cls.create(
-            user=user,
-            subscription_template=subscription_template,
+
+        created_invoice = await cls.create(
             amount=yoo_payment.amount.value,
-            comment=comment,
+            currency=yoo_payment.amount.currency,
             invoice_id=yoo_payment.id,
             pay_url=yoo_payment.confirmation.confirmation_url,
+
+            user=user,
+            subscription_template=subscription_template,
+            comment=comment,
             email=email,
         )
+        logger.info(f"InvoiceYooKassa created [{user.id}][{created_invoice.invoice_id}] {created_invoice.pay_url}")
+        return created_invoice

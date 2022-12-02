@@ -6,19 +6,19 @@ from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
 from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
+from aiogram_admin import setup_admin_handlers
 from aiohttp import web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fluent.runtime import FluentResourceLoader
 from loguru import logger
 
-from project.crying.apps.bot.handlers.admin import register_admin_handlers
-from project.crying.apps.bot.handlers.common import register_common_handlers
-from project.crying.apps.bot.handlers.errors.errors_handlers import register_error
+from project.crying.apps.bot.handlers import register_routers
 from project.crying.apps.bot.middleware import UserMiddleware, L10nMiddleware
 from project.crying.config.cli import CLIArgsSettings
 from project.crying.config.config import Settings, LOCALES_DIR
 from project.crying.config.logg_settings import init_logging, Level
 from project.crying.db import init_db, close_db
+from project.crying.db.models import ChannelForSubscription, User
 from project.crying.db.utils.backup import making_backup
 
 
@@ -31,16 +31,20 @@ async def set_commands(bot: Bot):
     await bot.set_my_commands(commands)
 
 
-def setup_routers(dp: Dispatcher, settings: Settings):
+async def setup_routers(dp: Dispatcher, settings: Settings):
     """Регистрация обработчиков"""
-    # Обработчики общего назначения
-    register_common_handlers(dp)
+    # Основные обработчики
+    register_routers(dp)
 
     # Обработчики админки
-    register_admin_handlers(dp, settings.bot.admins)
+    await setup_admin_handlers(
+        dp=dp,
+        admins=settings.bot.admins,
+        SubsChat=ChannelForSubscription,
+        User=User,
+        admin_command="base_admin",
+    )
 
-    # Обработчики ошибок
-    register_error(dp)
 
 
 def setup_middlewares(dp: Dispatcher, l10n_middleware: L10nMiddleware):
@@ -143,9 +147,9 @@ async def main():
     dp.message.filter(F.chat.type == "private")
 
     # Настройка роутеров обработчиков
-    setup_routers(dp, settings)
+    await setup_routers(dp, settings)
 
-    # Инициализация мидлвари i10n
+    # Инициализация мидлвари l10n
     l10n_middleware = L10nMiddleware(
         loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
         default_locale="ru",
