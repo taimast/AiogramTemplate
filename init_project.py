@@ -74,7 +74,7 @@ def set_project_name_in_files(workdir: Path, project_name: str):
 
 def install_dependencies():
     aiogram_version = 'aiogram@latest -E i18n --allow-prereleases'
-    dependencies = "loguru pydantic tortoise-orm[asyncpg] pyyaml APScheduler cachetools glQiwiApi apscheduler"
+    dependencies = "loguru pydantic tortoise-orm[asyncpg] pyyaml APScheduler cachetools glQiwiApi apscheduler fluent-runtime"
     os.system(f"poetry add {aiogram_version}")
     os.system(f"poetry add {dependencies}")
     os.system(f"poetry add git+https://github.com/taimast/aiogram-admin.git")
