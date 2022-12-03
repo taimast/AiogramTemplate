@@ -21,7 +21,7 @@
 ## Создание проекта
 
 Запустить скрипт `init_project.py`
-Например `python3 init_project.py -p <your_project_dir> -d -l en`
+Например `python3 init_project.py -p <your_project_dir> -d`
 
 - `d` - установка зависимостей, default = `True`
 - `l` - язык локализации

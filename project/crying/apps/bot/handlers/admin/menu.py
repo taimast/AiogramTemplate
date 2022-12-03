@@ -2,7 +2,7 @@ from aiogram import Router, types
 from aiogram.filters import StateFilter, Command, Text
 from aiogram.fsm.context import FSMContext
 
-from project.crying.apps.bot.markups.admin import admin_markups
+from project.crying.apps.bot.keyboards.admin import admin_markups
 
 router = Router()
 

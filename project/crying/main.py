@@ -140,8 +140,10 @@ async def main():
     # Инициализация бота
     bot = Bot(token=settings.bot.token.get_secret_value(), parse_mode="html")
     storage = MemoryStorage()
-    dp = Dispatcher(storage=storage)
-    dp.workflow_data.update(settings=settings)
+    dp = Dispatcher(
+        storage=storage,
+        settings=settings
+    )
 
     # Настройка фильтра только для приватных сообщений
     dp.message.filter(F.chat.type == "private")
