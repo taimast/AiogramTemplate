@@ -13,4 +13,3 @@ async def start(message: types.Message | types.CallbackQuery, state: FSMContext)
         message = message.message
     await message.answer("Стартовое меню!")
 
-
