@@ -189,13 +189,5 @@ async def main():
 
 
 if __name__ == "__main__":
-    for i in range(1, 4):
-        try:
-            asyncio.run(main())
-        except Exception as e:
-            logger.exception(e)
-            logger.error(f"Бот упал с ошибкой, перезапуск через 5 секунд... Попытка {i}/3")
-            time.sleep(5)
-        else:
-            break
     asyncio.run(main())
+
