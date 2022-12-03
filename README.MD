@@ -28,7 +28,7 @@ ___
 - Настройка Вебхука
 - База данных [PostgreSQL](https://www.postgresql.org/download/
 ) + [Tortoise ORM](https://github.com/tortoise/tortoise-orm/) + [asyncpg](https://github.com/MagicStack/asyncpg)
-
+- Удобная конфигурация проекта через [Pydantic](https://github.com/pydantic/pydantic)
 ## Создание проекта
 
 Запустить скрипт `init_project.py`
