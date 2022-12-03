@@ -28,7 +28,7 @@
 - `p` - путь к папке проекта, default = `./`. Если папка не существует, то будет создан новый проект с
   помощью `poetry new <your_project_dir>`
 
-# ceft create
+# Создание сертификата для webhook
 
 `openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`
 
