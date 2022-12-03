@@ -1,15 +1,21 @@
 # AiogramProjectTemplateV4
 
-Шаблон бота на aiogram 3 со всем необходимыми пакетами
+#### Шаблон бота на aiogram 3 с некоторым базовым функционалом. 
+#### [Python 3.11](https://www.python.org/downloads/), [Poetry](https://python-poetry.org/docs/#installation), [aiogram 3](https://github.com/aiogram/aiogram/tree/dev-3.x), [PostgreSQL](https://www.postgresql.org/download/)
+
+___
 
 ## Включает
-- Админ панели
+- Админ панель
   - Статистика 
   - Настройка обязательной подписки на каналы
   - Рассылка
   - Настройки бота
   - Экспорт пользователей
-- Проверка на спам
+- Мидлвары
+  - Проверка на подписку
+  - Проверка на спам
+  - Локализация Fluent
 - Настройки локализации через Fluent
 - Создание бекапа базы данных
 - Мерчанты
@@ -17,6 +23,11 @@
     - [Qiwi](https://qiwi.com/p2p-admin/api/)
     - [YooKassa](https://yookassa.ru/developers/)
     - ~~[Payeer](https://payeer.com/)~~
+- CLI 
+- Логирование loguru
+- Настройка Вебхука
+- База данных [PostgreSQL](https://www.postgresql.org/download/
+) + [Tortoise ORM](https://github.com/tortoise/tortoise-orm/) + [asyncpg](https://github.com/MagicStack/asyncpg)
 
 ## Создание проекта
 
