@@ -1,10 +1,9 @@
 import asyncio
 import logging
-import time
 
 from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import BotCommand
+from aiogram.types import BotCommandScopeDefault, BotCommandScopeChat, BotCommandScopeAllPrivateChats
 from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
 from aiogram_admin import setup_admin_handlers
 from aiohttp import web
@@ -12,7 +11,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fluent.runtime import FluentResourceLoader
 from loguru import logger
 
-from project.crying.apps.bot.commands.bot_commands import BotCommands
+from project.crying.apps.bot.commands.bot_commands import  BaseCommands, AdminCommands, SuperAdminCommands
 from project.crying.apps.bot.handlers import register_routers
 from project.crying.apps.bot.middleware import UserMiddleware, L10nMiddleware
 from project.crying.config.cli import CLIArgsSettings
@@ -23,13 +22,13 @@ from project.crying.db.models import ChannelForSubscription, User
 from project.crying.db.utils.backup import making_backup
 
 
-async def set_commands(bot: Bot):
-    """Установка команд бота"""
-    commands = [
-        BotCommand(command="/start", description="Стартовое меню"),
-        BotCommand(command="/admin", description="Админ панель"),
-    ]
-    await bot.set_my_commands(commands)
+async def set_commands(bot: Bot, settings: Settings):
+    """ Установка команд бота. """
+    await bot.set_my_commands(BaseCommands, scope=BotCommandScopeDefault())
+    for admin in settings.bot.admins:
+        await bot.set_my_commands(AdminCommands, scope=BotCommandScopeChat(chat_id=admin))
+    for super_admin in settings.bot.super_admins:
+        await bot.set_my_commands(SuperAdminCommands, scope=BotCommandScopeChat(chat_id=super_admin))
 
 
 async def setup_routers(dp: Dispatcher, settings: Settings):
@@ -167,8 +166,8 @@ async def main():
     await start_scheduler(l10n_middleware)
 
     # Установка команд бота
-    # await set_commands(bot)
-    await bot.set_my_commands(BotCommands)
+    await set_commands(bot, settings)
+
     # Запуск бота
     try:
         if not cli_settings.webhook:

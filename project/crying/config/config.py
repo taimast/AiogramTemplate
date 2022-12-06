@@ -31,7 +31,7 @@ def load_yaml(file: str | Path) -> dict[str, Any] | list[Any]:
 class Bot(BaseModel):
     token: SecretStr
     admins: list[int] = Field(default_factory=list)
-
+    super_admins: list[int] = Field(default_factory=list)
 
 class Database(BaseModel):
     user: str = "postgres"
