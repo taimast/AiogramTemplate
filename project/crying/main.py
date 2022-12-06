@@ -12,6 +12,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fluent.runtime import FluentResourceLoader
 from loguru import logger
 
+from project.crying.apps.bot.commands.bot_commands import BotCommands
 from project.crying.apps.bot.handlers import register_routers
 from project.crying.apps.bot.middleware import UserMiddleware, L10nMiddleware
 from project.crying.config.cli import CLIArgsSettings
@@ -166,8 +167,8 @@ async def main():
     await start_scheduler(l10n_middleware)
 
     # Установка команд бота
-    await set_commands(bot)
-
+    # await set_commands(bot)
+    await bot.set_my_commands(BotCommands)
     # Запуск бота
     try:
         if not cli_settings.webhook:
