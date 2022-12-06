@@ -166,7 +166,7 @@ async def main():
     await start_scheduler(l10n_middleware)
 
     # Установка команд бота
-    await set_commands(bot, settings)
+    asyncio.create_task(set_commands(bot, settings))
 
     # Запуск бота
     try:
