@@ -6,13 +6,13 @@ from .config import (
     MEDIA_DIR,
     MODELS_DIR,
     TIME_ZONE,
+
+    Settings,
     Bot,
     Database,
 )
 
 __all__ = (
-    'Bot',
-    'Database',
     'BASE_DIR',
     'LOG_DIR',
     'MEDIA_DIR',
@@ -20,4 +20,8 @@ __all__ = (
     'I18N_DOMAIN',
     'LOCALES_DIR',
     'TIME_ZONE',
+
+    'Settings',
+    'Bot',
+    'Database',
 )
