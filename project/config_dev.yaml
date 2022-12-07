@@ -1,5 +1,5 @@
 bot:
-  token: your_bot_token
+  token: ***REMOVED***
   admins:
     - 000000000
 db:

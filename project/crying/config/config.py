@@ -1,10 +1,9 @@
 import zoneinfo
 from pathlib import Path
-from pprint import pprint
 from typing import Optional, Any, Callable
 
 import yaml
-from pydantic import BaseModel, BaseSettings, Field, SecretStr, root_validator
+from pydantic import BaseModel, BaseSettings, Field, SecretStr, root_validator, validator
 from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, SecretsSettingsSource
 
 from .merchant.base import Merchant
@@ -32,6 +31,11 @@ class Bot(BaseModel):
     token: SecretStr
     admins: list[int] = Field(default_factory=list)
     super_admins: list[int] = Field(default_factory=list)
+
+    @validator("admins", "super_admins")
+    def validate_admins(cls, v):
+        return v or []
+
 
 class Database(BaseModel):
     user: str = "postgres"

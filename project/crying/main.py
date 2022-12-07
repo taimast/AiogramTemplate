@@ -3,7 +3,7 @@ import logging
 
 from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.types import BotCommandScopeDefault, BotCommandScopeChat, BotCommandScopeAllPrivateChats
+from aiogram.types import BotCommandScopeDefault, BotCommandScopeChat
 from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
 from aiogram_admin import setup_admin_handlers
 from aiohttp import web
@@ -11,7 +11,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fluent.runtime import FluentResourceLoader
 from loguru import logger
 
-from project.crying.apps.bot.commands.bot_commands import  BaseCommands, AdminCommands, SuperAdminCommands
+from project.crying.apps.bot.commands.bot_commands import BaseCommands, AdminCommands, SuperAdminCommands
 from project.crying.apps.bot.handlers import register_routers
 from project.crying.apps.bot.middleware import UserMiddleware, L10nMiddleware
 from project.crying.config.cli import CLIArgsSettings
@@ -67,6 +67,7 @@ def setup_middlewares(dp: Dispatcher, l10n_middleware: L10nMiddleware):
     # logger.info("Загружены локали: " + ", ".join(l10n_middleware.locales))
     dp.message.middleware(l10n_middleware)
     dp.callback_query.middleware(l10n_middleware)
+
 
 # Initializing and start Scheduler function
 async def start_scheduler(l10n_middleware: L10nMiddleware):
@@ -127,6 +128,7 @@ async def main():
     cli_settings = CLIArgsSettings.parse_args()
     cli_settings.update_settings(Settings)
     cli_settings.log.stdout = Level.TRACE
+    cli_settings.log.file = Level.TRACE
 
     # Создание объекта конфига
     settings = Settings()
@@ -166,7 +168,7 @@ async def main():
     await start_scheduler(l10n_middleware)
 
     # Установка команд бота
-    asyncio.create_task(set_commands(bot, settings))
+    await set_commands(bot, settings)
 
     # Запуск бота
     try:
