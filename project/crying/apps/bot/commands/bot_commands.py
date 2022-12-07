@@ -14,7 +14,7 @@ class _BaseCommands(NamedTuple):
 
 class _AdminCommands(NamedTuple):
     ADMIN: BotCommand = BotCommand(command="admin", description="Админ меню")
-
+    BASE_ADMIN: BotCommand = BotCommand(command="base_admin", description="Базовое админ меню")
 
 class _SuperAdminCommands(NamedTuple):
     SUPER_ADMIN: BotCommand = BotCommand(command="super_admin", description="Супер админ меню")
