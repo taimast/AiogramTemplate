@@ -1,1 +1,1 @@
-hello = Hello { $name }
+start = Hello, { $name }! How are you?
