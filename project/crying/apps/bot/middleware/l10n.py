@@ -27,7 +27,7 @@ class L10nMiddleware(BaseMiddleware):
         }
         for locale in locales:
             self.locales[locale] = FluentLocalization(
-                [default_locale, locale], resource_ids, loader
+                [locale, default_locale], resource_ids, loader
             )
 
     def get_locale(self, user: User) -> FluentLocalization:
