@@ -2,6 +2,7 @@ import asyncio
 import logging
 
 from aiogram import Bot, F, Dispatcher
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommandScopeDefault, BotCommandScopeChat
 from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
@@ -26,9 +27,15 @@ async def set_commands(bot: Bot, settings: Settings):
     """ Установка команд бота. """
     await bot.set_my_commands(BaseCommands, scope=BotCommandScopeDefault())
     for admin in settings.bot.admins:
-        await bot.set_my_commands(AdminCommands, scope=BotCommandScopeChat(chat_id=admin))
+        try:
+            await bot.set_my_commands(AdminCommands, scope=BotCommandScopeChat(chat_id=admin))
+        except TelegramBadRequest as e:
+            logger.warning(f"Can't set admin commands for {admin}: {e}")
     for super_admin in settings.bot.super_admins:
-        await bot.set_my_commands(SuperAdminCommands, scope=BotCommandScopeChat(chat_id=super_admin))
+        try:
+            await bot.set_my_commands(SuperAdminCommands, scope=BotCommandScopeChat(chat_id=super_admin))
+        except TelegramBadRequest as e:
+            logger.warning(f"Can't set super admin commands for {super_admin}: {e}")
 
 
 async def setup_routers(dp: Dispatcher, settings: Settings):
@@ -40,11 +47,11 @@ async def setup_routers(dp: Dispatcher, settings: Settings):
     await setup_admin_handlers(
         dp=dp,
         admins=settings.bot.admins,
+        super_admins=settings.bot.super_admins,
         SubsChat=ChannelForSubscription,
         User=User,
         admin_command="base_admin",
     )
-
 
 
 def setup_middlewares(dp: Dispatcher, l10n_middleware: L10nMiddleware):
@@ -128,7 +135,7 @@ async def main():
     cli_settings = CLIArgsSettings.parse_args()
     cli_settings.update_settings(Settings)
     cli_settings.log.stdout = Level.TRACE
-    cli_settings.log.file = Level.TRACE
+    # cli_settings.log.file = Level.TRACE
 
     # Создание объекта конфига
     settings = Settings()
