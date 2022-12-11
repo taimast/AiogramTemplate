@@ -129,6 +129,14 @@ async def start_webhook(bot: Bot, dp: Dispatcher, settings: Settings):
     await asyncio.Event().wait()
     # todo L1 09.11.2022 1:32 taima: убрать этот костыль
 
+def init_l10n():
+    return L10nMiddleware(
+        loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
+        default_locale="ru",
+        locales=["en"],
+        resource_ids=["common.ftl"]
+    )
+
 
 async def main():
     # Парсинг аргументов командной строки
@@ -137,10 +145,10 @@ async def main():
     cli_settings.log.stdout = Level.TRACE
     # cli_settings.log.file = Level.TRACE
 
-    # Создание объекта конфига
+    # Инициализация настроек
     settings = Settings()
 
-    # Настройка логирования
+    # Инициализация логирования
     init_logging(cli_settings.log)
 
     # Инициализация базы данных
@@ -160,19 +168,14 @@ async def main():
     # Настройка роутеров обработчиков
     await setup_routers(dp, settings)
 
-    # Инициализация мидлвари l10n
-    l10n_middleware = L10nMiddleware(
-        loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
-        default_locale="ru",
-        locales=["en"],
-        resource_ids=["common.ftl"]
-    )
+    # Инициализация мидлвари локализации
+    l10n = init_l10n()
 
     # Настройка мидлварей
-    setup_middlewares(dp, l10n_middleware)
+    setup_middlewares(dp, l10n)
 
     # Запуск планировщика
-    await start_scheduler(l10n_middleware)
+    await start_scheduler(l10n)
 
     # Установка команд бота
     await set_commands(bot, settings)
