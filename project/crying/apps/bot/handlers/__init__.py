@@ -2,7 +2,7 @@ from aiogram import Dispatcher, Router
 from aiogram_admin.filters.channel_subscription_filter import ChannelSubscriptionFilter
 
 from . import common
-from .errors import errors
+from .error import errors
 
 
 def register_routers(dp: Dispatcher):
