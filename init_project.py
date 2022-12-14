@@ -4,7 +4,6 @@ import shutil
 import subprocess
 from distutils import dir_util
 from pathlib import Path
-from pprint import pprint
 
 TEMPLATE_DIR = Path(__file__).parent / "project"
 
@@ -16,16 +15,6 @@ def parse_args():
     parser.add_argument("-l", "--localization", type=str)
     args = parser.parse_args()
     return args.project, args.dependencies, args.localization
-
-
-def read_file(file: Path):
-    with open(file, "r", encoding="utf-8") as f:
-        return f.read()
-
-
-def write_file(file, data):
-    with open(file, "w", encoding="utf-8") as f:
-        return f.write(data)
 
 
 def get_project_dir(project_path):
@@ -44,10 +33,11 @@ def get_project_dir(project_path):
 
 
 def create_setting_files(project_path: Path, project_name: str):
-    for file in (".gitignore", "config.yaml", "config_dev.yaml"):
+    for file in (".gitignore", "config.yaml", "config_dev.yaml", "README.md"):
         shutil.copy(TEMPLATE_DIR / file, project_path / file)
-        data = read_file(project_path / file).replace("crying", project_name)
-        write_file(project_path / file, data)
+        file_path = project_path / file
+        data = file_path.read_text(encoding="utf-8").replace("crying", project_name)
+        file_path.write_text(data, encoding="utf-8")
 
 
 def set_project_name_in_files(workdir: Path, project_name: str):
@@ -59,7 +49,7 @@ def set_project_name_in_files(workdir: Path, project_name: str):
                 print(f"❌ {elem}")
         else:
             if elem.suffix != ".pyc":
-                data = read_file(elem)
+                data = elem.read_text(encoding="utf-8")
                 if elem.name == 'config.py':
                     data = data.replace("project/crying", project_name) \
                         .replace('project.crying', project_name) \
@@ -67,17 +57,28 @@ def set_project_name_in_files(workdir: Path, project_name: str):
                 else:
                     data = data.replace("project.crying", project_name)
                 print(f"✅ {elem}")
-                write_file(elem, data)
+                elem.write_text(data, encoding="utf-8")
             else:
                 print(f"❌ {elem}")
 
 
-def install_dependencies():
+def install_dependencies(project_path: Path):
     aiogram_version = 'aiogram@latest -E i18n --allow-prereleases'
-    dependencies = "loguru pydantic tortoise-orm[asyncpg] pyyaml APScheduler cachetools glQiwiApi apscheduler fluent-runtime"
-    os.system(f"poetry add {aiogram_version}")
-    os.system(f"poetry add {dependencies}")
-    os.system(f"poetry add git+https://github.com/taimast/aiogram-admin.git")
+    dependencies = ["loguru",
+                    "pydantic",
+                    "tortoise-orm[asyncpg]",
+                    "pyyaml",
+                    "APScheduler",
+                    "cachetools",
+                    "glQiwiApi",
+                    "apscheduler",
+                    "fluent-runtime"]
+
+    dependencies = " ".join(dependencies)
+    os.system(f"cd {project_path} && "
+              f"poetry add {aiogram_version} && "
+              f"poetry add {dependencies} && "
+              f"poetry add git+https://github.com/taimast/aiogram-admin.git")
 
 
 def init_localize(project_name: str, localization: str):
@@ -101,7 +102,7 @@ def main():
     if not project_path.exists():
         permission = input(f"Директория {project_path} не существует, создать как новый проект? [y/n]: ")
         if permission == "y":
-            subprocess.Popen(['poetry', 'new', project_path.name]).wait()
+            subprocess.Popen(['poetry', 'new', str(project_path)]).wait()
             print("✅ Проект создан")
         else:
             exit("❌ Проект не создан. Укажите путь до проекта через аргумент -p")
@@ -119,7 +120,7 @@ def main():
 
     if dependencies:
         print(f"Установка базовых зависимостей...")
-        install_dependencies()
+        install_dependencies(project_path)
 
     if localization:
         init_localize(workdir.name, localization)
