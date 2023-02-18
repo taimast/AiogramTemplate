@@ -12,5 +12,5 @@ class Action(str, Enum):
 
 
 class UserCallback(CallbackData, prefix="user"):
-    pk: int
+    id: int
     action: Action
