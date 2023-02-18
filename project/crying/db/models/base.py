@@ -1,4 +1,12 @@
-from tortoise import Model, fields
+from tortoise import Model as _Model, fields
+
+
+class Model(_Model):
+
+    async def update(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        await self.save(update_fields=kwargs.keys())
 
 
 class ChannelForSubscription(Model):

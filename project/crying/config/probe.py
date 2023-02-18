@@ -112,6 +112,8 @@ async def qiwi_probe():
         await asyncio.sleep(2)
     pprint(res)
 
+
+
 async def crypto_cloud_probe():
     c = CryptoCloud(shop_id="SrL65kqO7lp3bhCt",
                     api_key="***REMOVED***")
@@ -122,6 +124,12 @@ async def crypto_cloud_probe():
         pprint(await c.is_paid(res.invoice_id))
         await asyncio.sleep(2)
 
+class SomeClass(BaseModel):
+    a: int|None
+    b: str
+
+
 if __name__ == '__main__':
+    s = SomeClass(b="2")
     # main2()
     asyncio.run(yookassa_probe())

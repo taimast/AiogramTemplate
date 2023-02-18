@@ -9,8 +9,8 @@ from project.crying.db.models import User
 router = Router()
 
 
-@router.message(Command(BaseCommands.START), StateFilter("*"))
-@router.callback_query(Text("start"), StateFilter("*"))
+@router.message(Command(BaseCommands.START))
+@router.callback_query(Text("start"))
 async def start(message: types.Message | types.CallbackQuery, user: User, l10n: FluentLocalization, state: FSMContext):
     await state.clear()
     if isinstance(message, types.CallbackQuery):
