@@ -4,3 +4,4 @@
 # todo L1 07.12.2022 3:05 taima: Заменить Loguru на стандартный логгер
 # todo L1 11.12.2022 20:04 taima: Переименовать init на initialize
 # todo L1 12.12.2022 16:43 taima: Перенести настройки из AutoAnswer в конфиг
+# todo L1 TODO 27.02.2023 2:44 taima: Исправить получение данные через атрибуты fluentogram

@@ -51,3 +51,15 @@ ___
 например `en` или `ru`
 
 Документация по [Fluent](https://projectfluent.org/fluent/guide/)
+
+## Дополнительно
+
+`project\crying\utils\ftl_parser_cli.py`  
+CLI для парсинга файлов переменных из ftl файлов в заглушку с поддержкой автодополнения, используется [fluentogram](https://github.com/Arustinal/fluentogram)  
+
+Пример как использовать [тут](https://github.com/Arustinal/fluentogram/blob/main/example/TypingGenerator.md), вместо i18n используется ftl_parser_cli  
+`ftl_parser_cli` дополнительно поддерживает
+- `-dir-ftl` - для создания заглушки для указанной папки
+- `-track-ftl` - для отслеживания изменений в файлах ftl в указанной папке и автоматического обновления заглушки
+
+
