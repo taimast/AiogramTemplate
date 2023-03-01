@@ -70,7 +70,7 @@ def install_dependencies(project_path: Path):
                     "glQiwiApi",
                     "apscheduler",
                     "fluent-runtime",
-                    "fluentogram,"
+                    "fluentogram",
                     "watchdog"]
 
     dependencies = " ".join(dependencies)
