@@ -69,7 +69,9 @@ def install_dependencies(project_path: Path):
                     "cachetools",
                     "glQiwiApi",
                     "apscheduler",
-                    "fluent-runtime"]
+                    "fluent-runtime",
+                    "fluentogram,"
+                    "watchdog"]
 
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "
