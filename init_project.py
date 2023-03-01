@@ -50,12 +50,9 @@ def set_project_name_in_files(workdir: Path, project_name: str):
         else:
             if elem.suffix != ".pyc":
                 data = elem.read_text(encoding="utf-8")
-                if elem.name == 'config.py':
-                    data = data.replace("project/crying", project_name) \
-                        .replace('project.crying', project_name) \
-                        .replace('crying', project_name)
-                else:
-                    data = data.replace("project.crying", project_name)
+                data = data.replace("project/crying", project_name) \
+                    .replace('project.crying', project_name) \
+                    .replace('crying', project_name)
                 print(f"✅ {elem}")
                 elem.write_text(data, encoding="utf-8")
             else:

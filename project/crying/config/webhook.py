@@ -10,7 +10,6 @@ class SSL(BaseModel):
     keyfile: FilePath
 
     def get_certfile(self) -> FSInputFile:
-        # return open(self.certfile, "rb")
         return FSInputFile(self.certfile)
 
     def get_ssl_context(self) -> Optional[ssl.SSLContext]:

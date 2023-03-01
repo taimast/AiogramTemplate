@@ -6,8 +6,11 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import BotCommandScopeDefault, BotCommandScopeChat
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiogram_admin import setup_admin_handlers
+# from aiogram_admin import setup_admin_handlers
 from aiohttp import web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from fluent_compiler.bundle import FluentBundle
+from fluentogram import TranslatorHub, FluentTranslator
 from loguru import logger
 
 from project.crying.apps.bot.commands.bot_commands import AdminCommandsCollection, SuperAdminCommandsCollection, \
@@ -15,8 +18,9 @@ from project.crying.apps.bot.commands.bot_commands import AdminCommandsCollectio
 from project.crying.apps.bot.handlers import register_common_routers
 from project.crying.apps.bot.handlers.admin import register_admin_routers
 from project.crying.apps.bot.handlers.error import errors
-from project.crying.apps.bot.middleware import L10nMiddleware, UserMiddleware
-from project.crying.config import Settings, TIME_ZONE
+from project.crying.apps.bot.middleware import UserMiddleware
+from project.crying.apps.bot.middleware.l10n import TranslatorRunnerMiddleware
+from project.crying.config import Settings, TIME_ZONE, LOCALES_DIR
 from project.crying.db.models import ChannelForSubscription, User
 from project.crying.db.utils.backup import making_backup
 
@@ -43,11 +47,11 @@ async def setup_routers(dp: Dispatcher, settings: Settings):
     # Обработчики ошибок
     dp.include_router(errors.router)
 
-    # Обработчики общего назначения
-    register_common_routers(dp)
-
     # Обработчики админки
     register_admin_routers(dp, settings.bot.admins)
+
+    # Обработчики общего назначения
+    register_common_routers(dp)
 
     # Обработчики админки
     await setup_admin_handlers(
@@ -60,26 +64,16 @@ async def setup_routers(dp: Dispatcher, settings: Settings):
     )
 
 
-def setup_middlewares(dp: Dispatcher, l10n_middleware: L10nMiddleware):
+def setup_middlewares(dp: Dispatcher):
     # Мидлварь для получения пользователя
     user_middleware = UserMiddleware()
     dp.message.middleware(user_middleware)
     dp.callback_query.middleware(user_middleware)
 
-    # Мидлварь для получения языка пользователя
-    # dp.message.middleware(language_middleware)
-    # dp.callback_query.middleware(language_middleware)
-
     # Мидлварь для локализации
-    # l10n_middleware = L10nMiddleware(
-    #     loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
-    #     default_locale="ru",
-    #     locales=["en"],
-    #     resource_ids=["common.ftl"]
-    # )
-    # logger.info("Загружены локали: " + ", ".join(l10n_middleware.locales))
-    dp.message.middleware(l10n_middleware)
-    dp.callback_query.middleware(l10n_middleware)
+    translator_runner_middleware = TranslatorRunnerMiddleware()
+    dp.message.middleware(translator_runner_middleware)
+    dp.callback_query.middleware(translator_runner_middleware)
 
 
 def start_scheduler():
@@ -92,6 +86,29 @@ def start_scheduler():
 
     # Запуск планировщика
     scheduler.start()
+
+
+# todo L1  01.03.2023 15:15 taima: Перенести в config
+def init_translator_hub() -> TranslatorHub:
+    """Инициализация локализации."""
+    en_files = LOCALES_DIR.glob("en/*.ftl")
+    ru_files = LOCALES_DIR.glob("ru/*.ftl")
+    translator_hub = TranslatorHub(
+        {"ru": ("ru", "en"),
+         "en": ("en",)},
+        [
+            FluentTranslator(
+                "en",
+                translator=FluentBundle.from_files("en-US", filenames=en_files)
+            ),
+            FluentTranslator(
+                "ru",
+                translator=FluentBundle.from_files("ru", filenames=ru_files)
+            )
+        ],
+    )
+    logger.info("Загружены локали: " + ", ".join(translator_hub.locales_map))
+    return translator_hub
 
 
 async def start_webhook(bot: Bot, dp: Dispatcher, settings: Settings):

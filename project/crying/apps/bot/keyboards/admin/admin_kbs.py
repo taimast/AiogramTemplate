@@ -25,5 +25,5 @@ def admin_button() -> InlineKeyboardMarkup:
 
 def back() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.button(text="⬅️ Назад", callback_data="admin")
+    builder.button(text="« Назад", callback_data="admin")
     return builder.as_markup()

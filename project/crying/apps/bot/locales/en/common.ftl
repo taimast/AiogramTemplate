@@ -1,1 +1,1 @@
-start = Hello, { $name }! How are you?
+start = Hi, I'm a bot
