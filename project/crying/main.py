@@ -2,19 +2,19 @@ import asyncio
 
 from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
-from fluent.runtime import FluentResourceLoader
 from loguru import logger
 
-from project.crying.apps.bot.middleware import L10nMiddleware
 from project.crying.config.cli import CLIArgsSettings
-from project.crying.config.config import Settings, LOCALES_DIR
+from project.crying.config.config import Settings
 from project.crying.config.logg_settings import init_logging, Level
 from project.crying.db import init_db, close_db
-from project.crying.setup import setup_routers, setup_middlewares, set_commands, start_scheduler, start_webhook
+from project.crying.setup import setup_routers, setup_middlewares, set_commands, start_scheduler, start_webhook, \
+    init_translator_hub
 
 
-# todo L1 TODO 18.02.2023 6:36 taima: Скопировать все из autoanswe
-
+# todo L1 TODO 18.02.2023 6:36 taima: Скопировать все из autoanswer
+# todo L1 TODO 18.02.2023 7:06 taima: Сделать ввиде раздельных импортируемых модулей
+# todo L1 TODO 18.02.2023 7:07 taima: Включить aiogram_admin в проект
 async def main():
     # Парсинг аргументов командной строки
     cli_settings = CLIArgsSettings.parse_args()
@@ -31,12 +31,16 @@ async def main():
     # Инициализация базы данных
     await init_db(settings.db)
 
+    # Инициализация переводчика
+    translator_hub = init_translator_hub()
+
     # Инициализация бота
     bot = Bot(token=settings.bot.token.get_secret_value(), parse_mode="html")
     storage = MemoryStorage()
     dp = Dispatcher(
         storage=storage,
-        settings=settings
+        settings=settings,
+        translator_hub=translator_hub,
     )
 
     # Настройка фильтра только для приватных сообщений
@@ -45,19 +49,11 @@ async def main():
     # Настройка роутеров обработчиков
     await setup_routers(dp, settings)
 
-    # Инициализация мидлвари локализации
-    l10n = L10nMiddleware(
-        loader=FluentResourceLoader(str(LOCALES_DIR / "{locale}")),
-        default_locale="ru",
-        locales=["en"],
-        resource_ids=["common.ftl"]
-    )
-
     # Настройка мидлварей
-    setup_middlewares(dp, l10n)
+    setup_middlewares(dp)
 
     # Запуск планировщика
-    await start_scheduler()
+    start_scheduler()
 
     # Установка команд бота
     await set_commands(bot, settings)
@@ -84,4 +80,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
