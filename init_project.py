@@ -21,6 +21,7 @@ def get_project_dir(project_path):
     for item in project_path.iterdir():
         if item.is_dir() and item.name not in ("tests",
                                                ".idea",
+                                               "scripts",
                                                "logs",
                                                "media",
                                                "static",
@@ -114,7 +115,9 @@ def main():
     print("Файлы настроек созданы")
 
     dir_util.copy_tree(str(TEMPLATE_DIR / "crying"), str(workdir))
+    dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
     set_project_name_in_files(workdir, project_name)
+    set_project_name_in_files(project_path / "scripts", project_name)
     print("Шаблон настроен")
 
     if dependencies:
