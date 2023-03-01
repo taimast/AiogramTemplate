@@ -72,7 +72,8 @@ def install_dependencies(project_path: Path):
                     "apscheduler",
                     "fluent-runtime",
                     "fluentogram",
-                    "watchdog"]
+                    "watchdog",
+                    "jinja2"]
 
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "
