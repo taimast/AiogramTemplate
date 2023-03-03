@@ -40,7 +40,7 @@ class Bot(BaseModel):
 class Database(BaseModel):
     user: str = "postgres"
     password: SecretStr = SecretStr("postgres")
-    database: str = "autoanswer"
+    database: str = "crying"
     host: str = "localhost"
     port: int = 5432
     timezone: str = "Europe/Moscow"
