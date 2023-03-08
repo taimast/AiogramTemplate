@@ -7,9 +7,17 @@ from loguru import logger
 from project.crying.config.cli import CLIArgsSettings
 from project.crying.config.config import Settings
 from project.crying.config.logg_settings import init_logging, Level
-from project.crying.db import init_db, close_db
+from project.crying.db import init_db
 from project.crying.setup import setup_routers, setup_middlewares, set_commands, start_scheduler, start_webhook, \
     init_translator_hub
+
+
+async def on_startup():
+    pass
+
+
+async def on_shutdown():
+    pass
 
 
 # todo L1 TODO 18.02.2023 6:36 taima: Скопировать все из autoanswer
@@ -39,9 +47,12 @@ async def main():
     storage = MemoryStorage()
     dp = Dispatcher(
         storage=storage,
-        settings=settings,
+        # settings=settings,
         translator_hub=translator_hub,
     )
+
+    dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
 
     # Настройка фильтра только для приватных сообщений
     dp.message.filter(F.chat.type == "private")
@@ -59,24 +70,24 @@ async def main():
     await set_commands(bot, settings)
 
     # Запуск бота
-    try:
-        if not cli_settings.webhook:
-            logger.info("Запуск бота в обычном режиме")
-            await bot.delete_webhook()
-            await dp.start_polling(
-                bot,
-                skip_updates=True,
-                allowed_updates=dp.resolve_used_update_types(),
-            )
+    if not cli_settings.webhook:
+        logger.info("Запуск бота в обычном режиме")
+        await bot.delete_webhook()
+        await dp.start_polling(
+            bot,
+            skip_updates=True,
+            allowed_updates=dp.resolve_used_update_types(),
+            settings=settings,
+            x=2
+        )
 
-        else:
-            logger.info("Запуск бота в вебхук режиме")
-            await start_webhook(bot, dp, settings)
-    finally:
-        await bot.session.close()
-        await dp.storage.close()
-        await close_db()
+    else:
+        logger.info("Запуск бота в вебхук режиме")
+        await start_webhook(bot, dp, settings)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        logger.info("Бот остановлен")

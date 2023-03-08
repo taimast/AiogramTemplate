@@ -41,7 +41,14 @@ async def set_commands(bot: Bot, settings: Settings):
         await _set_commands(SuperAdminCommandsCollection, scope=BotCommandScopeChat(chat_id=super_admin))
 
 
-async def setup_routers(dp: Dispatcher, settings: Settings):
+async def setup_routers(
+        dp: Dispatcher,
+        settings: Settings,
+        *,
+        check_subscriptions=True,
+        check_admins=True,
+        check_super_admins=True,
+):
     """Регистрация обработчиков"""
 
     # Обработчики ошибок
