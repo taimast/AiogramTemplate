@@ -77,7 +77,7 @@ def init_logging(log_settings: LogSettings):
             sink=sys.stderr,
             level=log_settings.stdout,
             format=Format.middle,
-            enqueue=True,
+            # enqueue=True,
             backtrace=True,
             diagnose=True,
         ))
@@ -85,7 +85,7 @@ def init_logging(log_settings: LogSettings):
         handlers.append(dict(
             sink=Path(LOG_DIR) / log_settings.file_name,
             level=log_settings.file,
-            enqueue=True,
+            # enqueue=True,
             backtrace=True,
             diagnose=True,
 
