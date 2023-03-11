@@ -1,7 +1,6 @@
 from typing import Callable, Any, Awaitable
 
 from aiogram import BaseMiddleware
-from aiogram.dispatcher.event.handler import CallableMixin
 from aiogram.types import Message, CallbackQuery
 from loguru import logger
 
@@ -22,9 +21,8 @@ class UserMiddleware(BaseMiddleware):
         db_user = await User.get_or_none(id=user.id)
         if not db_user:
             logger.info(f"Новый пользователь {user=}")
-            db_user = await User.create(**user.dict())
+            db_user = await User.create(**user.dict(exclude={"locale"}))
             is_new = True
 
         data.update(user=db_user, is_new=is_new)
         return await handler(event, data)
-
