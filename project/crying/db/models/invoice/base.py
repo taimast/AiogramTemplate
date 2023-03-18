@@ -57,6 +57,6 @@ class AbstractInvoice(models.Model):
             subscription_template: SubscriptionTemplate,
             amount: int | float | str,
             **kwargs,
-    )-> Self:
+    ) -> Self:
         """Создание счета"""
         raise NotImplementedError

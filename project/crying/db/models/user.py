@@ -12,7 +12,7 @@ if typing.TYPE_CHECKING:
 
 class User(AbstractUser):
     subscription: "Subscription"
-    locale = fields.CharField(5, null=True)
+    locale = fields.CharField(5, default="ru")
 
     @classmethod
     async def count_all(cls) -> int:

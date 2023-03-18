@@ -78,7 +78,6 @@ async def main():
             skip_updates=True,
             allowed_updates=dp.resolve_used_update_types(),
             settings=settings,
-            x=2
         )
 
     else:

@@ -1,5 +1,4 @@
 import sys
-from pprint import pprint
 
 from aiogram import Bot, Router
 from aiogram.exceptions import DetailedAiogramError
