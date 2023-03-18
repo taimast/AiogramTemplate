@@ -43,11 +43,11 @@ class InvoiceQiwi(AbstractInvoice):
             amount=amount,
             description=comment,
         )
-        logger.info(f"InvoiceQiwi created [{user}][{bill.id}] {bill.pay_url}")
+        logger.info(f"InvoiceQiwi created [{user}][{bill.user_id}] {bill.pay_url}")
         created_invoice = await cls.create(
             amount=bill.amount.value,
             currency=bill.amount.currency,
-            invoice_id=bill.id,
+            invoice_id=bill.user_id,
             pay_url=bill.pay_url,
 
             user=user,

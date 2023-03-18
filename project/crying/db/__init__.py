@@ -17,6 +17,7 @@ async def close_db():
     await Tortoise.close_connections()
     logger.info(f"Database closed")
 
+
 async def init_db(db: Database):
     logger.debug(f"Initializing Database {db.database}[{db.host}]...")
     data = {

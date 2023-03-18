@@ -1,4 +1,5 @@
-from aiogram import Dispatcher, Router
+from aiogram import Router
+
 from . import base
 
 router = Router(name="common")

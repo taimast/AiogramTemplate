@@ -1,8 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
-from project.crying.apps.bot.locales.stub.ru.stub import TranslatorRunner
+if TYPE_CHECKING:
+    from ...locales.stub.ru.stub import TranslatorRunner
 
 
 def start() -> ReplyKeyboardMarkup:
@@ -15,6 +20,13 @@ def custom_back(callback_data: str | CallbackData = "start") -> InlineKeyboardMa
     builder = InlineKeyboardBuilder()
     builder.button(text="« Назад", callback_data=callback_data)
     return builder.as_markup()
+
+
+def inline_button(text: str, callback_date: CallbackData) -> InlineKeyboardButton:
+    return InlineKeyboardButton(
+        text=text,
+        callback_data=callback_date.pack()
+    )
 
 
 def custom_back_button(l10n: TranslatorRunner, callback_data: str | CallbackData = "start", ) -> InlineKeyboardButton:

@@ -23,7 +23,6 @@ class CLIArgsSettings(BaseModel):
     config_file: str | None
     env_file: str | None
 
-
     @classmethod
     def parse_args(cls) -> 'CLIArgsSettings':
         parser = argparse.ArgumentParser()
@@ -51,4 +50,3 @@ class CLIArgsSettings(BaseModel):
     def update_settings(self, settings_cls: Type[Settings]):
         settings_cls.__config__.config_file = self.config_file
         settings_cls.__config__.env_file = self.env_file
-

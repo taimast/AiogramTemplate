@@ -5,6 +5,7 @@
 3. Скачать и установить [PostgreSQL](https://www.postgresql.org/download/)
 
 ### Запуск
+
 1. Склонировать репозиторий
 2. Переместиться в папку с проектом
 3. Установить зависимости командой `poetry install`
@@ -12,6 +13,7 @@
 5. Запустить бота командой `poetry run python crying/main.py`
 
 ### Доп информация
+
 1. Вход в консоль PostgreSQL: `sudo -u postgres psql`
 2. Создание базы данных: `CREATE DATABASE crying;`
 3. Изменения пароля PostgreSQL: `\password`

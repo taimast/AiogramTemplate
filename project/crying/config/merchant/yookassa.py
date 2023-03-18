@@ -2,7 +2,6 @@ import datetime
 import uuid
 from base64 import b64encode
 from enum import Enum
-from pprint import pprint
 from typing import Optional
 
 from pydantic import BaseModel, validator
@@ -18,6 +17,8 @@ class Amount(BaseModel):
 class Confirmation(BaseModel):
     confirmation_url: Optional[str]
     type: str = "redirect"
+
+
 class ConfirmationRequest(BaseModel):
     return_url: Optional[str]
     type: str = "redirect"
@@ -26,6 +27,7 @@ class ConfirmationRequest(BaseModel):
 class Recipient(BaseModel):
     account_id: str
     gateway_id: str
+
 
 class Status(str, Enum):
     WAITING_FOR_CAPTURE = "waiting_for_capture"
@@ -48,6 +50,7 @@ class YooPaymentRequest(BaseModel):
         if not v:
             v = f"Product {values.get('amount')}"
         return v
+
 
 class YooPayment(YooPaymentRequest):
     id: uuid.UUID

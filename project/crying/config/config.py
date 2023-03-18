@@ -94,6 +94,7 @@ class Settings(BaseSettings):
         config_file = "config.yaml"
         case_sensitive = True
         allow_mutation = False
+
         @classmethod
         def customise_sources(
                 cls,
@@ -107,4 +108,3 @@ class Settings(BaseSettings):
                 lambda s: load_yaml(BASE_DIR / s.__config__.config_file),
                 file_secret_settings
             )
-
