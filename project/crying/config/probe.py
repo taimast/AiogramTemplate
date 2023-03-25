@@ -6,8 +6,7 @@ from loguru import logger
 from pydantic import BaseModel
 
 from project.crying.config.logg_settings import init_logging
-from project.crying.config.merchant.crypto_cloud import CryptoCloud, CryptoPaymentRequest, \
-    Currency
+from project.crying.config.merchant.crypto_cloud import CryptoCloud
 from project.crying.config.merchant.qiwi import Qiwi
 from project.crying.config.merchant.yookassa import YooKassa
 
@@ -34,9 +33,12 @@ class Some(BaseModel):
     stream: bool = True
     write: bool = True
     base_logger: bool = True
+
+
 # long name for function
 def long_name_for_function():
     logger.warning("Hello, world!")
+
 
 def some_long_name():
     logger.critical("Hello, world! Critical")
@@ -49,15 +51,20 @@ def main():
     long_name_for_function()
     some_long_name()
 
+
 async def main2():
     c = CryptoCloud(api_key=1234, _session=None, shop_id=1234)
     pprint(c.dict())
     await c.get_session()
     # await c.close_session()
+
+
 async def main4():
-    c = CryptoInvoiceRequest(amount=1, currency="RUB",  order_id="1234")
+    c = CryptoInvoiceRequest(amount=1, currency="RUB", order_id="1234")
     pprint(c.dict())
     # await c.close_session()
+
+
 async def yookassa_probe():
     # c = Yookassa(shop_id="SrL65kqO7lp3bhCt",
     #                 api_key="***REMOVED***")
@@ -88,7 +95,7 @@ async def yookassa_probe():
     # return
     while True:
         # for i in invoice:
-        pprint((await c.get_invoice(invoice.id)))
+        pprint((await c.get_invoice(invoice.user_id)))
         await asyncio.sleep(2)
     # c = CryptoInvoiceRequest(amount=1, currency="RUB",  order_id="1234")
     # pprint(c.dict())
@@ -108,10 +115,9 @@ async def qiwi_probe():
              api_key="eyJ2ZXJzaW9uIjoiUDJQIiwiZGF0YSI6eyJwYXlpbl9tZXJjaGFudF9zaXRlX3VpZCI6InM5MW5lZi0wMCIsInVzZXJfaWQiOiI3OTg5NDc3NzgxNyIsInNlY3JldCI6ImRlYjM2Yjk5NTJkYzgzNGVhZmYzNDA3ODczYWE2ZTFmY2M4ZjRlOTE1NDJjMjdhMzdiOWI0ZDUzMDE1MDRjNTYifX0=")
     res = await c.create_invoice(amount=1, order_id="1234")
     while True:
-        pprint(await c.is_paid(res.id))
+        pprint(await c.is_paid(res.user_id))
         await asyncio.sleep(2)
     pprint(res)
-
 
 
 async def crypto_cloud_probe():
@@ -124,8 +130,9 @@ async def crypto_cloud_probe():
         pprint(await c.is_paid(res.invoice_id))
         await asyncio.sleep(2)
 
+
 class SomeClass(BaseModel):
-    a: int|None
+    a: int | None
     b: str
 
 

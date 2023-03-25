@@ -7,7 +7,7 @@ from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeybo
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
 if TYPE_CHECKING:
-    from ...locales.stub.ru.stub import TranslatorRunner
+    from ...locales.stubs.ru.stub import TranslatorRunner
 
 
 def start() -> ReplyKeyboardMarkup:

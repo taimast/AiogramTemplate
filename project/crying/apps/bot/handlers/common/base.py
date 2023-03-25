@@ -11,7 +11,7 @@ from aiogram.utils import chat_action
 from project.crying.apps.bot.commands.bot_commands import BaseCommands
 
 if TYPE_CHECKING:
-    from ...locales.stub.ru.stub import TranslatorRunner
+    from ...locales.stubs.ru.stub import TranslatorRunner
 
 router = Router()
 
