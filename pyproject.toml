@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "aiogramprojecttemplatev4"
+name = "aiogramprojecttemplate"
 version = "0.1.0"
 description = ""
 authors = ["taimaskhanov11 <81189712+taimaskhanov11@users.noreply.github.com>"]
