@@ -1,4 +1,4 @@
-# AiogramProjectTemplateV4
+# AiogramProjectTemplate
 
 #### Шаблон бота на aiogram 3 с некоторым базовым функционалом. 
 #### [Python 3.11](https://www.python.org/downloads/), [Poetry](https://python-poetry.org/docs/#installation), [aiogram 3](https://github.com/aiogram/aiogram/tree/dev-3.x), [PostgreSQL](https://www.postgresql.org/download/)
