@@ -1,5 +1,9 @@
 .idea
 __pycache__
 poetry.lock
+logs
+backup
 *dev*
 *probe*
+/db_data
+/scripts

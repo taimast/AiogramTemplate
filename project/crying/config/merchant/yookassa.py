@@ -87,7 +87,7 @@ class YooKassa(Merchant):
 
         data = YooPaymentRequest(
             amount=Amount(currency=currency, value=amount),
-            confirmation=Confirmation(return_url=return_url),
+            confirmation=ConfirmationRequest(return_url=return_url),
             description=description,
         )
         idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}

@@ -3,13 +3,14 @@ from loguru import logger
 from tortoise import Tortoise
 from tortoise.exceptions import DBConnectionError
 
-from project.crying.config import Database, MODELS_DIR, TIME_ZONE
+from project.crying.config import MODELS_DIR, TIME_ZONE
+from project.crying.config.db import Postgres, Sqlite
 
 __all__ = (
     "init_db",
     "close_db",
     "models",
-    "utils"
+
 )
 
 
@@ -18,10 +19,10 @@ async def close_db():
     logger.info(f"Database closed")
 
 
-async def init_db(db: Database):
-    logger.debug(f"Initializing Database {db.database}[{db.host}]...")
+async def init_db(db: Postgres | Sqlite):
+    logger.debug(f"Initializing Database {db}...")
     data = {
-        "db_url": db.url,
+        "db_url": db.tortoise_url,
         "modules": {"models": [MODELS_DIR]},
         "timezone": str(TIME_ZONE),
     }
@@ -35,4 +36,4 @@ async def init_db(db: Database):
         await Tortoise.generate_schemas()
         logger.success(f"New database {db.database} created")
 
-    logger.debug(f"Database {db.database}[{db.host}] initialized")
+    logger.debug(f"Database {db} initialized")

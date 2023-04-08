@@ -3,9 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from aiogram.filters.callback_data import CallbackData
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton
+from aiogram.utils import markdown as md
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
+md = md
 if TYPE_CHECKING:
     from ...locales.stubs.ru.stub import TranslatorRunner
 
@@ -33,6 +35,10 @@ def custom_back_button(l10n: TranslatorRunner, callback_data: str | CallbackData
     if not isinstance(callback_data, str):
         callback_data = callback_data.pack()
     return InlineKeyboardButton(text=l10n.button.back(), callback_data=callback_data)
+
+
+def reply_back_button(l10n: TranslatorRunner) -> KeyboardButton:
+    return KeyboardButton(text=l10n.button.back())
 
 
 def reply_back() -> ReplyKeyboardMarkup:

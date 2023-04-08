@@ -1,7 +1,7 @@
 import asyncio
 from typing import TypeVar
 
-from aiogram import types
+from aiogram import types, Bot
 
 MESSAGE_LIMIT = 4096
 ReplyMarkup = TypeVar("ReplyMarkup", types.InlineKeyboardMarkup, types.ReplyKeyboardMarkup, types.ReplyKeyboardRemove,
@@ -23,3 +23,15 @@ async def split_sending(message: types.Message,
             await asyncio.sleep(0.5)
     else:
         await message.answer(answer_text, reply_markup=reply_markup)
+
+
+async def mailings(bot: Bot, text: str, users: list, *, reply_markup: ReplyMarkup = None) -> list[types.Message]:
+    """ Send message to all users in list """
+    mails = []
+    for user in users:
+        try:
+            mails.append(await bot.send_message(user, text, reply_markup=reply_markup))
+        except Exception as e:
+            print(e)
+        await asyncio.sleep(0.5)
+    return mails

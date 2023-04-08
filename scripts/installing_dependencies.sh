@@ -12,3 +12,7 @@ sudo apt install python3.11 -y &&
 curl -sSL https://install.python-poetry.org | python3 - &&
 sudo apt install postgresql -y &&
 sudo apt --fix-broken install -y
+ln /root/.local/bin/poetry /usr/local/bin/poetry
+sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'postgres';"
+sudo chmod ugo+x ./scripts/run.sh
+poetry install
