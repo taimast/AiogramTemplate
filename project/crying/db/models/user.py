@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 import typing
 
@@ -8,6 +10,21 @@ from project.crying.db.models.base import AbstractUser
 
 if typing.TYPE_CHECKING:
     from .subscription import Subscription
+
+
+def get_chat_name(chat: User) -> str:
+    if chat.first_name and chat.last_name:
+        name = f"{chat.first_name} {chat.last_name}"
+    elif chat.first_name:
+        name = chat.first_name
+    elif chat.last_name:
+        name = chat.last_name
+    elif chat.username:
+        name = f"@{chat.username}"
+    else:
+        name = f"id{chat.id}"
+
+    return f"{name} (@{chat.username})"
 
 
 class User(AbstractUser):

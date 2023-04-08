@@ -4,6 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import BotCommandScopeDefault, BotCommandScopeChat
+from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiogram_admin import setup_admin_handlers
 # from aiogram_admin import setup_admin_handlers
@@ -22,7 +23,7 @@ from project.crying.apps.bot.middleware import UserMiddleware
 from project.crying.apps.bot.middleware.l10n import TranslatorRunnerMiddleware
 from project.crying.config import Settings, TIME_ZONE, LOCALES_DIR
 from project.crying.db.models import ChannelForSubscription, User
-from project.crying.db.utils.backup import making_backup
+from project.crying.utils.backup import making_backup
 
 
 async def set_commands(bot: Bot, settings: Settings):
@@ -56,10 +57,6 @@ async def setup_routers(
 
     # Обработчики админки
     register_admin_routers(dp, settings.bot.admins)
-
-    # Обработчики общего назначения
-    register_common_routers(dp)
-
     # Обработчики админки
     await setup_admin_handlers(
         dp=dp,
@@ -69,6 +66,8 @@ async def setup_routers(
         User=User,
         admin_command="base_admin",
     )
+    # Обработчики общего назначения
+    register_common_routers(dp)
 
 
 def setup_middlewares(dp: Dispatcher):
@@ -81,6 +80,9 @@ def setup_middlewares(dp: Dispatcher):
     translator_runner_middleware = TranslatorRunnerMiddleware()
     dp.message.middleware(translator_runner_middleware)
     dp.callback_query.middleware(translator_runner_middleware)
+
+    # Мидлварь для обработки CallbackAnswer
+    dp.callback_query.middleware(CallbackAnswerMiddleware())
 
 
 def start_scheduler():

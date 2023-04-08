@@ -34,7 +34,14 @@ def get_project_dir(project_path):
 
 
 def create_setting_files(project_path: Path, project_name: str):
-    for file in (".gitignore", "config.yaml", "config_dev.yaml", "README.md"):
+    for file in (
+            ".gitignore",
+            "config.yml",
+            "config_dev.yml",
+            "README.md",
+            "Dockerfile",
+            "docker-compose.yml",
+    ):
         shutil.copy(TEMPLATE_DIR / file, project_path / file)
         file_path = project_path / file
         data = file_path.read_text(encoding="utf-8").replace("crying", project_name)
@@ -49,7 +56,7 @@ def set_project_name_in_files(workdir: Path, project_name: str):
             else:
                 print(f"❌ {elem}")
         else:
-            if elem.suffix != ".pyc":
+            if elem.suffix != ".pyc" and "dev" not in elem.name and "probe" not in elem.name:
                 data = elem.read_text(encoding="utf-8")
                 data = data.replace("project/crying", project_name) \
                     .replace('project.crying', project_name) \

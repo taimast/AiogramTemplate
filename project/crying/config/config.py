@@ -3,10 +3,11 @@ from pathlib import Path
 from typing import Optional, Any, Callable
 
 import yaml
-from pydantic import BaseModel, BaseSettings, Field, SecretStr, root_validator, validator
+from pydantic import BaseModel, BaseSettings, Field, SecretStr, validator
 from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, SecretsSettingsSource
 
-from .merchant.base import Merchant
+from .db import Sqlite, Postgres
+from .merchant.group import MerchantGroup
 from .webhook import Webhook
 
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -37,63 +38,19 @@ class Bot(BaseModel):
         return v or []
 
 
-class Database(BaseModel):
-    user: str = "postgres"
-    password: SecretStr = SecretStr("postgres")
-    database: str = "crying"
-    host: str = "localhost"
-    port: int = 5432
-    timezone: str = "Europe/Moscow"
-
-    class Config:
-        allow_mutation = False
-
-    @property
-    def url(self):
-        return (f"postgres://"
-                f"{self.user}:{self.password.get_secret_value()}"
-                f"@{self.host}:{self.port}"
-                f"/{self.database}")
-
-
-# todo L1 23.11.2022 5:27 taima: Подумать что делать с этим
-class MerchantGroup(BaseModel):
-    qiwi: Optional[Merchant]
-    yookassa: Optional[Merchant]
-    crypto_cloud: Optional[Merchant]
-
-    class Config:
-        allow_mutation = False
-
-    @root_validator(pre=True)
-    def validate_merchants(cls, values):
-        try:
-            if qiwi := values.get("qiwi"):
-                from .merchant.qiwi import Qiwi
-                values["qiwi"] = Qiwi(**qiwi)
-            if yookassa := values.get("yookassa"):
-                from .merchant.yookassa import YooKassa
-                values["yookassa"] = YooKassa(**yookassa)
-            if crypto_cloud := values.get("crypto_cloud"):
-                from .merchant.crypto_cloud import CryptoCloud
-                values["crypto_cloud"] = CryptoCloud(**crypto_cloud)
-        except ImportError as e:
-            raise ImportError(f"Don't forget to install extra requirements for merchant: {e.name}")
-        return values
-
-
 class Settings(BaseSettings):
     bot: Bot
-    db: Database
+    db: Postgres | Sqlite
     webhook: Optional[Webhook]
     merchant: Optional[MerchantGroup]
 
     class Config:
         env_file = r"..\..\.env"
         env_file_encoding = "utf-8"
-        config_file = "config.yaml"
-        case_sensitive = True
+        config_file = "config.yml"
+        # case_sensitive = True
         allow_mutation = False
+        env_nested_delimiter = '__'
 
         @classmethod
         def customise_sources(
@@ -108,3 +65,21 @@ class Settings(BaseSettings):
                 lambda s: load_yaml(BASE_DIR / s.__config__.config_file),
                 file_secret_settings
             )
+
+    def dump(self):
+        with open(BASE_DIR / self.__config__.config_file, "w", encoding="utf-8") as f:
+            data = self.dict()
+
+            def recursive_remove_secret(obj):
+                if isinstance(obj, dict):
+                    for k, v in obj.items():
+                        if isinstance(v, SecretStr):
+                            obj[k] = v.get_secret_value()
+                        else:
+                            recursive_remove_secret(v)
+                elif isinstance(obj, list):
+                    for v in obj:
+                        recursive_remove_secret(v)
+
+            recursive_remove_secret(data)
+            yaml.dump(data, f, allow_unicode=True, sort_keys=False)

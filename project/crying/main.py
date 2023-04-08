@@ -1,4 +1,5 @@
 import asyncio
+from pprint import pformat
 
 from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -6,8 +7,8 @@ from loguru import logger
 
 from project.crying.config.cli import CLIArgsSettings
 from project.crying.config.config import Settings
-from project.crying.config.logg_settings import init_logging, Level
-from project.crying.db import init_db
+from project.crying.config.log import init_logging
+from project.crying.db import init_db, close_db
 from project.crying.setup import setup_routers, setup_middlewares, set_commands, start_scheduler, start_webhook, \
     init_translator_hub
 
@@ -27,14 +28,15 @@ async def main():
     # Парсинг аргументов командной строки
     cli_settings = CLIArgsSettings.parse_args()
     cli_settings.update_settings(Settings)
-    cli_settings.log.stdout = Level.TRACE
+    # cli_settings.log.stdout = Level.TRACE
     # cli_settings.log.file = Level.TRACE
 
     # Инициализация настроек
     settings = Settings()
-
+    logger.info(f"Settings:\n{pformat(settings.dict())}")
     # Инициализация логирования
     init_logging(cli_settings.log)
+
 
     # Инициализация базы данных
     await init_db(settings.db)
@@ -47,7 +49,7 @@ async def main():
     storage = MemoryStorage()
     dp = Dispatcher(
         storage=storage,
-        # settings=settings,
+        settings=settings,
         translator_hub=translator_hub,
     )
 
@@ -70,19 +72,24 @@ async def main():
     await set_commands(bot, settings)
 
     # Запуск бота
-    if not cli_settings.webhook:
-        logger.info("Запуск бота в обычном режиме")
-        await bot.delete_webhook()
-        await dp.start_polling(
-            bot,
-            skip_updates=True,
-            allowed_updates=dp.resolve_used_update_types(),
-            settings=settings,
-        )
+    try:
+        if not cli_settings.webhook:
+            logger.info("Запуск бота в обычном режиме")
+            await bot.delete_webhook()
+            await dp.start_polling(
+                bot,
+                skip_updates=True,
+                allowed_updates=dp.resolve_used_update_types(),
+            )
 
-    else:
-        logger.info("Запуск бота в вебхук режиме")
-        await start_webhook(bot, dp, settings)
+        else:
+            logger.info("Запуск бота в вебхук режиме")
+            await start_webhook(bot, dp, settings)
+
+    finally:
+        await bot.session.close()
+        await dp.storage.close()
+        await close_db()
 
 
 if __name__ == "__main__":
