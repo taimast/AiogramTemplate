@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class Sqlite(BaseModel):
+class SqliteDB(BaseModel):
     path: str = "crying.db"
     timezone: str = "Europe/Moscow"
     dialect: str = "aiosqlite"

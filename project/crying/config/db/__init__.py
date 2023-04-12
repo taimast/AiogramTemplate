@@ -1,2 +1,2 @@
-from .postgres import Postgres
-from .sqlite import Sqlite
+from .postgresdb import PostgresDB
+from .sqlitedb import SqliteDB

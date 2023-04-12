@@ -10,7 +10,7 @@ from .config import (
     Settings,
     Bot,
 )
-from .db import Postgres, Sqlite
+from .db import PostgresDB, SqliteDB
 
 __all__ = (
     'BASE_DIR',
@@ -23,6 +23,6 @@ __all__ = (
 
     'Settings',
     'Bot',
-    'Postgres',
-    'Sqlite',
+    'PostgresDB',
+    'SqliteDB',
 )

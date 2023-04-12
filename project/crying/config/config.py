@@ -6,7 +6,7 @@ import yaml
 from pydantic import BaseModel, BaseSettings, Field, SecretStr, validator
 from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, SecretsSettingsSource
 
-from .db import Sqlite, Postgres
+from .db import SqliteDB, PostgresDB
 from .merchant.group import MerchantGroup
 from .webhook import Webhook
 
@@ -40,7 +40,7 @@ class Bot(BaseModel):
 
 class Settings(BaseSettings):
     bot: Bot
-    db: Postgres | Sqlite
+    db: PostgresDB | SqliteDB
     webhook: Optional[Webhook]
     merchant: Optional[MerchantGroup]
 

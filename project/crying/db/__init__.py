@@ -4,7 +4,7 @@ from tortoise import Tortoise
 from tortoise.exceptions import DBConnectionError
 
 from project.crying.config import MODELS_DIR, TIME_ZONE
-from project.crying.config.db import Postgres, Sqlite
+from project.crying.config.db import PostgresDB, SqliteDB
 
 __all__ = (
     "init_db",
@@ -19,7 +19,7 @@ async def close_db():
     logger.info(f"Database closed")
 
 
-async def init_db(db: Postgres | Sqlite):
+async def init_db(db: PostgresDB | SqliteDB):
     logger.debug(f"Initializing Database {db}...")
     data = {
         "db_url": db.tortoise_url,
