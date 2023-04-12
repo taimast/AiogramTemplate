@@ -1,7 +1,9 @@
+from typing import Self
+
 from pydantic import BaseModel, SecretStr
 
 
-class Postgres(BaseModel):
+class PostgresDB(BaseModel):
     user: str
     password: SecretStr
     database: str
@@ -29,3 +31,11 @@ class Postgres(BaseModel):
                 f"{self.user}:{self.password.get_secret_value()}"
                 f"@{self.host}:{self.port}"
                 f"/{self.database}")
+
+    @classmethod
+    def default(cls) -> Self:
+        return cls(
+            user="postgres",
+            password="postgres",
+            database="crying",
+        )
