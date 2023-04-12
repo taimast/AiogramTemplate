@@ -23,6 +23,7 @@ from project.crying.apps.bot.middleware import UserMiddleware
 from project.crying.apps.bot.middleware.l10n import TranslatorRunnerMiddleware
 from project.crying.config import Settings, TIME_ZONE, LOCALES_DIR
 from project.crying.db.models import ChannelForSubscription, User
+from project.crying.db.models.user import Locale
 from project.crying.utils.backup import making_backup
 
 
@@ -100,21 +101,22 @@ def start_scheduler():
 # todo L1  01.03.2023 15:15 taima: Перенести в config
 def init_translator_hub() -> TranslatorHub:
     """Инициализация локализации."""
-    en_files = LOCALES_DIR.glob("en/*.ftl")
-    ru_files = LOCALES_DIR.glob("ru/*.ftl")
+
+    locales_map = {
+        locale: (locale, "en")
+        for locale in Locale
+    }
+    translators = [
+        FluentTranslator(
+            locale,
+            translator=FluentBundle.from_files(locale, filenames=LOCALES_DIR.glob(f"{locale}/*.ftl"))
+        )
+        for locale in Locale
+    ]
+
     translator_hub = TranslatorHub(
-        {"ru": ("ru", "en"),
-         "en": ("en",)},
-        [
-            FluentTranslator(
-                "en",
-                translator=FluentBundle.from_files("en-US", filenames=en_files)
-            ),
-            FluentTranslator(
-                "ru",
-                translator=FluentBundle.from_files("ru", filenames=ru_files)
-            )
-        ],
+        locales_map=locales_map,
+        translators=translators,
     )
     logger.info("Загружены локали: " + ", ".join(translator_hub.locales_map))
     return translator_hub

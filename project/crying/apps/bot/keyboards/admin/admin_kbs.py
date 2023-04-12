@@ -5,7 +5,9 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 # todo 5/31/2022 2:33 PM taima: разделить основно функционал
 def admin_start():
     keywords = [
-        # todo L1 11.11.2022 1:02 taima:
+        # "mailing"
+        ("📨 Рассылка", "mailing"),
+        ("📊 Статистика", "stats"),
     ]
     builder = InlineKeyboardBuilder()
 

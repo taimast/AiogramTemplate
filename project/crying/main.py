@@ -37,7 +37,6 @@ async def main():
     # Инициализация логирования
     init_logging(cli_settings.log)
 
-
     # Инициализация базы данных
     await init_db(settings.db)
 
