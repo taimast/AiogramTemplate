@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-poetry run python scenario_bot/main.py
+poetry run python crying/main.py
