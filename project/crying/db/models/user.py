@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datetime
 import typing
+from enum import StrEnum
 
 from tortoise import fields
 
@@ -27,9 +28,15 @@ def get_chat_name(chat: User) -> str:
     return f"{name} (@{chat.username})"
 
 
+class Locale(StrEnum):
+    """Language codes."""
+    ENGLISH = 'en'
+    RUSSIAN = 'ru'
+
+
 class User(AbstractUser):
     subscription: "Subscription"
-    locale = fields.CharField(5, default="ru")
+    locale = fields.CharEnumField(Locale, max_length=2, default=Locale.RUSSIAN)
 
     @classmethod
     async def count_all(cls) -> int:
@@ -37,9 +44,8 @@ class User(AbstractUser):
 
     @classmethod
     async def count_new_today(cls) -> int:
-        date = datetime.datetime.now(TIME_ZONE)
-        return await User.filter(
-            registered_at__year=date.year,
-            registered_at__month=date.month,
-            registered_at__day=date.day,
-        ).count()
+        return await cls.filter(registered_at__gte=datetime.datetime.now(tz=TIME_ZONE).date()).count()
+
+    @classmethod
+    async def today_count(cls) -> int:
+        return await cls.filter(registered_at__gte=datetime.datetime.now(tz=TIME_ZONE).date()).count()
