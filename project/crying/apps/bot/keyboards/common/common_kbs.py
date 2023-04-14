@@ -31,10 +31,10 @@ def inline_button(text: str, callback_date: CallbackData) -> InlineKeyboardButto
     )
 
 
-def custom_back_button(l10n: TranslatorRunner, callback_data: str | CallbackData = "start", ) -> InlineKeyboardButton:
+def custom_back_button(text: str = "« Назад", callback_data: str | CallbackData = "start", ) -> InlineKeyboardButton:
     if not isinstance(callback_data, str):
         callback_data = callback_data.pack()
-    return InlineKeyboardButton(text=l10n.button.back(), callback_data=callback_data)
+    return InlineKeyboardButton(text=text, callback_data=callback_data)
 
 
 def reply_back_button(l10n: TranslatorRunner) -> KeyboardButton:
