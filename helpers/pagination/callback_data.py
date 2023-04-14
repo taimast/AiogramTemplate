@@ -1,5 +1,5 @@
 from enum import StrEnum
-from typing import Self, TypeVar
+from typing import Self, TypeVar, Sequence
 
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton as IKButton
@@ -44,7 +44,7 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
     def has_prev(self) -> bool:
         return self.offset > 0
 
-    def slice(self, items: list[T]) -> list[T]:
+    def slice(self, items: Sequence[T]) -> Sequence[T]:
         return items[self.offset:self.offset + self.limit]
 
     def add_buttons(self, builder: InlineKeyboardBuilder, length: int):
