@@ -4,8 +4,8 @@ from pydantic import BaseModel, SecretStr
 
 
 class PostgresDB(BaseModel):
-    user: str
-    password: SecretStr
+    user: str = "postgres"
+    password: SecretStr = SecretStr("postgres")
     database: str
     host: str = "localhost"
     port: int = 5432
@@ -21,13 +21,6 @@ class PostgresDB(BaseModel):
     @property
     def url(self):
         return (f"postgresql+{self.dialect}://"
-                f"{self.user}:{self.password.get_secret_value()}"
-                f"@{self.host}:{self.port}"
-                f"/{self.database}")
-
-    @property
-    def tortoise_url(self):
-        return (f"postgres://"
                 f"{self.user}:{self.password.get_secret_value()}"
                 f"@{self.host}:{self.port}"
                 f"/{self.database}")
