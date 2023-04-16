@@ -10,10 +10,10 @@ from project.crying.config import Settings
 
 async def start_webhook(bot: Bot, dp: Dispatcher, settings: Settings):
     """Start webhook."""
-    # Выключаем логи от aiohttp
+    # Disable aiohttp logs
     logging.getLogger("aiohttp").setLevel(logging.WARNING)
 
-    # Установка вебхука
+    # Set webhook
     await bot.set_webhook(
         certificate=settings.webhook.get_certfile(),
         url=settings.webhook.url,
@@ -21,15 +21,16 @@ async def start_webhook(bot: Bot, dp: Dispatcher, settings: Settings):
         allowed_updates=dp.resolve_used_update_types(),
     )
 
-    # Создание запуска aiohttp
+    # Create aiohttp application
     app = web.Application()
     SimpleRequestHandler(dispatcher=dp, bot=bot).register(
         app, path=settings.webhook.path
     )
-    # Конфигурация startup и shutdown процессов
+
+    # Configure startup and shutdown processes
     setup_application(app, dp)
 
-    # Запуск aiohttp
+    # Start aiohttp
     runner = web.AppRunner(app)
     await runner.setup()
 
@@ -42,6 +43,5 @@ async def start_webhook(bot: Bot, dp: Dispatcher, settings: Settings):
     # web.run_app(app, host=config.webhook.host, port=config.webhook.port)
     await site.start()
 
-    # Бесконечный цикл
-    await asyncio.Event().wait()
-    # todo L1 09.11.2022 1:32 taima: убрать этот костыль
+    # Run forever
+    await asyncio.Future()

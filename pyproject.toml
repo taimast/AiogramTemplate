@@ -18,7 +18,7 @@ fluent-runtime = "^0.3.1"
 aiogram-admin = { git = "https://github.com/taimast/aiogram-admin.git" }
 fluentogram = "^1.1.6"
 watchdog = "^2.3.0"
-sqlalchemy = "^2.0.7"
+sqlalchemy = "^2.0.9"
 asyncpg = "^0.27.0"
 
 

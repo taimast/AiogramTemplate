@@ -16,8 +16,3 @@ class SqliteDB(BaseModel):
     def url(self):
         return (f"sqlite+{self.dialect}://"
                 f"{self.path}")
-
-    @property
-    def tortoise_url(self):
-        return (f"sqlite://"
-                f"{self.path}")
