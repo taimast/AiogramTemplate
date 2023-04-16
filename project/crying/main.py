@@ -9,8 +9,12 @@ from project.crying.config.cli import CLIArgsSettings
 from project.crying.config.config import Settings
 from project.crying.config.log import init_logging
 from project.crying.db import init_db, close_db
-from project.crying.setup import setup_routers, setup_middlewares, set_commands, start_scheduler, start_webhook, \
-    init_translator_hub
+from project.crying.init.commands import set_commands
+from project.crying.init.middlewares import setup_middlewares
+from project.crying.init.routers import setup_routers
+from project.crying.init.scheduler import setup_scheduler
+from project.crying.init.translator import init_translator_hub
+from project.crying.init.webhook import start_webhook
 
 
 async def on_startup():
@@ -65,7 +69,7 @@ async def main():
     setup_middlewares(dp)
 
     # Запуск планировщика
-    start_scheduler()
+    setup_scheduler()
 
     # Установка команд бота
     await set_commands(bot, settings)
