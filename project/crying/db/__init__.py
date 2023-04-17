@@ -3,8 +3,8 @@ from loguru import logger
 from tortoise import Tortoise
 from tortoise.exceptions import DBConnectionError
 
-from project.crying.config import MODELS_DIR, TIME_ZONE
-from project.crying.config.db import PostgresDB, SqliteDB
+from ..config import TIME_ZONE
+from ..config.db import PostgresDB, SqliteDB
 
 __all__ = (
     "init_db",
@@ -21,6 +21,7 @@ async def close_db():
 
 async def init_db(db: PostgresDB | SqliteDB):
     logger.debug(f"Initializing Database {db}...")
+    MODELS_DIR = "crying.db.models"
     data = {
         "db_url": db.tortoise_url,
         "modules": {"models": [MODELS_DIR]},

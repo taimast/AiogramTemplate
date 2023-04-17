@@ -1,8 +1,13 @@
 .idea
 __pycache__
+*.pyc
+*.pyo
+*.pyd
+*.cover
+*.log
+
 poetry.lock
 logs
-backup
 *dev*
 *probe*
 /db_data

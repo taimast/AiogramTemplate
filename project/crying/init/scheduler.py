@@ -1,17 +1,15 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from loguru import logger
 
-from project.crying.config import TIME_ZONE
-from project.crying.utils.backup import making_backup
+from ..config import TIME_ZONE
 
 
 def setup_scheduler() -> AsyncIOScheduler:
-    """Инициализация и запуск планировщика задач."""
-    # Инициализация планировщика
+    # Init scheduler
     scheduler = AsyncIOScheduler(timezone=TIME_ZONE)
 
-    # Создание бекапа базы данных
-    scheduler.add_job(making_backup, 'cron', hour=0, minute=0)
-
-    # Запуск планировщика
+    # Start scheduler
     scheduler.start()
+
+    logger.info("Scheduler setup completed")
     return scheduler

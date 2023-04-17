@@ -1,9 +1,8 @@
 from enum import StrEnum
 
-from sqlalchemy import BigInteger
 from sqlalchemy.orm import mapped_column, Mapped
 
-from .base import Base
+from .base import AbstractUser
 
 
 class Locale(StrEnum):
@@ -12,7 +11,6 @@ class Locale(StrEnum):
     RUSSIAN = 'ru'
 
 
-class User(Base):
+class User(AbstractUser):
     __tablename__ = 'users'
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    locale: Mapped[Locale] = mapped_column(default=Locale.RUSSIAN)
+    language_code: Mapped[Locale | None] = mapped_column(default=Locale.RUSSIAN)

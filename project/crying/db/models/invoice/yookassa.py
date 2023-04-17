@@ -3,10 +3,10 @@ from typing import Self
 from loguru import logger
 from tortoise import fields
 
-from project.crying.config.merchant.yookassa import YooPayment, YooKassa
 from .base import AbstractInvoice
 from ..subscription import SubscriptionTemplate
 from ..user import User
+from ....apps.merchant.yookassa import YooPayment, YooKassa
 
 
 class InvoiceYooKassa(AbstractInvoice):

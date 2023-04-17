@@ -4,8 +4,8 @@ from glQiwiApi.qiwi.clients.p2p.types import Bill
 from loguru import logger
 from tortoise import fields
 
-from project.crying.config.merchant.base import Merchant
 from .base import AbstractInvoice
+from ..config.merchant.base import Merchant
 from ..subscription.subscription import SubscriptionTemplate
 from ..user import User
 

@@ -5,7 +5,7 @@ from aiogram.types import Message
 from fluent.runtime import FluentResourceLoader, FluentLocalization as _FluentLocalization
 from fluentogram import TranslatorHub
 
-from project.crying.db.models import User
+from ....db.models import User
 
 
 class FluentLocalization(_FluentLocalization):
@@ -60,5 +60,5 @@ class TranslatorRunnerMiddleware(BaseMiddleware):
         hub: TranslatorHub = data.get('translator_hub')
         user: User = data.get('user')
         # There you can ask your database for locale
-        data['l10n'] = hub.get_translator_by_locale(user.locale)
+        data['l10n'] = hub.get_translator_by_locale(user.language_code)
         return await handler(event, data)

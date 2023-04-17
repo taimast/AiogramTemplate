@@ -6,8 +6,8 @@ from enum import StrEnum
 
 from tortoise import fields
 
-from project.crying.config import TIME_ZONE
-from project.crying.db.models.base import AbstractUser
+from .base import AbstractUser
+from ...config import TIME_ZONE
 
 if typing.TYPE_CHECKING:
     from .subscription import Subscription

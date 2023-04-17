@@ -4,10 +4,10 @@ from typing import Self
 from tortoise import models, fields
 from tortoise.transactions import atomic
 
-from project.crying.config.config import TIME_ZONE
-from project.crying.config.merchant.base import PAYMENT_LIFETIME, Merchant
 from ..subscription import SubscriptionTemplate
 from ..user import User
+from ....apps.merchant.base import PAYMENT_LIFETIME, Merchant
+from ....config.config import TIME_ZONE
 
 
 class AbstractInvoice(models.Model):

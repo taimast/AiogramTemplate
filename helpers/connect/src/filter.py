@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.filters import BaseFilter
 
-from ....db.models import User
+from ........db.models import User
 
 
 class IsConnectedFilter(BaseFilter):
