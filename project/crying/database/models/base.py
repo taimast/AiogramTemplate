@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, DeclarativeBase
 from sqlalchemy.orm import mapped_column
 
-T = TypeVar("T", bound=DeclarativeBase)
+T = TypeVar("T", bound='Base')
 
 
 class Base(DeclarativeBase):
@@ -61,7 +61,7 @@ class Base(DeclarativeBase):
         kwargs = {k: v for k, v in kwargs.items() if k in valid_columns}
         instance = cls(**kwargs)
         session.add(instance)
-        await session.commit()
+        await session.flush()
         return instance
 
 
@@ -73,10 +73,6 @@ class AbstractUser(Base):
     last_name: Mapped[str | None] = mapped_column(String(100))
     is_bot: Mapped[bool] = mapped_column(default=False)
     is_premium: Mapped[bool | None]
-
-    @classmethod
-    async def get_or_create(cls, session: AsyncSession, **kwargs):
-        pass
 
 
 class TimestampMixin:
