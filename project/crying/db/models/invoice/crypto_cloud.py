@@ -3,10 +3,10 @@ from typing import Self
 from loguru import logger
 from tortoise import fields
 
-from project.crying.config.merchant.crypto_cloud import CryptoCloud
 from .base import AbstractInvoice
 from ..subscription import SubscriptionTemplate
 from ..user import User
+from ....apps.merchant.crypto_cloud import CryptoCloud
 
 
 class InvoiceCrypto(AbstractInvoice):

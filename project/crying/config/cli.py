@@ -6,8 +6,8 @@ from typing import Type
 from loguru import logger
 from pydantic import BaseModel
 
-from project.crying.config.config import Settings
-from project.crying.config.log import LogSettings, Level
+from ..config.config import Settings
+from ..config.log import LogSettings, Level
 
 
 class Mode(str, Enum):
@@ -16,6 +16,7 @@ class Mode(str, Enum):
     TEST = "test"
 
 
+# todo L1 TODO 16.04.2023 21:43 taima: Переделать парсер командной строки
 class CLIArgsSettings(BaseModel):
     mode: Mode = Mode.PROD
     log: LogSettings = LogSettings()
@@ -36,6 +37,7 @@ class CLIArgsSettings(BaseModel):
         args_settings = cls(**args_dict)
 
         if args_settings.mode is Mode.DEV:
+            args_settings.log.stdout = Level.DEBUG
             args_settings.config_file = args_settings.config_file or "config_dev.yml"
             args_settings.env_file = args_settings.env_file or r"..\..\.env_dev"
         else:

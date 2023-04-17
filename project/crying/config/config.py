@@ -7,8 +7,8 @@ from pydantic import BaseModel, BaseSettings, Field, SecretStr, validator
 from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, SecretsSettingsSource
 
 from .db import SqliteDB, PostgresDB
-from .merchant.group import MerchantGroup
 from .webhook import Webhook
+from ..apps.merchant.group import MerchantGroup
 
 BASE_DIR = Path(__file__).parent.parent.parent
 LOG_DIR = BASE_DIR / "logs"
@@ -17,10 +17,8 @@ MEDIA_DIR = BASE_DIR / 'media'
 for DIR in [LOG_DIR, MEDIA_DIR]:
     DIR.mkdir(exist_ok=True)
 
-I18N_DOMAIN = "crying"
-LOCALES_DIR = BASE_DIR / "crying/apps/bot/locales"
+LOCALES_DIR = BASE_DIR / "crying/locales"
 TIME_ZONE = zoneinfo.ZoneInfo("Europe/Moscow")
-MODELS_DIR = "project.crying.db.models"
 
 
 def load_yaml(file: str | Path) -> dict[str, Any] | list[Any]:
@@ -48,7 +46,6 @@ class Settings(BaseSettings):
         env_file = r"..\..\.env"
         env_file_encoding = "utf-8"
         config_file = "config.yml"
-        # case_sensitive = True
         allow_mutation = False
         env_nested_delimiter = '__'
 

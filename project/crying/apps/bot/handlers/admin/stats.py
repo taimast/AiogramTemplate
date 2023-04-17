@@ -2,9 +2,9 @@ from aiogram import Router, types
 from aiogram.filters import Text
 from aiogram.fsm.context import FSMContext
 
-from project.crying.apps.bot.keyboards.admin import admin_kbs
-from project.crying.apps.bot.keyboards.common.common_kbs import md
-from project.crying.db.models import User
+from ...keyboards.admin import admin_kbs
+from ...keyboards.common.common_kbs import md
+from .....db.models import User
 
 router = Router()
 

@@ -5,8 +5,8 @@ from aiogram.filters import Text, StateFilter
 from aiogram.fsm.context import FSMContext
 from loguru import logger
 
-from project.crying.apps.bot.keyboards.common.common_kbs import md
-from project.crying.db.models import User
+from .....apps.bot.keyboards.common.common_kbs import md
+from .....db.models import User
 
 router = Router()
 

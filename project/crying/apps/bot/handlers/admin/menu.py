@@ -2,8 +2,8 @@ from aiogram import Router, types
 from aiogram.filters import Command, Text
 from aiogram.fsm.context import FSMContext
 
-from project.crying.apps.bot.commands.bot_commands import AdminCommands
-from project.crying.apps.bot.keyboards.admin import admin_kbs
+from ...commands.bot_commands import AdminCommands
+from ...keyboards.admin import admin_kbs
 
 router = Router()
 

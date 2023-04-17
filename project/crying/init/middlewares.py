@@ -1,19 +1,33 @@
 from aiogram import Dispatcher
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
+from loguru import logger
+from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from project.crying.apps.bot.middleware import UserMiddleware, TranslatorRunnerMiddleware
+from ..apps.bot.middlewares import UserMiddleware, TranslatorRunnerMiddleware
+from ..apps.bot.middlewares.db import DbSessionMiddleware
 
 
-def setup_middlewares(dp: Dispatcher):
-    # Мидлварь для получения пользователя
+def setup_middlewares(dp: Dispatcher, session_maker: async_sessionmaker):
+    """
+    Setup middlewares
+    :param dp:
+    :param session_maker:
+    :return:
+    """
+    # Session maker middleware
+    dp.update.middleware(DbSessionMiddleware(session_maker))
+
+    # Get user middleware
     user_middleware = UserMiddleware()
     dp.message.middleware(user_middleware)
     dp.callback_query.middleware(user_middleware)
 
-    # Мидлварь для локализации
+    # Translator middleware
     translator_runner_middleware = TranslatorRunnerMiddleware()
     dp.message.middleware(translator_runner_middleware)
     dp.callback_query.middleware(translator_runner_middleware)
 
-    # Мидлварь для обработки CallbackAnswer
+    # Callback answer middleware
     dp.callback_query.middleware(CallbackAnswerMiddleware())
+
+    logger.info("Middlewares setup completed")

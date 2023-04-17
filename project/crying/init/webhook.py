@@ -4,8 +4,9 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp import web
+from loguru import logger
 
-from project.crying.config import Settings
+from ..config import Settings
 
 
 async def start_webhook(bot: Bot, dp: Dispatcher, settings: Settings):
@@ -43,5 +44,6 @@ async def start_webhook(bot: Bot, dp: Dispatcher, settings: Settings):
     # web.run_app(app, host=config.webhook.host, port=config.webhook.port)
     await site.start()
 
+    logger.info("Webhook started")
     # Run forever
     await asyncio.Future()

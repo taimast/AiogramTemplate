@@ -1,10 +1,12 @@
+from pprint import pprint
 from typing import Callable, Any, Awaitable
 
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery
 from loguru import logger
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from project.crying.db.models import User
+from ....database.models.user import User
 
 
 class UserMiddleware(BaseMiddleware):
@@ -16,13 +18,13 @@ class UserMiddleware(BaseMiddleware):
             data: dict[str, Any]
     ) -> Any:
         user = event.from_user
+        session: AsyncSession = data["session"]
         logger.debug("Get user for User {}", user.id)
-        is_new = False
-        db_user = await User.get_or_none(id=user.id)
+        db_user = await User.get_or_none(session, id=user.id)
         if not db_user:
             logger.info(f"Новый пользователь {user=}")
-            db_user = await User.create(**user.dict(exclude={"locale"}))
-            is_new = True
+            pprint(user.dict())
+            db_user = await User.create(session, **user.dict())
 
-        data.update(user=db_user, is_new=is_new)
+        data["user"] = db_user
         return await handler(event, data)

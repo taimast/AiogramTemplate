@@ -1,10 +1,10 @@
 from functools import lru_cache
 from typing import Type
 
-from project.crying.config.merchant.base import Merchant
-from project.crying.config.merchant.group import MerchantGroup
-from project.crying.db.models import InvoiceCrypto, InvoiceQiwi, InvoiceYooKassa
-from project.crying.db.models.invoice import AbstractInvoice
+from ..apps.merchant.base import Merchant
+from ..apps.merchant.group import MerchantGroup
+from ..db.models import InvoiceCrypto, InvoiceQiwi, InvoiceYooKassa
+from ..db.models.invoice import AbstractInvoice
 
 
 @lru_cache

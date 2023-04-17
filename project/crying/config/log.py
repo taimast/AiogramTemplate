@@ -7,7 +7,7 @@ from pathlib import Path
 from loguru import logger
 from pydantic import BaseModel
 
-from project.crying.config.config import LOG_DIR
+from .config import LOG_DIR
 
 
 class Level(str, Enum):

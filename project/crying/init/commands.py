@@ -3,13 +3,18 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import BotCommandScopeDefault, BotCommandScopeChat
 from loguru import logger
 
-from project.crying.apps.bot.commands.bot_commands import BaseCommandsCollection, AdminCommandsCollection, \
+from ..apps.bot.commands.bot_commands import BaseCommandsCollection, AdminCommandsCollection, \
     SuperAdminCommandsCollection
-from project.crying.config import Settings
+from ..config import Settings
 
 
 async def set_commands(bot: Bot, settings: Settings):
-    """ Установка команд бота. """
+    """
+    Set bot commands
+    :param bot:
+    :param settings:
+    :return:
+    """
 
     async def _set_commands(commands, scope):
         try:
@@ -22,3 +27,4 @@ async def set_commands(bot: Bot, settings: Settings):
         await _set_commands(AdminCommandsCollection, scope=BotCommandScopeChat(chat_id=admin))
     for super_admin in settings.bot.super_admins:
         await _set_commands(SuperAdminCommandsCollection, scope=BotCommandScopeChat(chat_id=super_admin))
+    logger.info("Bot commands set")
