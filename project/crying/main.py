@@ -6,6 +6,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
 from project.crying.config import Settings, CLIArgsSettings, init_logging
+from project.crying.init import db
 from project.crying.init import (
     set_commands,
     setup_middlewares,
@@ -30,8 +31,8 @@ async def on_shutdown():
 # todo L1 TODO 18.02.2023 7:06 taima: Сделать ввиде раздельных импортируемых модулей
 # todo L1 TODO 18.02.2023 7:07 taima: Включить aiogram_admin в проект
 async def main():
-    # await db.main()
-    # return
+    await db.main()
+    return
 
     # Parse command line arguments
     cli_settings = CLIArgsSettings.parse_args()

@@ -4,6 +4,7 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import close_all_sessions
 
+from project.crying.database.models.invoice import AbstractInvoice
 from ..config import SqliteDB, PostgresDB
 from ..database.models.base import Base
 from ..database.models.user import User
@@ -32,11 +33,9 @@ async def main():
         async with session.begin():
             # session.add(User())
             user, _ = await User.get_or_create(session, id=1)
-            print(user)
-            print(user.locale)
-            print(user.__dict__)
-            print(_)
-            await session.commit()
+            invoice, _ = await AbstractInvoice.get_or_create(session, id="2", user_id=user.id)
+            logger.info(invoice.user.id)
+            # await session.commit()
 
 
 if __name__ == '__main__':
