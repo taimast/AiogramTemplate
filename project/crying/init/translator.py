@@ -15,7 +15,7 @@ def init_translator_hub() -> TranslatorHub:
     """
 
     locales_map = {
-        locale: (locale, "en")
+        locale: (locale, "ru", "en")
         for locale in Locale
     }
     translators = [

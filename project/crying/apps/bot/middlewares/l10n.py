@@ -5,7 +5,7 @@ from aiogram.types import Message
 from fluent.runtime import FluentResourceLoader, FluentLocalization as _FluentLocalization
 from fluentogram import TranslatorHub
 
-from ....db.models import User
+from project.crying.database.models import User
 
 
 class FluentLocalization(_FluentLocalization):

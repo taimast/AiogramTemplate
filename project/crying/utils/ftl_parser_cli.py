@@ -59,8 +59,8 @@ def cli() -> None:
     not_any = not args.ftl_path and not args.track_path and not args.dir_path and not args.stub_path
 
     if args.use_default_tracks or not_any:
-        args.track_path = Path(__file__).parent.parent / "apps/bot/locales/ru"
-        args.stub_path = Path(__file__).parent.parent / "apps/bot/locales/stubs/ru/stub.pyi"
+        args.track_path = Path(__file__).parent.parent / "locales/ru"
+        args.stub_path = Path(__file__).parent.parent / "locales/stubs/ru/stub.pyi"
 
     if not args.ftl_path and not args.track_path and not args.dir_path:
         raise ValueError("Empty request, wtf")

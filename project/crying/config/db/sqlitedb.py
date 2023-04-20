@@ -10,9 +10,14 @@ class SqliteDB(BaseModel):
         allow_mutation = False
 
     def __str__(self):
-        return f"Database {self.path}"
+        return f"{self.path}"
 
     @property
     def url(self):
         return (f"sqlite+{self.dialect}://"
+                f"{self.path}")
+
+    @property
+    def sync_url(self):
+        return (f"sqlite://"
                 f"{self.path}")

@@ -16,11 +16,18 @@ class PostgresDB(BaseModel):
         allow_mutation = False
 
     def __str__(self):
-        return f"Database {self.database}[{self.host}]"
+        return f"{self.database}[{self.host}]"
 
     @property
     def url(self):
         return (f"postgresql+{self.dialect}://"
+                f"{self.user}:{self.password.get_secret_value()}"
+                f"@{self.host}:{self.port}"
+                f"/{self.database}")
+
+    @property
+    def sync_url(self):
+        return (f"postgresql://"
                 f"{self.user}:{self.password.get_secret_value()}"
                 f"@{self.host}:{self.port}"
                 f"/{self.database}")

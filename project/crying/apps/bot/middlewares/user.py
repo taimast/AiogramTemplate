@@ -6,7 +6,7 @@ from aiogram.types import Message, CallbackQuery
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from ....database.models.user import User
+from project.crying.database.models import User
 
 
 class UserMiddleware(BaseMiddleware):
@@ -25,6 +25,7 @@ class UserMiddleware(BaseMiddleware):
             logger.info(f"Новый пользователь {user=}")
             pprint(user.dict())
             db_user = await User.create(session, **user.dict())
+            await session.commit()
 
         data["user"] = db_user
         return await handler(event, data)

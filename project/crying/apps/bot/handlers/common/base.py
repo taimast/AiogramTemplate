@@ -6,10 +6,10 @@ from aiogram import Router, types
 from aiogram.filters import Command, Text
 from aiogram.fsm.context import FSMContext
 
-from ...commands.bot_commands import BaseCommands
+from project.crying.apps.bot.commands.bot_commands import BaseCommands
 
 if TYPE_CHECKING:
-    from .....locales.stubs.ru.stub import TranslatorRunner
+    from project.crying.locales.stubs.ru.stub import TranslatorRunner
 
 router = Router()
 
