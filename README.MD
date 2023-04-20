@@ -1,13 +1,15 @@
 # AiogramProjectTemplate
 
-#### Шаблон бота на aiogram 3 с некоторым базовым функционалом. 
+#### Шаблон бота на aiogram 3 с некоторым базовым функционалом.
+
 #### [Python 3.11](https://www.python.org/downloads/), [Poetry](https://python-poetry.org/docs/#installation), [aiogram 3](https://github.com/aiogram/aiogram/tree/dev-3.x), [PostgreSQL](https://www.postgresql.org/download/)
 
 ___
 
 ## Включает
+
 - Админ панель
-  - Статистика 
+  - Статистика
   - Настройка обязательной подписки на каналы
   - Рассылка
   - Настройки бота
@@ -19,16 +21,17 @@ ___
 - Настройки локализации через Fluent
 - Создание бекапа базы данных
 - Мерчанты
-    - [CryptoCloud](https://cryptocloud.plus/)
-    - [Qiwi](https://qiwi.com/p2p-admin/api/)
-    - [YooKassa](https://yookassa.ru/developers/)
-    - ~~[Payeer](https://payeer.com/)~~
-- CLI 
+  - [CryptoCloud](https://cryptocloud.plus/)
+  - [Qiwi](https://qiwi.com/p2p-admin/api/)
+  - [YooKassa](https://yookassa.ru/developers/)
+  - ~~[Payeer](https://payeer.com/)~~
+- CLI
 - Логирование loguru
 - Настройка Вебхука
 - База данных [PostgreSQL](https://www.postgresql.org/download/
-) + [Tortoise ORM](https://github.com/tortoise/tortoise-orm/) + [asyncpg](https://github.com/MagicStack/asyncpg)
+  ) + [Tortoise ORM](https://github.com/tortoise/tortoise-orm/) + [asyncpg](https://github.com/MagicStack/asyncpg)
 - Удобная конфигурация проекта через [Pydantic](https://github.com/pydantic/pydantic)
+
 ## Создание проекта
 
 Запустить скрипт `init_project.py`
@@ -55,10 +58,13 @@ ___
 ## Дополнительно
 
 `project\crying\utils\ftl_parser_cli.py`  
-CLI для парсинга файлов переменных из ftl файлов в заглушку с поддержкой автодополнения, используется [fluentogram](https://github.com/Arustinal/fluentogram)  
+CLI для парсинга файлов переменных из ftl файлов в заглушку с поддержкой автодополнения,
+используется [fluentogram](https://github.com/Arustinal/fluentogram)
 
-Пример как использовать [тут](https://github.com/Arustinal/fluentogram/blob/main/example/TypingGenerator.md), вместо i18n используется ftl_parser_cli  
+Пример как использовать [тут](https://github.com/Arustinal/fluentogram/blob/main/example/TypingGenerator.md), вместо
+i18n используется ftl_parser_cli  
 `ftl_parser_cli` дополнительно поддерживает
+
 - `-dir-ftl` - для создания заглушки для указанной папки
 - `-track-ftl` - для отслеживания изменений в файлах ftl в указанной папке и автоматического обновления заглушки
 
