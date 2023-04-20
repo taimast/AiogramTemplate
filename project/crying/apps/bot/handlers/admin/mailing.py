@@ -3,10 +3,11 @@ import asyncio
 from aiogram import Router, types, Bot
 from aiogram.filters import Text, StateFilter
 from aiogram.fsm.context import FSMContext
+from aiogram.utils import markdown as md
 from loguru import logger
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from .....apps.bot.keyboards.common.common_kbs import md
-from .....db.models import User
+from .....database.models import User
 
 router = Router()
 
@@ -18,7 +19,7 @@ async def mailing(call: types.CallbackQuery, state: FSMContext):
 
 
 @router.message(StateFilter("mailing"))
-async def mailing_send(message: types.Message, bot: Bot, state: FSMContext):
+async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, state: FSMContext):
     time_emoji1 = "⏳ In progress"
     time_emoji2 = "⌛ In progress"
     done_emoji = "✅ Done"
@@ -48,7 +49,7 @@ async def mailing_send(message: types.Message, bot: Bot, state: FSMContext):
 
     task = asyncio.create_task(mailings_status_updated())
     # copy message
-    users = await User.all()
+    users = await User.all(session)
     for num, user in enumerate(users, 1):
         try:
             await bot.copy_message(

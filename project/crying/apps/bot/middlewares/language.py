@@ -3,7 +3,7 @@ from typing import Protocol, TypeVar
 from aiogram.types import TelegramObject
 from aiogram.utils.i18n import I18nMiddleware
 
-from ....db.models import User
+from project.crying.database.models import User
 
 
 class HasLocale(Protocol):

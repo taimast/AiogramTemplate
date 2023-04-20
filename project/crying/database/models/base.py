@@ -1,11 +1,13 @@
 import datetime
-from typing import TypeVar
+from typing import TypeVar, Sequence
 
-from sqlalchemy import String, BigInteger, select
+from sqlalchemy import String, BigInteger, select, delete, ChunkedIteratorResult
 from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, DeclarativeBase
 from sqlalchemy.orm import mapped_column
+
+# todo L1 TODO 18.04.2023 17:00 taima: Use func from sqlalchemy_utils. get_tables is not used
 
 T = TypeVar("T", bound='Base')
 
@@ -36,7 +38,6 @@ class Base(DeclarativeBase):
                 params.update(defaults)
             instance = cls(**params)
             session.add(instance)
-            await session.commit()
             return instance, True
         return instance, False
 
@@ -47,6 +48,11 @@ class Base(DeclarativeBase):
             return instance, False
         instance = await cls.create(session, **kwargs, **(defaults or {}))
         return instance, True
+
+    @classmethod
+    async def get(cls: type[T], session: AsyncSession, **kwargs) -> T:
+        result = await session.execute(select(cls).filter_by(**kwargs))
+        return result.scalar_one()
 
     @classmethod
     async def get_or_none(cls: type[T], session: AsyncSession, **kwargs) -> T | None:
@@ -61,18 +67,45 @@ class Base(DeclarativeBase):
         kwargs = {k: v for k, v in kwargs.items() if k in valid_columns}
         instance = cls(**kwargs)
         session.add(instance)
-        await session.flush()
         return instance
 
+    # two method to delete instance. One is classmethod, another is instance method
 
-class AbstractUser(Base):
-    __abstract__ = True
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    username: Mapped[str | None] = mapped_column(String(32), index=True)
-    first_name: Mapped[str | None] = mapped_column(String(100))
-    last_name: Mapped[str | None] = mapped_column(String(100))
-    is_bot: Mapped[bool] = mapped_column(default=False)
-    is_premium: Mapped[bool | None]
+    # удаление по условиям
+    @classmethod
+    async def delete(cls: type[T], session: AsyncSession, *expr) -> Sequence[int]:
+        res: ChunkedIteratorResult = await session.execute(delete(cls).where(*expr).returning(cls.id))
+        return res.scalars().fetchall()
+
+    async def delete_instance(self, session: AsyncSession) -> None:
+        await session.delete(self)
+
+    @classmethod
+    async def all(cls: type[T], session: AsyncSession) -> list[T]:
+        result = await session.execute(select(cls))
+        return result.scalars().all()
+
+    @classmethod
+    async def update(cls: type[T], session: AsyncSession, **kwargs) -> None:
+        await session.execute(cls.__table__.update().values(**kwargs))
+
+    @classmethod
+    async def filter(
+            cls: type[T],
+            session: AsyncSession,
+            limit: int | None = None,
+            offset: int | None = None,
+            *expr
+    ) -> list[T]:
+        query = select(cls).where(*expr).limit(limit).offset(offset)
+        result = await session.execute(query)
+        return result.scalars().all()
+
+    @classmethod
+    async def count(cls: type[T], session: AsyncSession, *expr) -> int:
+        query = select(func.count(cls.id)).where(*expr)
+        result = await session.execute(query)
+        return result.scalar_one()
 
 
 class TimestampMixin:
@@ -82,3 +115,13 @@ class TimestampMixin:
     updated_at: Mapped[datetime.datetime | None] = mapped_column(
         server_default=func.now(), onupdate=func.now()
     )
+
+
+class AbstractUser(Base, TimestampMixin):
+    __abstract__ = True
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    username: Mapped[str | None] = mapped_column(String(32), index=True)
+    first_name: Mapped[str | None] = mapped_column(String(100))
+    last_name: Mapped[str | None] = mapped_column(String(100))
+    is_bot: Mapped[bool] = mapped_column(default=False)
+    is_premium: Mapped[bool | None]

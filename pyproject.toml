@@ -20,6 +20,8 @@ fluentogram = "^1.1.6"
 watchdog = "^2.3.0"
 sqlalchemy = "^2.0.9"
 asyncpg = "^0.27.0"
+sqlalchemy-utils = "^0.41.0"
+psycopg2 = "^2.9.6"
 
 
 

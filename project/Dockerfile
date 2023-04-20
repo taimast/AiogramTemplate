@@ -5,8 +5,8 @@ RUN apt update \
     && apt clean -y \
     && rm -rf /var/lib/apt/* /var/log/* /var/cache/*
 WORKDIR /app
-COPY pyproject.toml ./
+COPY pyproject.toml poetry.lock ./
+RUN poetry install
 COPY crying crying
 COPY README.md README.md
 # todo L1 TODO 06.04.2023 18:57 taima: Запустить poetry install до копирования файлов
-RUN poetry install

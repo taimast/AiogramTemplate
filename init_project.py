@@ -80,7 +80,9 @@ def install_dependencies(project_path: Path):
                     "fluent-runtime",
                     "fluentogram",
                     "watchdog",
-                    "jinja2"]
+                    "jinja2",
+                    "sqlalchemy",
+                    "sqlalchemy-utils", ]
 
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "

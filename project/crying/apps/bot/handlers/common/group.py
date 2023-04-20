@@ -7,7 +7,7 @@ from aiogram.enums import ChatMemberStatus
 from aiogram.filters import ChatMemberUpdatedFilter, ADMINISTRATOR
 from loguru import logger
 
-from .....config import Settings
+from project.crying.config import Settings
 
 if TYPE_CHECKING:
     pass
