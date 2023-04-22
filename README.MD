@@ -9,22 +9,22 @@ ___
 ## Включает
 
 - Админ панель
-  - Статистика
-  - Настройка обязательной подписки на каналы
-  - Рассылка
-  - Настройки бота
-  - Экспорт пользователей
+    - Статистика
+    - Настройка обязательной подписки на каналы
+    - Рассылка
+    - Настройки бота
+    - Экспорт пользователей
 - Мидлвары
-  - Проверка на подписку
-  - Проверка на спам
-  - Локализация Fluent
+    - Проверка на подписку
+    - Проверка на спам
+    - Локализация Fluent
 - Настройки локализации через Fluent
 - Создание бекапа базы данных
 - Мерчанты
-  - [CryptoCloud](https://cryptocloud.plus/)
-  - [Qiwi](https://qiwi.com/p2p-admin/api/)
-  - [YooKassa](https://yookassa.ru/developers/)
-  - ~~[Payeer](https://payeer.com/)~~
+    - [CryptoCloud](https://cryptocloud.plus/)
+    - [Qiwi](https://qiwi.com/p2p-admin/api/)
+    - [YooKassa](https://yookassa.ru/developers/)
+    - ~~[Payeer](https://payeer.com/)~~
 - CLI
 - Логирование loguru
 - Настройка Вебхука

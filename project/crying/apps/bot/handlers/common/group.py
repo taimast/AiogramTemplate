@@ -30,6 +30,6 @@ async def my_chat_member(update: types.Message, bot: Bot, settings: Settings):
     if not is_admin_group:
         return
 
-    settings.bot.chat_id = update.chat.id
-    settings.dump()
+    # settings.bot.chat_id = update.chat.id
+    # settings.dump()
     logger.success(f"Chat id: {update.chat.id} saved")

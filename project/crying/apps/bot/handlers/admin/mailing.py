@@ -7,7 +7,7 @@ from aiogram.utils import markdown as md
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .....database.models import User
+from .....db.models import User
 
 router = Router()
 

@@ -5,9 +5,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import close_all_sessions
 from sqlalchemy_utils import database_exists, create_database
 
+from project.crying.db.models import Base, User
 from ..config import SqliteDB, PostgresDB
-from ..database.models.base import Base
-from ..database.models.user import User
 
 Database = SqliteDB | PostgresDB
 
@@ -54,6 +53,7 @@ async def get_user(maker, user_id):
 
 async def main():
     maker = await init_db(PostgresDB(database="probe_alchemy3"))
+
     async with maker() as session:
         # session.add(User())
         user, _ = await User.get_or_create(session, id=1)

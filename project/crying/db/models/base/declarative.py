@@ -1,11 +1,8 @@
-import datetime
-from typing import TypeVar, Sequence
+from typing import Sequence, TypeVar
 
-from sqlalchemy import String, BigInteger, select, delete, ChunkedIteratorResult
-from sqlalchemy import func
+from sqlalchemy import select, ChunkedIteratorResult, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Mapped, DeclarativeBase
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import DeclarativeBase
 
 # todo L1 TODO 18.04.2023 17:00 taima: Use func from sqlalchemy_utils. get_tables is not used
 
@@ -28,18 +25,6 @@ class Base(DeclarativeBase):
     #         int: BigInteger,
     #     }
     # )
-    @classmethod
-    async def get_or_create1(cls: type[T], session: AsyncSession, defaults=None, **kwargs) -> tuple[T, bool]:
-        filters = {k: v for k, v in kwargs.items() if not k.startswith('_')}
-        instance = (await session.execute(select(cls).filter_by(**filters))).one()
-        if instance is None:
-            params = {k: v for k, v in kwargs.items() if not k.startswith('_')}
-            if defaults:
-                params.update(defaults)
-            instance = cls(**params)
-            session.add(instance)
-            return instance, True
-        return instance, False
 
     @classmethod
     async def get_or_create(cls: type[T], session: AsyncSession, defaults=None, **kwargs) -> tuple[T, bool]:
@@ -106,22 +91,3 @@ class Base(DeclarativeBase):
         query = select(func.count(cls.id)).where(*expr)
         result = await session.execute(query)
         return result.scalar_one()
-
-
-class TimestampMixin:
-    created_at: Mapped[datetime.datetime | None] = mapped_column(
-        server_default=func.now()
-    )
-    updated_at: Mapped[datetime.datetime | None] = mapped_column(
-        server_default=func.now(), onupdate=func.now()
-    )
-
-
-class AbstractUser(Base, TimestampMixin):
-    __abstract__ = True
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    username: Mapped[str | None] = mapped_column(String(32), index=True)
-    first_name: Mapped[str | None] = mapped_column(String(100))
-    last_name: Mapped[str | None] = mapped_column(String(100))
-    is_bot: Mapped[bool] = mapped_column(default=False)
-    is_premium: Mapped[bool | None]

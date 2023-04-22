@@ -1,15 +1,16 @@
 from typing import Self
 
 from loguru import logger
-from tortoise import fields
+from sqlalchemy import String
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Mapped, mapped_column
 
-from .base import AbstractInvoice
-from ..subscription import SubscriptionTemplate
+from project.crying.apps.merchant.crypto_cloud import CryptoCloud
+from .base import AbstractInvoice, Currency
 from ..user import User
-from ....apps.merchant.crypto_cloud import CryptoCloud
 
 
-class InvoiceCrypto(AbstractInvoice):
+class InvoiceCrypto(AbstractInvoice[CryptoCloud]):
     """
     for create:
         amount
@@ -31,26 +32,19 @@ class InvoiceCrypto(AbstractInvoice):
     checked time:
         7-10 m
     """
-    user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE, related_name="invoice_cryptos")
-    # shop_id = fields.CharField(50, default=config.merchants.crypto_cloud.shop_id)
-    # todo L1 29.10.2022 1:54 taima:
-    currency = fields.CharField(5, default="RUB", description="USD, RUB, EUR, GBP")
-    order_id = fields.CharField(50, null=True, description="Custom product ID")
-
-    async def check_payment(self, merchant: CryptoCloud) -> bool:
-        return await merchant.is_paid(self.invoice_id)
+    order_id: Mapped[str | None] = mapped_column(String(50), index=True, doc="Custom product ID")
+    email: Mapped[str | None] = mapped_column(String(50), index=True, doc="Customer email")
 
     @classmethod
     async def create_invoice(
             cls,
+            session: AsyncSession,
             merchant: CryptoCloud,
             user: User,
-            subscription_template: SubscriptionTemplate,
             amount: int | float | str,
-            currency="RUB",
+            currency: Currency.RUB = Currency.RUB,
             email: str = None,
             order_id: str = None,
-            # **kwargs,
     ) -> Self:
         crypto_payment = await merchant.create_invoice(
             amount=amount,
@@ -60,13 +54,12 @@ class InvoiceCrypto(AbstractInvoice):
         )
 
         created_invoice = await cls.create(
+            session=session,
+            user=user,
             amount=amount,
             currency=currency,
             invoice_id=crypto_payment.invoice_id,
             pay_url=crypto_payment.pay_url,
-
-            user=user,
-            subscription_template=subscription_template,
             order_id=order_id,
             email=email,
         )

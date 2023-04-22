@@ -1,10 +1,11 @@
 from typing import Self
 
 from loguru import logger
-from tortoise import fields
+from sqlalchemy import String
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import mapped_column, Mapped
 
 from .base import AbstractInvoice
-from ..subscription import SubscriptionTemplate
 from ..user import User
 from ....apps.merchant.yookassa import YooPayment, YooKassa
 
@@ -19,18 +20,14 @@ class InvoiceYooKassa(AbstractInvoice):
                          'confirmation_url': 'https://yoomoney.ru/checkout/payments/v2/contract?orderId=2a60ca77-000f-5000-a000-16cf4119f15e'},
         'test': False, 'paid': False, 'refundable': False, 'metadata': {}}
     """
-    user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE, related_name="invoice_yookassas")
-    comment = fields.CharField(255, null=True)
-
-    async def check_payment(self, merchant: YooKassa) -> bool:
-        return await merchant.is_paid(self.invoice_id)
+    comment: Mapped[str | None] = mapped_column(String(255))
 
     @classmethod
     async def create_invoice(
             cls,
+            session: AsyncSession,
             merchant: YooKassa,
             user: "User",
-            subscription_template: "SubscriptionTemplate",
             amount: int | float | str,
             comment: str = None,
             email: str = None,
@@ -41,13 +38,12 @@ class InvoiceYooKassa(AbstractInvoice):
         )
 
         created_invoice = await cls.create(
+            session=session,
+            user=user,
             amount=yoo_payment.amount.value,
             currency=yoo_payment.amount.currency,
             invoice_id=yoo_payment.id,
             pay_url=yoo_payment.confirmation.confirmation_url,
-
-            user=user,
-            subscription_template=subscription_template,
             comment=comment,
             email=email,
         )

@@ -1,4 +1,3 @@
-from pprint import pprint
 from typing import Callable, Any, Awaitable
 
 from aiogram import BaseMiddleware
@@ -6,7 +5,7 @@ from aiogram.types import Message, CallbackQuery
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from project.crying.database.models import User
+from project.crying.db.models import User
 
 
 class UserMiddleware(BaseMiddleware):
@@ -23,7 +22,6 @@ class UserMiddleware(BaseMiddleware):
         db_user = await User.get_or_none(session, id=user.id)
         if not db_user:
             logger.info(f"Новый пользователь {user=}")
-            pprint(user.dict())
             db_user = await User.create(session, **user.dict())
             await session.commit()
 

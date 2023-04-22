@@ -1,17 +1,13 @@
 from __future__ import annotations
 
 import datetime
-import typing
 from enum import StrEnum
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import mapped_column, Mapped
 
-from .base import AbstractUser
-
-if typing.TYPE_CHECKING:
-    pass
+from .base import BaseUser
 
 
 class Locale(StrEnum):
@@ -20,19 +16,9 @@ class Locale(StrEnum):
     RUSSIAN = 'ru'
 
 
-class User(AbstractUser):
+class User(BaseUser):
     __tablename__ = 'users'
     language_code: Mapped[Locale | None] = mapped_column(default=Locale.RUSSIAN)
-    locked: Mapped[bool] = mapped_column(default=False)
-
-    # invoices: Mapped[list[AbstractInvoice]] = relationship(back_populates="user")
-
-    async def __aenter__(self):
-        self.locked = True
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        self.locked = False
 
     @classmethod
     async def today_count(cls, session: AsyncSession) -> int:

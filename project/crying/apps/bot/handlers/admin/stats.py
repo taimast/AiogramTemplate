@@ -5,7 +5,7 @@ from aiogram.utils import markdown as md
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...keyboards.admin import admin_kbs
-from .....database.models import User
+from .....db.models import User
 
 router = Router()
 
