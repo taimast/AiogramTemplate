@@ -1,36 +1,23 @@
 from _pydecimal import Decimal
 from typing import Self
 
-from tortoise import fields
-from tortoise.transactions import atomic
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from .base import AbstractInvoice
+from .base import AbstractInvoice, Currency
 from ..user import User
 from ....apps.merchant.usdt import USDT
 
 
 class USDTInvoice(AbstractInvoice):
-    currency = fields.CharField(5, default="USDT", description="USDT")
-    amount = fields.DecimalField(16, 5)
-    pay_url = fields.CharField(255, null=True)
-    invoice_id = fields.IntField(index=True)
-
-    @atomic()
-    async def successfully_paid(self):
-        await self.fetch_related("user")
-        await self.user.add_balance(self.amount)
-        self.is_paid = True
-        await self.save(update_fields=["is_paid"])
-
-    async def check_payment(self, merchant: USDT) -> bool:
-        return await merchant.is_paid(self.amount)
 
     @classmethod
-    async def get_next_invoice_id(cls) -> int:
+    async def get_next_invoice_id(cls, session: AsyncSession) -> int:
         """Получение следующего самого минимального invoice_id"""
-        exists_values = await cls.all().order_by(
-            "-invoice_id"
-        ).limit(100).values_list("invoice_id", flat=True)
+        exists_values = (await session.execute(
+            select(cls.invoice_id).order_by(cls.invoice_id.desc()).limit(100)
+        )).scalars().all()
+
         if not exists_values:
             return 1
         for i in range(1, max(exists_values) + 2):
@@ -58,18 +45,19 @@ class USDTInvoice(AbstractInvoice):
     @classmethod
     async def create_invoice(
             cls,
+            session: AsyncSession,
             merchant: USDT,
             user: User,
             amount: int | float | str,
-            currency="USDT",
-            order_id: str = None,
+            currency: Currency = Currency.USDT,
     ) -> Self:
-        invoice_id = await cls.get_next_invoice_id()
+        invoice_id = await cls.get_next_invoice_id(session)
         amount = cls.create_amount(amount, invoice_id)
         created_invoice = await cls.create(
+            session=session,
+            user=user,
             amount=amount,
             currency=currency,
             invoice_id=invoice_id,
-            user=user,
         )
         return created_invoice

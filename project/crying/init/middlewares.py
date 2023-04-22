@@ -3,8 +3,11 @@ from aiogram.utils.callback_answer import CallbackAnswerMiddleware
 from loguru import logger
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
-from ..apps.bot.middlewares import UserMiddleware, TranslatorRunnerMiddleware
-from ..apps.bot.middlewares.db import DbSessionMiddleware
+from ..apps.bot.middlewares import (
+    UserMiddleware,
+    TranslatorRunnerMiddleware,
+    DbSessionMiddleware
+)
 
 
 def setup_middlewares(dp: Dispatcher, session_maker: async_sessionmaker):

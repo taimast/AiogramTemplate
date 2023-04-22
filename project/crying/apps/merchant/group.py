@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel, root_validator
 
 from .base import Merchant
@@ -7,31 +5,34 @@ from .base import Merchant
 
 # todo L1 23.11.2022 5:27 taima: Подумать что делать с этим
 class MerchantGroup(BaseModel):
-    qiwi: Optional[Merchant]
-    yookassa: Optional[Merchant]
-    crypto_cloud: Optional[Merchant]
+    merchants: dict[str, Merchant]
 
     class Config:
         allow_mutation = False
 
     def get_merchant(self, name: str) -> Merchant:
-        merchant = getattr(self, name)
-        if merchant is None:
-            raise ValueError(f"Merchant {name} not found")
-        return merchant
+        return self.merchants[name]
 
     @root_validator(pre=True)
     def validate_merchants(cls, values):
+
         try:
-            if qiwi := values.get("qiwi"):
-                from .qiwi import Qiwi
-                values["qiwi"] = Qiwi(**qiwi)
-            if yookassa := values.get("yookassa"):
-                from .yookassa import YooKassa
-                values["yookassa"] = YooKassa(**yookassa)
-            if crypto_cloud := values.get("crypto_cloud"):
-                from .crypto_cloud import CryptoCloud
-                values["crypto_cloud"] = CryptoCloud(**crypto_cloud)
+            parsed_merchants = {}
+            for merchant_name, merchant in values["merchants"].items():
+
+                match merchant_name:
+                    case "qiwi":
+                        from .qiwi import Qiwi
+                        parsed_merchants[merchant_name] = Qiwi(**merchant)
+                    case "yookassa":
+                        from .yookassa import YooKassa
+                        parsed_merchants[merchant_name] = YooKassa(**merchant)
+                    case "crypto_cloud":
+                        from .crypto_cloud import CryptoCloud
+                        parsed_merchants[merchant_name] = CryptoCloud(**merchant)
+                    case _:
+                        raise ValueError(f"Merchant {merchant_name} not found")
         except ImportError as e:
             raise ImportError(f"Don't forget to install extra requirements for merchant: {e.name}")
+        values["merchants"] = parsed_merchants
         return values

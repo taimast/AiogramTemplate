@@ -22,4 +22,4 @@ async def error_handler(event: ErrorEvent, bot: Bot, event_from_user: User):
         logger.opt(exception=(_type, None, tb)).error(exception.message)
     else:
         logger.exception(exception)
-    await bot.send_message(event_from_user.id, text, parse_mode=None)
+    # await bot.send_message(event_from_user.id, text, parse_mode=None)

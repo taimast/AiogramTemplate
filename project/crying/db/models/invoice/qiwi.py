@@ -1,13 +1,18 @@
-from typing import Self
+from __future__ import annotations
+
+from typing import Self, TYPE_CHECKING
 
 from glQiwiApi.qiwi.clients.p2p.types import Bill
 from loguru import logger
-from tortoise import fields
+from sqlalchemy import String
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Mapped, mapped_column
 
 from .base import AbstractInvoice
-from ..config.merchant.base import Merchant
-from ..subscription.subscription import SubscriptionTemplate
 from ..user import User
+
+if TYPE_CHECKING:
+    from ....apps.merchant.qiwi import Qiwi
 
 
 class InvoiceQiwi(AbstractInvoice):
@@ -23,18 +28,14 @@ class InvoiceQiwi(AbstractInvoice):
          'status': {'changed_datetime': datetime.datetime(2022, 5, 22, 21, 24, 17, 186000, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800))),
                     'value': 'WAITING'}}
     """
-    user: "User" = fields.ForeignKeyField("models.User", on_delete=fields.CASCADE, related_name="invoice_qiwis")
-    comment = fields.CharField(255, null=True)
-
-    async def check_payment(self, merchant: Merchant) -> bool:
-        return await merchant.is_paid(self.invoice_id)
+    comment: Mapped[str | None] = mapped_column(String(255))
 
     @classmethod
     async def create_invoice(
             cls,
-            merchant: Merchant,
+            session: AsyncSession,
+            merchant: Qiwi,
             user: User,
-            subscription_template: SubscriptionTemplate,
             amount: int | float | str,
             comment: str = None,
             email: str = None,
@@ -43,15 +44,14 @@ class InvoiceQiwi(AbstractInvoice):
             amount=amount,
             description=comment,
         )
-        logger.info(f"InvoiceQiwi created [{user}][{bill.user_id}] {bill.pay_url}")
+        logger.info(f"InvoiceQiwi created [{user}][{bill.id}] {bill.pay_url}")
         created_invoice = await cls.create(
+            session=session,
+            user=user,
             amount=bill.amount.value,
             currency=bill.amount.currency,
-            invoice_id=bill.user_id,
+            invoice_id=bill.id,
             pay_url=bill.pay_url,
-
-            user=user,
-            subscription_template=subscription_template,
             email=email,
         )
         logger.info(f"InvoiceQiwi created [{user.id}][{created_invoice.invoice_id}] {created_invoice.pay_url}")

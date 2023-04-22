@@ -25,8 +25,10 @@ async def split_sending(message: types.Message,
         await message.answer(answer_text, reply_markup=reply_markup)
 
 
-async def mailings(bot: Bot, text: str, users: list, *, reply_markup: ReplyMarkup = None) -> list[types.Message]:
+async def mailings(bot: Bot, text: str, users: list | int, *, reply_markup: ReplyMarkup = None) -> list[types.Message]:
     """ Send message to all users in list """
+    if isinstance(users, int):
+        users = [users]
     mails = []
     for user in users:
         try:
