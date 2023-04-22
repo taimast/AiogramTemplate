@@ -17,7 +17,6 @@ ___
     - USDT
     - ~~[Payeer](https://payeer.com/)~~
 - CLI
-- Логирование loguru
 - Настройка Вебхука
 - Database ORM: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
 - Удобная конфигурация проекта через [Pydantic](https://github.com/pydantic/pydantic)
