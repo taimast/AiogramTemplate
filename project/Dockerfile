@@ -5,7 +5,7 @@ RUN apt update \
     && apt clean -y \
     && rm -rf /var/lib/apt/* /var/log/* /var/cache/*
 WORKDIR /app
-COPY pyproject.toml poetry.lock ./
+COPY pyproject.toml ./
 RUN poetry install
 COPY crying crying
 COPY README.md README.md
