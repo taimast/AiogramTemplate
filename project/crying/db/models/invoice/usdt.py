@@ -10,7 +10,7 @@ from ....apps.merchant.usdt import USDT
 
 
 class USDTInvoice(AbstractInvoice):
-
+    __tablename__ = "invoice_usdt"
     @classmethod
     async def get_next_invoice_id(cls, session: AsyncSession) -> int:
         """Получение следующего самого минимального invoice_id"""
