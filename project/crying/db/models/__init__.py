@@ -6,7 +6,7 @@ from .invoice import (
     InvoiceYooKassa,
     USDTInvoice,
 )
-from .user import BaseUser, User
+from .user import BaseUser, User, Locale
 
 __all__ = (
     "Base",
@@ -18,4 +18,5 @@ __all__ = (
     "USDTInvoice",
     "BaseUser",
     "User",
+    "Locale",
 )

@@ -82,13 +82,16 @@ def install_dependencies(project_path: Path):
                     "watchdog",
                     "jinja2",
                     "sqlalchemy",
-                    "sqlalchemy-utils", ]
+                    "sqlalchemy-utils",
+                    "asyncpg"
+                    ]
 
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "
               f"poetry add {aiogram_version} && "
               f"poetry add {dependencies} && "
-              f"poetry add git+https://github.com/taimast/aiogram-admin.git")
+              # f"poetry add git+https://github.com/taimast/aiogram-admin.git"
+              )
 
 
 def init_localize(project_name: str, localization: str):

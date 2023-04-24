@@ -1,33 +1,9 @@
 ### Установка
 
-1. Скачать и установить [Python 3.11](https://www.python.org/downloads/)
-2. Скачать и установить [Poetry](https://python-poetry.org/docs/#installation)
-3. Скачать и установить [PostgreSQL](https://www.postgresql.org/download/)
+1. Заполнить `config.yml`
+2. Запустить `docker-compose up -d`
 
-### Запуск
+### При изменении данных
 
-1. Склонировать репозиторий
-2. Переместиться в папку с проектом
-3. Установить зависимости командой `poetry install`
-4. Заполнить config.yaml
-5. Запустить бота командой `poetry run python crying/main.py`
-
-### Доп информация
-
-1. Вход в консоль PostgreSQL: `sudo -u postgres psql`
-2. Создание базы данных: `CREATE DATABASE crying;`
-3. Изменения пароля PostgreSQL: `\password`
-4. Выход из консоли PostgreSQL: `\q`
-5. Перезапуск PostgreSQL: `sudo service postgresql restart`
-
-### Команды screen
-
-Screen - это утилита для работы с терминалом,
-которая позволяет создавать сессии,
-в которых можно запускать процессы, а затем переключаться между ними.
-Это позволяет запускать бота в фоновом режиме, а затем переключаться на другие сессии.
-
-1. Создание новой сессии: `screen -S bot`
-2. Переключение на сессию: `screen -r bot`
-3. Отключение от сессии: `Ctrl + A + D`
-
+1. Запустить `docker-compose down`
+2. Запустить `docker-compose up -d --build`

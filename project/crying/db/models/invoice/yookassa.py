@@ -20,6 +20,7 @@ class InvoiceYooKassa(AbstractInvoice):
                          'confirmation_url': 'https://yoomoney.ru/checkout/payments/v2/contract?orderId=2a60ca77-000f-5000-a000-16cf4119f15e'},
         'test': False, 'paid': False, 'refundable': False, 'metadata': {}}
     """
+    __tablename__ = "invoice_yookassa"
     comment: Mapped[str | None] = mapped_column(String(255))
 
     @classmethod

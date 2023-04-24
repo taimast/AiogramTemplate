@@ -28,6 +28,7 @@ class InvoiceQiwi(AbstractInvoice):
          'status': {'changed_datetime': datetime.datetime(2022, 5, 22, 21, 24, 17, 186000, tzinfo=datetime.timezone(datetime.timedelta(seconds=10800))),
                     'value': 'WAITING'}}
     """
+    __tablename__ = 'invoices_qiwi'
     comment: Mapped[str | None] = mapped_column(String(255))
 
     @classmethod

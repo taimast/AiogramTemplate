@@ -32,6 +32,7 @@ class InvoiceCrypto(AbstractInvoice[CryptoCloud]):
     checked time:
         7-10 m
     """
+    __tablename__ = "invoice_crypto"
     order_id: Mapped[str | None] = mapped_column(String(50), index=True, doc="Custom product ID")
     email: Mapped[str | None] = mapped_column(String(50), index=True, doc="Customer email")
 
