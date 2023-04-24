@@ -60,7 +60,7 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
         builder.row(
             # В самое начало
             IKButton(
-                text="⏮",
+                text="≺≺",
                 callback_data=self.switch_to_first().pack()
             ),
 
@@ -79,7 +79,7 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
             ),
             # В самый конец
             IKButton(
-                text="⏭",
+                text="≻≻",
                 callback_data=self.switch_to_last(length).pack()
             )
         )
