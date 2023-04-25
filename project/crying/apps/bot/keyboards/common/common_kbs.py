@@ -7,6 +7,8 @@ from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeybo
 from aiogram.utils import markdown as md
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
+IKB = InlineKeyboardButton
+KB = KeyboardButton
 md = md
 if TYPE_CHECKING:
     from .....locales.stubs.ru.stub import TranslatorRunner
@@ -24,17 +26,14 @@ def custom_back(callback_data: str | CallbackData = "start") -> InlineKeyboardMa
     return builder.as_markup()
 
 
-def inline_button(text: str, callback_date: CallbackData) -> InlineKeyboardButton:
-    return InlineKeyboardButton(
-        text=text,
-        callback_data=callback_date.pack()
-    )
+def inline_button(text: str, cd: CallbackData) -> InlineKeyboardButton:
+    return IKB(text=text, callback_data=cd.pack())
 
 
-def custom_back_button(text: str = "« Назад", callback_data: str | CallbackData = "start", ) -> InlineKeyboardButton:
-    if not isinstance(callback_data, str):
-        callback_data = callback_data.pack()
-    return InlineKeyboardButton(text=text, callback_data=callback_data)
+def custom_back_inline_button(text: str = "« Назад", cd: str | CallbackData = "start") -> InlineKeyboardButton:
+    if not isinstance(cd, str):
+        cd = cd.pack()
+    return IKB(text=text, callback_data=cd)
 
 
 def reply_back_button(l10n: TranslatorRunner) -> KeyboardButton:
