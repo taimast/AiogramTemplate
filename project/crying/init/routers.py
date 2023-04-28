@@ -1,9 +1,7 @@
-from aiogram import Dispatcher
+from aiogram import Dispatcher, F
 from loguru import logger
 
-from ..apps.bot.handlers import register_common_routers
-from ..apps.bot.handlers.admin import register_admin_routers
-from ..apps.bot.handlers.error import errors
+from ..apps.bot.handlers import admin, common, error
 from ..config import Settings
 
 
@@ -12,12 +10,14 @@ async def setup_routers(
         settings: Settings,
 ):
     # Handling errors
-    dp.include_router(errors.router)
+    dp.include_router(error.router)
 
     # Admin handlers
-    register_admin_routers(dp, settings.bot.admins)
+    admin.router.message.filter(F.from_user.id.in_(settings.bot.admins))
+    admin.router.callback_query.filter(F.from_user.id.in_(settings.bot.admins))
+    dp.include_router(admin.router)
 
     # Common handlers
-    register_common_routers(dp)
+    dp.include_router(common.router)
 
     logger.info("Routers setup complete")

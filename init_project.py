@@ -89,8 +89,8 @@ def install_dependencies(project_path: Path):
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "
               f"poetry add {aiogram_version} && "
-              f"poetry add {dependencies} && "
-              # f"poetry add git+https://github.com/taimast/aiogram-admin.git"
+              f"poetry add {dependencies}"
+              # f" &&  poetry add git+https://github.com/taimast/aiogram-admin.git"
               )
 
 

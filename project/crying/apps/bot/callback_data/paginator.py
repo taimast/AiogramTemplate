@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Self, Sequence, Callable, Any, TypeVar
+from typing import Sequence, Callable, Any, TypeVar, Self
 
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton as IKButton
@@ -20,7 +20,7 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
     limit: int = 10
     sort_order: SortOrder | None = None
 
-    def make(self, offset: int):
+    def make(self, offset: int) -> Self:
         return PaginatorCallback(
             offset=offset,
             limit=self.limit,

@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     bot: Bot
     db: PostgresDB | SqliteDB
     webhook: Optional[Webhook]
-    merchant: Optional[MerchantGroup]
+    merchants: Optional[MerchantGroup]
 
     class Config:
         env_file = r"..\..\.env"

@@ -5,7 +5,7 @@ from aiogram.types import Update
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
 
-class DbSessionMiddleware(BaseMiddleware):
+class DBSessionMiddleware(BaseMiddleware):
     def __init__(self, session_maker: async_sessionmaker):
         self.session_maker = session_maker
 
