@@ -70,17 +70,18 @@ class Base(DeclarativeBase):
         result = await session.execute(select(cls))
         return result.scalars().all()
 
-    @classmethod
-    async def update(cls: type[T], session: AsyncSession, **kwargs) -> None:
-        await session.execute(cls.__table__.update().values(**kwargs))
+    def update(self: T, **kwargs) -> None:
+        for attr, value in kwargs.items():
+            if hasattr(self, attr):
+                setattr(self, attr, value)
 
     @classmethod
     async def filter(
             cls: type[T],
             session: AsyncSession,
+            *expr,
             limit: int | None = None,
             offset: int | None = None,
-            *expr
     ) -> list[T]:
         query = select(cls).where(*expr).limit(limit).offset(offset)
         result = await session.execute(query)

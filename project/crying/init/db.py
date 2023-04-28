@@ -25,7 +25,7 @@ async def dev_init_db(db: Database = PostgresDB.default()) -> async_sessionmaker
         logger.info(f"Database {db.database}[{db.host}] created")
 
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
+        # await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
     logger.info(f"Database {db.database}[{db.host}] initialized")
@@ -52,40 +52,26 @@ async def get_user(maker, user_id):
 
 
 async def main():
-    maker = await init_db(PostgresDB(database="probe_alchemy3"))
+    maker = await dev_init_db(PostgresDB(database="probe_alchemy3"))
 
     async with maker() as session:
         # session.add(User())
+        logger.info("Get User")
         user, _ = await User.get_or_create(session, id=1)
-        await session.commit()
-        async with user:
-            await session.commit()
-            logger.info(f"User locked {user.id} {user.locked}")
-            user = await get_user(maker, user.id)
-            logger.info(f"Gotten user {user.id} {user.locked}")
-            await asyncio.sleep(5)
 
-        logger.info("User unlocked")
+        # query = select(User).where(User.id == 1).options(selectinload(User.secrets)).limit(1)
+        # result = await session.execute(query)
+        # user = result.scalar_one()
+        # selection load for gotten user
+        print("Sleeping 5")
+        await asyncio.sleep(5)
+        # await session.refresh(user, attribute_names=["secrets"])
+        await session.refresh(user)
 
-        # await user.delete_instance(session)
-        # await session.flush()
-        # await asyncio.sleep(4)
-        # user.first_name = "Vasya"
+        # secret = Secret(secret="secret", user=user, id=1)
+        # session.add(secret)
+        print(user.secrets)
+        print(user.username)
         # await session.commit()
-        # print(await User.update(session, language_code=Locale.ENGLISH))
-
-        # users = await User.all(session)
-        # print(type(users))
-        # print(users)
-        # for u in users:
-        #     print(u.language_code)
-        # invoice, _ = await AbstractInvoice.get_or_create(session, id="2", user_id=user.id)
-        # await asyncio.sleep(5)
-        # res = await User.delete(session, User.id == 1)
-        # print(res)
-        # logger.info(invoice.user.id)
-        # await session.commit()
-
-
 if __name__ == '__main__':
     asyncio.run(main())

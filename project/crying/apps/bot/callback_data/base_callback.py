@@ -9,6 +9,7 @@ class Action(str, Enum):
     DELETE = "delete"
     UPDATE = "update"
     ALL = "all"
+    MENU = "menu"
 
 
 class UserCallback(CallbackData, prefix="user"):

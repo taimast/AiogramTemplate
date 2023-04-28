@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import async_sessionmaker
 from ..apps.bot.middlewares import (
     UserMiddleware,
     TranslatorRunnerMiddleware,
-    DbSessionMiddleware
+    DBSessionMiddleware
 )
 
 
@@ -18,7 +18,7 @@ def setup_middlewares(dp: Dispatcher, session_maker: async_sessionmaker):
     :return:
     """
     # Session maker middleware
-    dp.update.middleware(DbSessionMiddleware(session_maker))
+    dp.update.middleware(DBSessionMiddleware(session_maker))
 
     # Get user middleware
     user_middleware = UserMiddleware()

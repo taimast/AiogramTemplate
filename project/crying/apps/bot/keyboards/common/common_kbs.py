@@ -26,6 +26,12 @@ def custom_back(callback_data: str | CallbackData = "start") -> InlineKeyboardMa
     return builder.as_markup()
 
 
+def custom_back_kb(text: str = "« Назад", cd: str | CallbackData = "start") -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.button(text=text, callback_data=cd)
+    return builder.as_markup()
+
+
 def inline_button(text: str, cd: CallbackData) -> InlineKeyboardButton:
     return IKB(text=text, callback_data=cd.pack())
 
