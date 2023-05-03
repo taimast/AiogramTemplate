@@ -2,7 +2,8 @@
 name = "aiogramprojecttemplate"
 version = "0.1.0"
 description = ""
-authors = ["taimaskhanov11 <81189712+taimaskhanov11@users.noreply.github.com>"]
+authors = ["taimast <charlskenno@gmail.com>"]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
