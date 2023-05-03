@@ -42,11 +42,15 @@ def custom_back_inline_button(text: str = "« Назад", cd: str | CallbackDat
     return IKB(text=text, callback_data=cd)
 
 
+def custom_reply_kb(text: str = "« Назад") -> ReplyKeyboardMarkup:
+    builder = ReplyKeyboardBuilder()
+    builder.button(text=text)
+    return builder.as_markup(resize_keyboard=True)
+
+
 def reply_back_button(l10n: TranslatorRunner) -> KeyboardButton:
     return KeyboardButton(text=l10n.button.back())
 
 
 def reply_back() -> ReplyKeyboardMarkup:
-    builder = ReplyKeyboardBuilder()
-    builder.button(text="« Назад")
-    return builder.as_markup(resize_keyboard=True)
+    return custom_reply_kb()

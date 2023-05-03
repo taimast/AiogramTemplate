@@ -57,7 +57,9 @@ async def main():
     async with maker() as session:
         # session.add(User())
         logger.info("Get User")
-        user, _ = await User.get_or_create(session, id=1)
+        users = await User.filter(session)
+        print(type(users))
+        print(type([]))
 
         # query = select(User).where(User.id == 1).options(selectinload(User.secrets)).limit(1)
         # result = await session.execute(query)
