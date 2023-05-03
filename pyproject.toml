@@ -13,7 +13,6 @@ cachetools = "^5.2.0"
 pydantic = "^1.10.2"
 aiogram = { version = ">=3.0.0b5", allow-prereleases = true }
 glqiwiapi = { version = "^2.18.2", optional = true }
-aiogram-admin = { git = "https://github.com/taimast/aiogram-admin.git" }
 fluentogram = "^1.1.6"
 watchdog = "^2.3.0"
 sqlalchemy = "^2.0.9"
