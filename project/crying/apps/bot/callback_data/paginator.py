@@ -48,11 +48,11 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
     def switch_to_first(self) -> Self:
         return self.switch_to(0)
 
-    def has_next(self, length: int, page: int = 0) -> bool:
-        return self.offset + self.limit < length - page
-
     def has_prev(self, page: int = 0) -> bool:
-        return self.offset > page
+        return self.offset > page * self.limit
+
+    def has_next(self, length: int, page: int = 0) -> bool:
+        return self.offset + self.limit < length - page * self.limit
 
     def slice(self, items: Sequence[T]) -> Sequence[T]:
         return items[self.offset:self.offset + self.limit]
@@ -64,11 +64,13 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
 
     def add_pagination_buttons(self, builder: InlineKeyboardBuilder, length: int):
         prev5offset = self.offset - 5 * self.limit
-        has5prev_cd = self.make(prev5offset).pack() if self.has_prev(
-            4) else self.switch_to_first().pack()
+        has5prev = self.has_prev(5)
+        has5prev_cd = self.make(prev5offset).pack() if has5prev else self.switch_to_first().pack()
+
         next5offset = self.offset + 5 * self.limit
-        has5next_cd = self.make(next5offset).pack() if self.has_next(
-            length, 5) else self.switch_to_last(length).pack()
+        has5next = self.has_next(length, 5)
+        has5next_cd = self.make(next5offset).pack() if has5next else self.switch_to_last(length).pack()
+
         has1prev_cd = self.prev().pack() if self.has_prev() else self.switch_to_last(length).pack()
         has1next_cd = self.next().pack() if self.has_next(length) else self.switch_to_first().pack()
         builder.row(
@@ -85,7 +87,7 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
             # В самый конец
             IKButton(text="≫", callback_data=self.switch_to_last(length).pack())
         )
-        counter_str = f"{self.offset // self.limit + 1}/{(length - 1) // self.limit + 1}"
+        counter_str = f"{self.offset // self.limit + 1} / {length // self.limit + 1}"
         builder.row(IKButton(text=counter_str, callback_data="None"))
 
     # Кнопки сортировки по убыванию и возрастанию
