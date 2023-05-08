@@ -63,6 +63,8 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
         return sorted(items, key=key, reverse=self.sort_order == SortOrder.DESC)
 
     def add_pagination_buttons(self, builder: InlineKeyboardBuilder, length: int):
+        if length <= self.limit:
+            return
         prev5offset = self.offset - 5 * self.limit
         has5prev = self.has_prev(5)
         has5prev_cd = self.make(prev5offset).pack() if has5prev else self.switch_to_first().pack()
