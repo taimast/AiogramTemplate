@@ -102,6 +102,13 @@ async def main():
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        try:
+            import uvloop
+        except ImportError:
+            logger.warning("uvloop is not installed")
+            asyncio.run(main())
+        else:
+            with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
+                runner.run(main())
     except (KeyboardInterrupt, SystemExit):
         logger.info("Bot stopped")

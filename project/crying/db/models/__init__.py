@@ -1,21 +1,21 @@
-from .base import Base, TimestampMixin
-from .invoice import (
-    AbstractInvoice,
-    InvoiceCrypto,
-    InvoiceQiwi,
-    InvoiceYooKassa,
-    USDTInvoice,
+from project.crying.db.models.invoice import (
+    Invoice,
+    Status,
+    Currency,
 )
+from .base import Base, TimestampMixin
 from .user import BaseUser, User, Locale
 
+InvoiceStatus = Status
 __all__ = (
     "Base",
     "TimestampMixin",
-    "AbstractInvoice",
-    "InvoiceCrypto",
-    "InvoiceQiwi",
-    "InvoiceYooKassa",
-    "USDTInvoice",
+
+    "Invoice",
+    "Status",
+    "InvoiceStatus",
+    "Currency",
+
     "BaseUser",
     "User",
     "Locale",

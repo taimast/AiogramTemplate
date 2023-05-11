@@ -68,7 +68,7 @@ def set_project_name_in_files(workdir: Path, project_name: str):
 
 
 def install_dependencies(project_path: Path):
-    aiogram_version = 'aiogram@latest -E i18n --allow-prereleases'
+    aiogram_version = 'aiogram@latest --allow-prereleases'
     dependencies = ["loguru",
                     "pydantic",
                     # "tortoise-orm[asyncpg]",
@@ -76,20 +76,23 @@ def install_dependencies(project_path: Path):
                     "APScheduler",
                     "cachetools",
                     "glQiwiApi",
+                    "pycryptopay-sdk",
                     "apscheduler",
                     # "fluent-runtime",
                     "fluentogram",
                     "watchdog",
                     "jinja2",
                     "sqlalchemy",
-                    "sqlalchemy-utils",
+
                     "asyncpg"
                     ]
-
+    utils = ["watchdog", "sqlalchemy-utils"]
+    utils = " ".join(utils)
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "
               f"poetry add {aiogram_version} && "
-              f"poetry add {dependencies}"
+              f"poetry add {dependencies} &&"
+              f"poetry add {utils} --group utils"
               # f" &&  poetry add git+https://github.com/taimast/aiogram-admin.git"
               )
 

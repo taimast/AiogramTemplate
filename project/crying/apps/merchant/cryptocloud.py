@@ -1,9 +1,11 @@
 from enum import Enum
+from typing import Literal
 
 from loguru import logger
 from pydantic import BaseModel
 
-from .base import Merchant
+from project.crying.db.models.invoice import Invoice
+from .base import BaseMerchant, MerchantEnum
 
 
 class Currency(str, Enum):
@@ -55,20 +57,24 @@ class CryptoPayment(BaseModel):
     error: str | None = None
 
 
-class CryptoCloud(Merchant):
+class CryptoCloud(BaseMerchant):
     create_url: str = "https://api.cryptocloud.plus/v1/invoice/create"
     status_url: str = "https://api.cryptocloud.plus/v1/invoice/info"
     id_prefix: str = "INV-"
+    merchant: Literal[MerchantEnum.CRYPTO_CLOUD]
 
     @property
     def headers(self) -> dict:
         return {"Authorization": f"Token {self.api_key.get_secret_value()}"}
 
-    async def create_invoice(self,
-                             amount: int | float | str,
-                             currency: str = "RUB",
-                             order_id: str = None,
-                             email: str = None, ) -> CryptoPaymentResponse | None:
+    async def create_invoice(
+            self,
+            user_id: int,
+            amount: int | float | str,
+            currency: Currency = Currency.RUB,
+            order_id: str = None,
+            email: str = None,
+    ) -> Invoice:
         data = CryptoPaymentRequest(
             amount=amount,
             currency=Currency(currency),
@@ -76,16 +82,22 @@ class CryptoCloud(Merchant):
             order_id=order_id,
             shop_id=self.shop_id,
         )
-
-        logger.debug(f"Sending request to {self.create_url} with data {data}")
         response = await self.make_request("POST", self.create_url, json=data.dict())
         response = CryptoPaymentResponse(**response)
         if response.status == Status.SUCCESS:
             logger.info(f"Success create invoice {response.invoice_id}")
-            return response
-        else:
-            logger.error(f"Error create invoice {response}")
-            return None
+            return Invoice(
+                user_id=user_id,
+                amount=amount,
+                currency=currency,
+                invoice_id=response.invoice_id,
+                pay_url=response.pay_url,
+                order_id=order_id,
+                email=email,
+                merchant=self.merchant,
+            )
+        logger.error(f"Error create invoice {response}")
+        raise Exception(f"Error create invoice {response}")
 
     async def is_paid(self, invoice_id: str) -> bool:
         response = await self.make_request(

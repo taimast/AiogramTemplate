@@ -3,8 +3,11 @@ from typing import ClassVar
 
 from loguru import logger
 from pydantic import SecretStr, BaseModel, Field
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from .base import Merchant
+from project.crying.db.models.invoice import Invoice, Currency
+from .base import BaseMerchant
+from ...db.models import User
 
 
 class State(StrEnum):
@@ -59,7 +62,7 @@ class TransactionResponse(BaseModel):
         return False
 
 
-class USDT(Merchant):
+class USDT(BaseMerchant):
     address: str
     api_key: SecretStr
     base_url: ClassVar[str] = "https://www.oklink.com/"
@@ -67,9 +70,12 @@ class USDT(Merchant):
 
     async def create_invoice(
             self,
+            session: AsyncSession,
+            user: User,
             amount: int | float | str,
-            order_id: str = None,
-    ) -> str:
+            currency: Currency = Currency.USDT,
+            **kwargs
+    ) -> Invoice:
         pass
 
     @property

@@ -1,16 +1,16 @@
 from pydantic import BaseModel, root_validator
 
-from .base import Merchant
+from .base import BaseMerchant
 
 
 # todo L1 23.11.2022 5:27 taima: Подумать что делать с этим
 class MerchantGroup(BaseModel):
-    merchants: dict[str, Merchant]
+    merchants: dict[str, BaseMerchant]
 
     class Config:
         allow_mutation = False
 
-    def get_merchant(self, name: str) -> Merchant:
+    def get_merchant(self, name: str) -> BaseMerchant:
         return self.merchants[name]
 
     @root_validator(pre=True)

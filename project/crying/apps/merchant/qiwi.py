@@ -1,17 +1,18 @@
 import datetime
-from typing import Optional
+from typing import Optional, Literal
 
 from glQiwiApi import QiwiP2PClient
-from glQiwiApi.qiwi.clients.p2p.types import Bill
 from pydantic import validator
 
-from .base import Merchant, PAYMENT_LIFETIME, TIME_ZONE
+from .base import PAYMENT_LIFETIME, TIME_ZONE, BaseMerchant, MerchantEnum
+from ...db.models import Invoice
 
 
 # todo L1 24.11.2022 18:29 taima: Использовать кастомную платежную систему вместо модуля glQiwiApi
 #  Каждый раз открывается и закрывается сессия, что не есть хорошо
-class Qiwi(Merchant):
+class Qiwi(BaseMerchant):
     client: Optional[QiwiP2PClient]
+    merchant: Literal[MerchantEnum.QIWI]
 
     class Config:
         arbitrary_types_allowed = True
@@ -25,15 +26,25 @@ class Qiwi(Merchant):
 
     async def create_invoice(
             self,
+            user_id: int,
             amount: int | float | str,
             description: str = None,
-            order_id: str = None,
             email: str = None,
-    ) -> Bill:
-        return await self.client.create_p2p_bill(
+    ) -> Invoice:
+        bill = await self.client.create_p2p_bill(
             amount=amount,
             comment=description or f"Product {amount}",
             expire_at=datetime.datetime.now(TIME_ZONE) + datetime.timedelta(seconds=PAYMENT_LIFETIME),
+        )
+        return Invoice(
+            user_id=user_id,
+            amount=bill.amount.value,
+            currency=bill.amount.currency,
+            invoice_id=bill.id,
+            pay_url=bill.pay_url,
+            email=email,
+            description=description,
+            merchant=self.merchant,
         )
 
     async def is_paid(self, invoice_id: str) -> bool:

@@ -1,6 +1,7 @@
 import asyncio
 
 from loguru import logger
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import close_all_sessions
 from sqlalchemy_utils import database_exists, create_database
@@ -56,24 +57,12 @@ async def main():
 
     async with maker() as session:
         # session.add(User())
-        logger.info("Get User")
-        users = await User.filter(session)
-        print(type(users))
-        print(type([]))
-
-        # query = select(User).where(User.id == 1).options(selectinload(User.secrets)).limit(1)
-        # result = await session.execute(query)
-        # user = result.scalar_one()
-        # selection load for gotten user
-        print("Sleeping 5")
-        await asyncio.sleep(5)
-        # await session.refresh(user, attribute_names=["secrets"])
-        await session.refresh(user)
-
-        # secret = Secret(secret="secret", user=user, id=1)
-        # session.add(secret)
-        print(user.secrets)
-        print(user.username)
         # await session.commit()
+        query = select(User)
+        users: list[User] = (await session.execute(query)).scalars().all()
+        # to json
+        print(users[0].__dict__)
+
+
 if __name__ == '__main__':
     asyncio.run(main())
