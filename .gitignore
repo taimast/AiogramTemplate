@@ -6,4 +6,5 @@ backup
 *dev*
 *probe*
 /db_data
-/scripts
+#scripts
+netangels
