@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import zoneinfo
 from pathlib import Path
 from typing import Optional, Any, Callable
@@ -8,7 +10,7 @@ from pydantic.env_settings import InitSettingsSource, EnvSettingsSource, Secrets
 
 from .db import SqliteDB, PostgresDB
 from .webhook import Webhook
-from ..apps.merchant.group import MerchantGroup
+from ..apps.merchant import MerchantAnnotated
 
 BASE_DIR = Path(__file__).parent.parent.parent
 LOG_DIR = BASE_DIR / "logs"
@@ -40,7 +42,7 @@ class Settings(BaseSettings):
     bot: Bot
     db: PostgresDB | SqliteDB
     webhook: Optional[Webhook]
-    merchants: Optional[MerchantGroup]
+    merchants: list[MerchantAnnotated] = Field(default_factory=list)
 
     class Config:
         env_file = r"..\..\.env"

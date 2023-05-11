@@ -7,7 +7,7 @@ authors = ["taimast <charlskenno@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-loguru = "^0.6.0"
+loguru = "^0.7.0"
 PyYAML = "^6.0"
 APScheduler = "^3.9.1"
 cachetools = "^5.2.0"
@@ -15,23 +15,26 @@ pydantic = "^1.10.2"
 aiogram = { version = ">=3.0.0b5", allow-prereleases = true }
 glqiwiapi = { version = "^2.18.2", optional = true }
 fluentogram = "^1.1.6"
-watchdog = "^2.3.0"
 sqlalchemy = "^2.0.9"
 asyncpg = "^0.27.0"
-sqlalchemy-utils = "^0.41.0"
 psycopg2 = "^2.9.6"
+pycryptopay-sdk = { git = "https://github.com/LulzLoL231/pyCryptoPayAPI.git" }
 
-
-
-[tool.poetry.dev-dependencies]
-
-[tool.poetry.extras]
-qiwi = ["glqiwiapi"]
+[tool.poetry.group.utils.dependencies]
+watchdog = "^3.0.0"
+sqlalchemy-utils = "^0.41.1"
 
 [tool.poetry.group.dev.dependencies]
 jinja2 = "^3.1.2"
 pygithub = "^1.58.1"
 paramiko = "^3.1.0"
+sshtunnel = "^0.4.0"
+fabric = "^3.0.1"
+decorator = "^5.1.1"
+invocations = "^3.1.0"
+
+[tool.poetry.extras]
+qiwi = ["glqiwiapi"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

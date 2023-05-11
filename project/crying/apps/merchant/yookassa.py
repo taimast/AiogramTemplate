@@ -2,11 +2,12 @@ import datetime
 import uuid
 from base64 import b64encode
 from enum import Enum
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import BaseModel, validator
 
-from .base import Merchant
+from project.crying.db.models.invoice import Invoice
+from .base import BaseMerchant, MerchantEnum
 
 
 class Amount(BaseModel):
@@ -65,8 +66,9 @@ class YooPayment(YooPaymentRequest):
         return self.paid
 
 
-class YooKassa(Merchant):
+class YooKassa(BaseMerchant):
     create_url: str = "https://api.yookassa.ru/v3/payments"
+    merchant: Literal[MerchantEnum.YOOKASSA]
 
     @property
     def headers(self) -> dict:
@@ -78,32 +80,45 @@ class YooKassa(Merchant):
 
     async def create_invoice(
             self,
+            user_id: int,
             amount: int | float | str,
             description: str = None,
             currency: str = "RUB",
             return_url: str = f"https://t.me/"  # todo L2 14.08.2022 19:02 taima: прописать url
-    ) -> "YooPayment":
-        """ Создание платежа """
-
+    ) -> Invoice:
         data = YooPaymentRequest(
             amount=Amount(currency=currency, value=amount),
             confirmation=ConfirmationRequest(return_url=return_url),
             description=description,
         )
         idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}
-        response = await self.make_request("POST", self.create_url, json=data.dict(), headers=idempotence_key)
-        return YooPayment(**response)
+        response = await self.make_request(
+            "POST",
+            self.create_url,
+            json=data.dict(),
+            headers=idempotence_key
+        )
+        yoo_payment = YooPayment(**response)
+        return Invoice(
+            user_id=user_id,
+            amount=yoo_payment.amount.value,
+            currency=yoo_payment.amount.currency,
+            invoice_id=yoo_payment.id,
+            pay_url=yoo_payment.confirmation.confirmation_url,
+            description=description,
+            merchant=self.merchant,
+        )
 
     async def is_paid(self, invoice_id: uuid.UUID) -> bool:
         """ Проверка статуса платежа """
         return (await self.get_invoice(invoice_id)).paid
 
-    async def get_invoice(self, invoice_id: uuid.UUID) -> "YooPayment":
+    async def get_invoice(self, invoice_id: uuid.UUID) -> YooPayment:
         """ Получение информации о платеже """
         res = await self.make_request("GET", f"{self.create_url}/{invoice_id}")
         return YooPayment.parse_obj(res)
 
-    async def cancel(self, bill_id: uuid.UUID) -> "YooPayment":
+    async def cancel(self, bill_id: uuid.UUID) -> YooPayment:
         """ Отмена платежа """
         idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}
         res = await self.make_request("POST", f"{self.create_url}/{bill_id}/cancel", headers=idempotence_key)

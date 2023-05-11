@@ -1,18 +1,20 @@
+from __future__ import annotations
+
 import datetime
 from abc import abstractmethod
 from enum import StrEnum
-from typing import Self, TypeVar, Generic
+from typing import Self, TypeVar
 
 from sqlalchemy import String, func, ForeignKey
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..base import TimestampMixin
 from ..base.declarative import Base
 from ..user import User
-from ....apps.merchant.base import PAYMENT_LIFETIME, Merchant
+from ....apps.merchant.base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
 
-MerchantType = TypeVar("MerchantType", bound=Merchant)
+MerchantType = TypeVar("MerchantType", bound=BaseMerchant)
 
 
 class Currency(StrEnum):
@@ -21,7 +23,13 @@ class Currency(StrEnum):
     RUB = "RUB"
     EUR = "EUR"
     GBP = "GBP"
+
     USDT = "USDT"
+    BTC = "BTC"
+    TON = "TON"
+    ETH = "ETH"
+    USDC = "USDC"
+    BUSD = "BUSD"
 
 
 class Status(StrEnum):
@@ -32,11 +40,11 @@ class Status(StrEnum):
     FAIL = "fail"
 
 
-class AbstractInvoice(Base, TimestampMixin, Generic[MerchantType]):
+class Invoice(Base, TimestampMixin):
     __abstract__ = True
     id: Mapped[str] = mapped_column(String(20), primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    # user: Mapped[User] = relationship(back_populates="invoices")
+    user: Mapped[User] = relationship(back_populates="invoices")
     currency: Mapped[Currency | None]
     amount: Mapped[float | None]
     invoice_id: Mapped[str] = mapped_column(String(50), index=True)
@@ -46,6 +54,15 @@ class AbstractInvoice(Base, TimestampMixin, Generic[MerchantType]):
     additional_info: Mapped[str | None] = mapped_column(String(255))
     pay_url: Mapped[str | None] = mapped_column(String(255))
     status: Mapped[Status | None] = mapped_column(String(10), default=Status.PENDING)
+
+    # CryptoCloud
+    order_id: Mapped[str | None] = mapped_column(String(50), index=True, doc="Custom product ID")
+    email: Mapped[str | None] = mapped_column(String(50), index=True, doc="Customer email")
+
+    # CryptoPay, YooKassa, Qiwi
+    description: Mapped[str | None] = mapped_column(String(255))
+
+    merchant: Mapped[MerchantEnum | None] = mapped_column(String(20))
 
     class Meta:
         abstract = True

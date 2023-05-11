@@ -1,10 +1,16 @@
+from __future__ import annotations
+
 import abc
 import zoneinfo
 from abc import ABC
-from typing import Optional, Any
+from enum import StrEnum
+from typing import Optional, Any, Literal, TYPE_CHECKING
 
 from aiohttp import ClientSession
 from pydantic import BaseModel, SecretStr
+
+if TYPE_CHECKING:
+    from project.crying.db.models.invoice import Invoice
 
 # seconds
 PAYMENT_LIFETIME = 60 * 60
@@ -14,13 +20,23 @@ TIME_ZONE = zoneinfo.ZoneInfo("Europe/Moscow")
 # todo L1 15.10.2022 2:07 taima: add to config
 # класс с методами для работы с мерчантами
 
+class MerchantEnum(StrEnum):
+    NONE = "none"
+    CRYPTO_CLOUD = "crypto_cloud"
+    USDT = "usdt"
+    QIWI = "qiwi"
+    YOOMONEY = "yoomoney"
+    YOOKASSA = "yookassa"
+    CRYPTO_PAY = "crypto_pay"
 
-class Merchant(BaseModel, ABC):
+
+class BaseMerchant(BaseModel, ABC):
     shop_id: Optional[str]
     api_key: SecretStr
     create_url: Optional[str] = None
     status_url: Optional[str] = None
     session: Optional[ClientSession] = None
+    merchant: Literal[MerchantEnum.NONE]
 
     class Config:
         arbitrary_types_allowed = True
@@ -44,7 +60,12 @@ class Merchant(BaseModel, ABC):
             return await res.json()
 
     @abc.abstractmethod
-    async def create_invoice(self, amount: int | float | str, **kwargs) -> Any:
+    async def create_invoice(
+            self,
+            user_id: int,
+            amount: int | float | str,
+            **kwargs
+    ) -> Invoice:
         pass
 
     @abc.abstractmethod
