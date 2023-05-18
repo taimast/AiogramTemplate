@@ -6,8 +6,8 @@ from typing import Optional, Literal
 
 from pydantic import BaseModel, validator
 
-from project.crying.db.models.invoice import Invoice
 from .base import BaseMerchant, MerchantEnum
+from ...db.models.invoice import Invoice
 
 
 class Amount(BaseModel):

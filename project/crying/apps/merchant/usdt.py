@@ -5,9 +5,9 @@ from loguru import logger
 from pydantic import SecretStr, BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from project.crying.db.models.invoice import Invoice, Currency
 from .base import BaseMerchant
 from ...db.models import User
+from ...db.models.invoice import Invoice, Currency
 
 
 class State(StrEnum):
