@@ -141,7 +141,7 @@ class Deployer:
         print(f"Successfully downed and rebuilt docker")
 
     def copy_config(self, config_path: str = f'{BASE_DIR}/config.yml'):
-        self.connection.put(config_path, '/home/hentai-dw-bot/config.yml')
+        self.connection.put(config_path, f'/home/{self.repo_name}/config.yml')
         print(f"Successfully copied config")
 
 
