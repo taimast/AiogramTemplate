@@ -29,7 +29,7 @@ async def on_shutdown():
 # todo L1 TODO 18.02.2023 6:36 taima: Скопировать все из autoanswer
 # todo L1 TODO 18.02.2023 7:06 taima: Сделать ввиде раздельных импортируемых модулей
 # todo L1 TODO 18.02.2023 7:07 taima: Включить aiogram_admin в проект
-async def main():
+
     # await db.main()
     # return
 
