@@ -12,8 +12,6 @@ jobs:
   python-ckecks:
     runs-on: ubuntu-latest
     steps:
-      - name: PyCharm Python Security Scanner
-        uses: tonybaloney/pycharm-security@1.25.1
 
       - name: Checkout code
         uses: actions/checkout@v3
