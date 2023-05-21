@@ -4,8 +4,8 @@ from typing import Literal
 from loguru import logger
 from pydantic import BaseModel
 
-from project.crying.db.models.invoice import Invoice
 from .base import BaseMerchant, MerchantEnum
+from ...db.models.invoice import Invoice
 
 
 class Currency(str, Enum):

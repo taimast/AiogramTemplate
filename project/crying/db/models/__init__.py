@@ -1,9 +1,9 @@
-from project.crying.db.models.invoice import (
+from .base import Base, TimestampMixin
+from .invoice import (
     Invoice,
     Status,
     Currency,
 )
-from .base import Base, TimestampMixin
 from .user import BaseUser, User, Locale
 
 InvoiceStatus = Status

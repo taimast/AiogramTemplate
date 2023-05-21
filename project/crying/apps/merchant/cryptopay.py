@@ -3,8 +3,8 @@ from typing import Literal
 from CryptoPayAPI import CryptoPay as CryptoPayAPI, schemas
 from pydantic import validator
 
-from project.crying.db.models.invoice import Invoice
 from .base import BaseMerchant, MerchantEnum
+from ...db.models.invoice import Invoice
 
 
 class CryptoPay(BaseMerchant):

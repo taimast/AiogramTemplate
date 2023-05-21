@@ -50,7 +50,7 @@ class BaseQuery:
     @classmethod
     async def all(cls: type[T], session: AsyncSession) -> list[T]:
         result = await session.execute(select(cls))
-        return result.scalars().all()
+        return result.unique().scalars().all()
 
     def update(self: T, **kwargs) -> None:
         for attr, value in kwargs.items():
@@ -67,7 +67,7 @@ class BaseQuery:
     ) -> list[T]:
         query = select(cls).where(*expr).limit(limit).offset(offset)
         result = await session.execute(query)
-        return result.scalars().all()
+        return result.unique().scalars().all()
 
     @classmethod
     async def count(cls: type[T], session: AsyncSession, *expr) -> int:

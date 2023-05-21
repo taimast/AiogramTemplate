@@ -10,7 +10,7 @@ from aiohttp import ClientSession
 from pydantic import BaseModel, SecretStr
 
 if TYPE_CHECKING:
-    from project.crying.db.models.invoice import Invoice
+    from ...db.models.invoice import Invoice
 
 # seconds
 PAYMENT_LIFETIME = 60 * 60

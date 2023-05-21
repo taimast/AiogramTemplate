@@ -51,8 +51,10 @@ class Deployer:
                 # "key_filename": self.key_filename
             }
         )
-        self.create_deploy_key_command = self.create_deploy_key_file.read_text("utf-8")
-        self.setup_docker_command = self.setup_docker_file.read_text("utf-8")
+        if self.create_deploy_key_file.exists():
+            self.create_deploy_key_command = self.create_deploy_key_file.read_text("utf-8")
+        if self.setup_docker_file.exists():
+            self.setup_docker_command = self.setup_docker_file.read_text("utf-8")
 
     def __enter__(self):
         return self
