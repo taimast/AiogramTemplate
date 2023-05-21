@@ -39,7 +39,7 @@ async def on_shutdown():
 
     # Initialize settings
     settings = Settings()
-    logger.info(f" Settings:\n{pformat(settings.dict())}")
+    logger.info(f"  Settings:\n{pformat(settings.dict())}")
 
     # Initialize logging
     init_logging(cli_settings.log)
