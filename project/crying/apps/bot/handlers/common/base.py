@@ -6,8 +6,8 @@ from aiogram import Router, types
 from aiogram.filters import Command, Text
 from aiogram.fsm.context import FSMContext
 
-from project.crying.apps.bot.callback_data.paginator import PaginatorCallback
 from project.crying.apps.bot.commands.bot_commands import BaseCommands
+from project.crying.apps.bot.keyboards.common import common_kbs
 
 if TYPE_CHECKING:
     from project.crying.locales.stubs.ru.stub import TranslatorRunner
@@ -27,8 +27,7 @@ async def start(
     if isinstance(message, types.CallbackQuery):
         message = message.message
 
-    pg = PaginatorCallback()
     await message.answer(
         l10n.start(name=message.from_user.full_name),
-        reply_markup=pg.get_keyboard()
+        reply_markup=common_kbs.custom_back_kb("Тест оплаты", cd="payments")
     )

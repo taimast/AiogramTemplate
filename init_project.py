@@ -132,8 +132,12 @@ def main():
 
     dir_util.copy_tree(str(TEMPLATE_DIR / "crying"), str(workdir))
     dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
+    dir_util.copy_tree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"))
+
     set_project_name_in_files(workdir, project_name)
     set_project_name_in_files(project_path / "scripts", project_name)
+    set_project_name_in_files(project_path / ".github", project_name)
+
     print("Шаблон настроен")
 
     if dependencies:

@@ -6,7 +6,7 @@ RUN apt update \
     && rm -rf /var/lib/apt/* /var/log/* /var/cache/*
 WORKDIR /app
 COPY pyproject.toml ./
-RUN poetry install --no-root
+RUN poetry install --no-root --without dev
 COPY crying crying
 COPY README.md README.md
 ENV PYTHONPATH=/app
