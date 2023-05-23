@@ -1,7 +1,14 @@
 import datetime
 from typing import Optional, Literal
 
-from glQiwiApi import QiwiP2PClient
+from loguru import logger
+
+try:
+    from glQiwiApi import QiwiP2PClient
+except ImportError:
+    logger.warning("glQiwiApi not installed")
+    QiwiP2PClient = None
+
 from pydantic import validator
 
 from .base import PAYMENT_LIFETIME, TIME_ZONE, BaseMerchant, MerchantEnum
