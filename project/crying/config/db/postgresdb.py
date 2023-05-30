@@ -1,6 +1,5 @@
-from typing import Self
-
 from pydantic import BaseModel, SecretStr
+from typing import Self
 
 
 class PostgresDB(BaseModel):
@@ -24,6 +23,10 @@ class PostgresDB(BaseModel):
                 f"{self.user}:{self.password.get_secret_value()}"
                 f"@{self.host}:{self.port}"
                 f"/{self.database}")
+
+    @property
+    def sqlite_url(self):
+        return f"sqlite+aiosqlite:///{self.database}.db"
 
     @property
     def sync_url(self):
