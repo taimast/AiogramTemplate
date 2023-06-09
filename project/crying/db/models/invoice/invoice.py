@@ -41,7 +41,7 @@ class Status(StrEnum):
 
 
 class Invoice(Base, TimestampMixin):
-    __abstract__ = True
+    __tablename__ = "invoices"
     id: Mapped[str] = mapped_column(String(20), primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped[User] = relationship(back_populates="invoices")
@@ -62,7 +62,7 @@ class Invoice(Base, TimestampMixin):
     # CryptoPay, YooKassa, Qiwi
     description: Mapped[str | None] = mapped_column(String(255))
 
-    merchant: Mapped[MerchantEnum | None] = mapped_column(String(20))
+    merchant: Mapped[MerchantEnum | None]
 
     class Meta:
         abstract = True

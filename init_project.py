@@ -86,13 +86,13 @@ def install_dependencies(project_path: Path):
 
                     "asyncpg"
                     ]
-    utils = ["watchdog", "sqlalchemy-utils"]
+    utils = ["watchdog", "sqlalchemy-utils", "psycopg2"]
     utils = " ".join(utils)
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "
               f"poetry add {aiogram_version} && "
               f"poetry add {dependencies} &&"
-              f"poetry add {utils} --group utils"
+              f"poetry add {utils} --group dev"
               # f" &&  poetry add git+https://github.com/taimast/aiogram-admin.git"
               )
 
@@ -136,7 +136,7 @@ def main():
 
     set_project_name_in_files(workdir, project_name)
     set_project_name_in_files(project_path / "scripts", project_name)
-    set_project_name_in_files(project_path / ".github", project_name)
+    set_project_name_in_files(project_path / ".github", project_path.name)
 
     print("Шаблон настроен")
 

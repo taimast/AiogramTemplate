@@ -32,6 +32,7 @@ class Deployer:
     ip: str
     username: str = 'root'
     # key_filename: str
+    repo_path_name: str = field(init=False)
 
     create_deploy_key_file: Path = field(default=Path(SCRIPTS_DIR / 'create_deploy_key.sh'))
     create_deploy_key_command: str = field(init=False)
@@ -43,6 +44,7 @@ class Deployer:
     connection: Connection = field(init=False)
 
     def __post_init__(self):
+        self.repo_path_name = self.repo_name.replace('_', '-')
         self.g = Github(self.github_token)
         self.repo = self.g.get_repo(f'taimast/{self.repo_name}')
         self.connection = Connection(

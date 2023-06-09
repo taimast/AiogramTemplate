@@ -1,4 +1,5 @@
 import asyncio
+from pprint import pprint
 
 from loguru import logger
 from sqlalchemy import select
@@ -52,16 +53,30 @@ async def get_user(maker, user_id):
         return user
 
 
+async def probe(session):
+    await asyncio.sleep(1)
+    query = select(User)
+    users: list[User] = (await session.execute(query)).scalars().all()
+    # to json
+    print(users[0].__dict__)
+
+
 async def main():
-    maker = await dev_init_db(PostgresDB(database="probe_alchemy3"))
+    maker = await dev_init_db(PostgresDB.default())
 
     async with maker() as session:
-        # session.add(User())
+        user, _ = await User.get_or_create(session, id=1)
+        # private= Private(
+        #     user=user,
+        #     data="2"
+        # )
+        # session.add(private)
         # await session.commit()
-        query = select(User)
-        users: list[User] = (await session.execute(query)).scalars().all()
-        # to json
-        print(users[0].__dict__)
+        # print(user.private.data)
+        pprint(dir(user))
+        res = await user.awaitable_attrs.private
+        pprint(res.data)
+        print(user.private.data)
 
 
 if __name__ == '__main__':

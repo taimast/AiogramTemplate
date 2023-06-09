@@ -40,7 +40,7 @@ class Status(str, Enum):
 class YooPaymentRequest(BaseModel):
     amount: Amount
     description: str | None
-    confirmation: ConfirmationRequest
+    confirmation: ConfirmationRequest | None
     capture: bool = True
 
     # необязательный expire_at. Не указано в документации. Всегда равен 1 часу
