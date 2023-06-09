@@ -22,7 +22,7 @@ class Private(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped[User] = relationship(back_populates="private")
-
+    data: Mapped[str] = mapped_column()
 
 class User(BaseUser):
     __tablename__ = 'users'

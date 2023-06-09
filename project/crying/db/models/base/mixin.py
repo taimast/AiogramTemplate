@@ -18,11 +18,15 @@ class BaseQuery:
 
     @classmethod
     async def get(cls: type[T], session: AsyncSession, **kwargs) -> T:
+        if id := kwargs.get('id'):
+            return await session.get(cls, id)
         result = await session.execute(select(cls).filter_by(**kwargs))
         return result.scalar_one()
 
     @classmethod
     async def get_or_none(cls: type[T], session: AsyncSession, **kwargs) -> T | None:
+        if id := kwargs.get('id'):
+            return await session.get(cls, id)
         result = await session.execute(select(cls).filter_by(**kwargs))
         return result.scalar_one_or_none()
 

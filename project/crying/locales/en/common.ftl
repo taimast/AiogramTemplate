@@ -1,1 +1,0 @@
-start = Hi, I'm a bot
