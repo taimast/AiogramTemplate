@@ -13,7 +13,7 @@ def parse_args():
     parser.add_argument("-p", "--project", type=str)
     parser.add_argument("-d", "--dependencies", action="store_true", default=False)
     args = parser.parse_args()
-    return args.project, args.dependencies, args.localization
+    return args.project, args.dependencies
 
 
 def get_project_dir(project_path):
@@ -94,7 +94,7 @@ def install_dependencies(project_path: Path):
 
 def main():
     # subprocess.Popen(['poetry', 'show', '--tree'])
-    project_path, dependencies, localization = parse_args()
+    project_path, dependencies = parse_args()
     if not project_path:
         permission = input("Путь до проекта не указан, установить в текущую директорию? [y/n]: ")
         if permission == "y":
