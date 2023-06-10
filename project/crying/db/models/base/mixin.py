@@ -1,6 +1,6 @@
 from typing import Sequence, TypeVar
 
-from sqlalchemy import select, ChunkedIteratorResult, delete, func
+from sqlalchemy import select, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 T = TypeVar("T", bound='Base')
@@ -45,7 +45,7 @@ class BaseQuery:
     # удаление по условиям
     @classmethod
     async def delete(cls: type[T], session: AsyncSession, *expr) -> Sequence[int]:
-        res: ChunkedIteratorResult = await session.execute(delete(cls).where(*expr).returning(cls.id))
+        res = await session.execute(delete(cls).where(*expr).returning(cls.id))
         return res.scalars().fetchall()
 
     async def delete_instance(self, session: AsyncSession) -> None:

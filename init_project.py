@@ -12,7 +12,6 @@ def parse_args():
     parser = argparse.ArgumentParser(description="config_file")
     parser.add_argument("-p", "--project", type=str)
     parser.add_argument("-d", "--dependencies", action="store_true", default=False)
-    parser.add_argument("-l", "--localization", type=str)
     args = parser.parse_args()
     return args.project, args.dependencies, args.localization
 
@@ -71,14 +70,12 @@ def install_dependencies(project_path: Path):
     aiogram_version = 'aiogram@latest --allow-prereleases'
     dependencies = ["loguru",
                     "pydantic",
-                    # "tortoise-orm[asyncpg]",
                     "pyyaml",
                     "APScheduler",
                     "cachetools",
                     "glQiwiApi",
                     "pycryptopay-sdk",
                     "apscheduler",
-                    # "fluent-runtime",
                     "fluentogram",
                     "watchdog",
                     "jinja2",
@@ -93,16 +90,7 @@ def install_dependencies(project_path: Path):
               f"poetry add {aiogram_version} && "
               f"poetry add {dependencies} &&"
               f"poetry add {utils} --group dev"
-              # f" &&  poetry add git+https://github.com/taimast/aiogram-admin.git"
               )
-
-
-def init_localize(project_name: str, localization: str):
-    os.system(f"pybabel extract ./{project_name}/ -o ./{project_name}/apps/bot/locales/{project_name}.pot")
-    os.system(
-        f"pybabel init -i ./{project_name}/apps/bot/locales/{project_name}.pot "
-        f"-d ./{project_name}/apps/bot/locales/ -D {project_name} -l {localization}")
-
 
 def main():
     # subprocess.Popen(['poetry', 'show', '--tree'])
@@ -144,8 +132,6 @@ def main():
         print(f"Установка базовых зависимостей...")
         install_dependencies(project_path)
 
-    if localization:
-        init_localize(workdir.name, localization)
 
 
 if __name__ == "__main__":
