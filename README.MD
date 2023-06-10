@@ -19,10 +19,11 @@ ___
 - Настройки локализации через Fluent
 - Мерчанты
   - [CryptoCloud](https://cryptocloud.plus/)
+  - [CryptoPay](https://github.com/LulzLoL231/pyCryptoPayAPI)
   - [Qiwi](https://qiwi.com/p2p-admin/api/)
-    - [YooKassa](https://yookassa.ru/developers/)
-    - USDT
-    - ~~[Payeer](https://payeer.com/)~~
+  - [YooKassa](https://yookassa.ru/developers/)
+  - USDT
+  - ~~[Payeer](https://payeer.com/)~~
 - CLI
 - Настройка Вебхука
 - Database ORM: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
