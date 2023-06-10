@@ -2,17 +2,24 @@
 
 #### Шаблон бота на aiogram 3 с некоторым базовым функционалом.
 
-#### [Python 3.11](https://www.python.org/downloads/), [Poetry](https://python-poetry.org/docs/#installation), [aiogram 3](https://github.com/aiogram/aiogram/tree/dev-3.x), [PostgreSQL](https://www.postgresql.org/download/)
+####
+
+- [Python 3.11](https://www.python.org/downloads/)
+- [Poetry](https://python-poetry.org/docs/#installation)
+- [aiogram 3](https://github.com/aiogram/aiogram/tree/dev-3.x)
+- [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
+- [PostgreSQL](https://www.postgresql.org/download/)
 
 ___
 
 ## Включает
+
 - Админ панель
 - Мидлвары
 - Настройки локализации через Fluent
 - Мерчанты
-    - [CryptoCloud](https://cryptocloud.plus/)
-    - [Qiwi](https://qiwi.com/p2p-admin/api/)
+  - [CryptoCloud](https://cryptocloud.plus/)
+  - [Qiwi](https://qiwi.com/p2p-admin/api/)
     - [YooKassa](https://yookassa.ru/developers/)
     - USDT
     - ~~[Payeer](https://payeer.com/)~~
@@ -33,7 +40,7 @@ ___
 ## Локализация
 
 Документация по [Fluent](https://projectfluent.org/fluent/guide/)
-`project\crying\utils\ftl_parser_cli.py`  
+`project\crying\utils\ftl_parser_cli.py`
 CLI для парсинга файлов переменных из ftl файлов в заглушку с поддержкой автодополнения,
 используется [fluentogram](https://github.com/Arustinal/fluentogram)
 
@@ -42,7 +49,7 @@ CLI для парсинга файлов переменных из ftl файл�
 ## Дополнительно
 
 Пример как использовать [тут](https://github.com/Arustinal/fluentogram/blob/main/example/TypingGenerator.md), вместо
-i18n используется ftl_parser_cli  
+i18n используется ftl_parser_cli
 `ftl_parser_cli` дополнительно поддерживает
 
 - `-dir-ftl` - для создания заглушки для указанной папки
