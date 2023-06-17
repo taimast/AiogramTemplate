@@ -9,7 +9,7 @@ from .....db.models import User
 router = Router()
 
 
-@router.callback_query(Text("export-users"))
+@router.callback_query(Text("export_users"))
 async def export_users(call: types.CallbackQuery, session: AsyncSession):
     await call.message.answer(f"Экспорт пользователей...")
     users = await User.all(session)

@@ -29,46 +29,54 @@ async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, 
                       f"✅ Success: {{}}\n" \
                       f"🚫 Failed: {{}}\n\n" \
                       f"{{}}\n"
-    status_message = await message.answer(status_template.format(0, 0, 0, current_emoji))
-    success = 0
-    failed = 0
+    try:
+        status_message = await message.answer(status_template.format(0, 0, 0, current_emoji))
+        success = 0
+        failed = 0
 
-    async def mailings_status_updated():
-        while True:
-            await asyncio.sleep(0.5)
-            nonlocal current_emoji
-            current_emoji = time_emoji1 if current_emoji == time_emoji2 else time_emoji2
-            await status_message.edit_text(
-                status_template.format(
-                    md.hcode(success + failed),
-                    md.hcode(success),
-                    md.hcode(failed),
-                    current_emoji
+        async def mailings_status_updated():
+            while True:
+                await asyncio.sleep(0.5)
+                nonlocal current_emoji
+                current_emoji = time_emoji1 if current_emoji == time_emoji2 else time_emoji2
+                try:
+                    await status_message.edit_text(
+                        status_template.format(
+                            md.hcode(success + failed),
+                            md.hcode(success),
+                            md.hcode(failed),
+                            current_emoji
+                        )
+                    )
+                except Exception as e:
+                    logger.warning(f"Error while updating status message: {e}")
+
+        task = asyncio.create_task(mailings_status_updated())
+        # copy message
+        users = await User.all(session)
+        for num, user in enumerate(users, 1):
+            try:
+                await bot.copy_message(
+                    user.id,
+                    message.chat.id,
+                    message.message_id,
                 )
+                success += 1
+            except Exception as e:
+                failed += 1
+                logger.warning(f"Error while sending message to {user.id}: {e}")
+            await asyncio.sleep(0.1)
+        task.cancel()
+        await status_message.edit_text(
+            status_template.format(
+                md.hcode(success + failed),
+                md.hcode(success),
+                md.hcode(failed),
+                done_emoji,
             )
-
-    task = asyncio.create_task(mailings_status_updated())
-    # copy message
-    users = await User.all(session)
-    for num, user in enumerate(users, 1):
-        try:
-            await bot.copy_message(
-                user.id,
-                message.chat.id,
-                message.message_id,
-            )
-            success += 1
-        except Exception as e:
-            failed += 1
-            logger.warning(f"Error while sending message to {user.id}: {e}")
-        await asyncio.sleep(0.1)
-    task.cancel()
-    await status_message.edit_text(
-        status_template.format(
-            md.hcode(success + failed),
-            md.hcode(success),
-            md.hcode(failed),
-            done_emoji,
         )
-    )
+    except Exception as e:
+        logger.error(f"Error while sending mailing: {e}")
+        await message.answer(f"Произошла ошибка при рассылке {e}", parse_mode=None)
+
     await state.clear()

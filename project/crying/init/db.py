@@ -5,7 +5,6 @@ from loguru import logger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from sqlalchemy.orm import close_all_sessions
-from sqlalchemy_utils import database_exists, create_database
 
 from project.crying.db.models import Base, User
 from ..config import SqliteDB, PostgresDB
@@ -19,6 +18,7 @@ async def close_db():
 
 
 async def dev_init_db(db: Database = PostgresDB.default()) -> async_sessionmaker:
+    from sqlalchemy_utils import database_exists, create_database
     logger.info(f"Initializing Database {db.database}[{db.host}]...")
     engine = create_async_engine(db.url, echo=True)
 

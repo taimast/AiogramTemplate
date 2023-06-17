@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import StrEnum
 
 from aiogram.filters.callback_data import CallbackData
 
 
-class Action(str, Enum):
+class Action(StrEnum):
     GET = "get"
     CREATE = "create"
     DELETE = "delete"

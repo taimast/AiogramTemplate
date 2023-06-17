@@ -14,7 +14,7 @@ class SqliteDB(BaseModel):
 
     @property
     def url(self):
-        return (f"sqlite+{self.dialect}://"
+        return (f"sqlite+{self.dialect}:///"
                 f"{self.path}")
 
     @property
