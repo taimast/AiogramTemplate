@@ -3,13 +3,14 @@ bot:
   admins:
     - 000000000
 db:
-  user: postgres
-  password: postgres
-  database: crying
-  host: localhost
-  port: 5432
+  path: ../db.sqlite3
 
-
+#db:
+#  user: postgres
+#  password: postgres
+#  database: crying
+#  host: localhost
+#  port: 5432
 
 
 # Detailed information in the config folder

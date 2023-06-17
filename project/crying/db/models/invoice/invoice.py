@@ -5,9 +5,9 @@ from abc import abstractmethod
 from enum import StrEnum
 from typing import Self, TypeVar
 
-from sqlalchemy import String, func, ForeignKey
+from sqlalchemy import String, func, ForeignKey, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, selectinload
 
 from ..base import TimestampMixin
 from ..base.declarative import Base
@@ -42,7 +42,7 @@ class Status(StrEnum):
 
 class Invoice(Base, TimestampMixin):
     __tablename__ = "invoices"
-    id: Mapped[str] = mapped_column(String(20), primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped[User] = relationship(back_populates="invoices")
     currency: Mapped[Currency | None]
@@ -69,6 +69,40 @@ class Invoice(Base, TimestampMixin):
 
     def __str__(self):
         return f"[{self.__class__.__name__}] {self.user} {self.amount} {self.currency}"
+
+    @classmethod
+    async def get_pending_invoices(cls, session: AsyncSession) -> list[Invoice]:
+        """Get pending invoices."""
+        result = await session.execute(
+            select(cls)
+            .options(selectinload(cls.user))
+            .where(cls.expire_at > func.now())
+            .where(cls.status == Status.PENDING)
+        )
+        return result.scalars().all()
+
+    @classmethod
+    async def get_last_invoice(
+            cls,
+            session: AsyncSession,
+            user_id: int,
+            amount: int | float | str,
+            currency: Currency,
+            merchant: MerchantType,
+    ) -> Invoice | None:
+        """Get last unpaid invoice."""
+        return (
+            await session.execute(
+                select(cls)
+                .where(cls.user_id == user_id)
+                .where(cls.amount == amount)
+                .where(cls.currency == currency)
+                .where(cls.merchant == merchant)
+                .where(cls.status == Status.PENDING)
+                .where(cls.expire_at > func.now())
+                .order_by(cls.id.desc())
+            )
+        ).scalar_one_or_none()
 
     # todo L1 TODO 22.04.2023 22:56 taima: Do successfully_paid and check_payment methods in one method
     async def successfully_paid(self):

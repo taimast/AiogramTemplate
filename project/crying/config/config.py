@@ -69,10 +69,25 @@ class Settings(BaseSettings):
         with open(BASE_DIR / self.__config__.config_file, "w", encoding="utf-8") as f:
             data = self.dict()
 
+            def if_merchants(obj, k, v):
+                if k == "merchants":
+                    merchants = []
+
+                    for merchant in v:
+                        merchants.append(
+                            {"merchant": str(merchant["merchant"]),
+                             "shop_id": merchant["shop_id"],
+                             "api_key": merchant["api_key"].get_secret_value(),
+                             }
+                        )
+                    obj[k] = merchants
+
             def recursive_remove_secret(obj):
                 if isinstance(obj, dict):
                     for k, v in obj.items():
-                        if isinstance(v, SecretStr):
+                        if k == "merchants":
+                            if_merchants(obj, k, v)
+                        elif isinstance(v, SecretStr):
                             obj[k] = v.get_secret_value()
                         else:
                             recursive_remove_secret(v)

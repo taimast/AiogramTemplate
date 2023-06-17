@@ -18,8 +18,9 @@ from project.crying.init import (
 )
 
 
-async def on_startup():
-    pass
+async def on_startup(bot: Bot):
+    username = (await bot.me()).username
+    logger.warning(f"Bot @{username} started")
 
 
 async def on_shutdown():
@@ -39,7 +40,7 @@ async def main():
 
     # Initialize settings
     settings = Settings()
-    logger.info(f"   Settings:\n{pformat(settings.dict())}")
+    logger.info(f"Settings:\n{pformat(settings.dict())}")
 
     # Initialize logging
     init_logging(cli_settings.log)

@@ -81,7 +81,8 @@ def install_dependencies(project_path: Path):
                     "jinja2",
                     "sqlalchemy",
 
-                    "asyncpg"
+                    "asyncpg",
+                    "aiosqlite",
                     ]
     utils = ["watchdog", "sqlalchemy-utils", "psycopg2"]
     utils = " ".join(utils)

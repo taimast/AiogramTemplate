@@ -1,5 +1,6 @@
 from aiogram import Dispatcher
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
+from aiogram.utils.chat_action import ChatActionMiddleware
 from loguru import logger
 from sqlalchemy.ext.asyncio import async_sessionmaker
 
@@ -29,6 +30,11 @@ def setup_middlewares(dp: Dispatcher, session_maker: async_sessionmaker):
     translator_runner_middleware = TranslatorRunnerMiddleware()
     dp.message.middleware(translator_runner_middleware)
     dp.callback_query.middleware(translator_runner_middleware)
+
+    # Chat action middleware
+    chat_action_middleware = ChatActionMiddleware()
+    dp.message.middleware(chat_action_middleware)
+    dp.callback_query.middleware(chat_action_middleware)
 
     # Callback answer middleware
     dp.callback_query.middleware(CallbackAnswerMiddleware())
