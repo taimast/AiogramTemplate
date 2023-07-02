@@ -14,7 +14,7 @@ conversation-moderator-connected =
     ✅💬 Вы подключились к { $name }
 
 conversation-user-connected =
-    ✅💬 Вы подключились к QualityDelivery
+    ✅💬 Вы подключились к Модератору
 
 conversation-connect-user_already_connected =
     ❌💬 Пользователь { $name } уже подключен к оператору
@@ -33,8 +33,13 @@ conversation-connect-order_not_found =
 
 
 conversation-message_from_moderator =
-    📩 От QualityDelivery:
+    📩 От Модератора:
 
 conversation-message_from_user =
     📩 От { $name }:
 
+conversation-connect = 🗣️💬 Скоро вам ответит оператор, пожалуйста, ожидайте...
+conversation-connect_request = 🗣️ Получен запрос на подключение к оператору
+    от { $name }
+conversation-connect-button-accept = ✅ Принять
+conversation-connect-button-reject = ❌ Отклонить

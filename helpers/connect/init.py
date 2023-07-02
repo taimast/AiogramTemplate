@@ -6,18 +6,9 @@ CONNECT_SRC_DIR = Path(__file__).parent / "src"
 
 def get_project_dir(project_path):
     for item in project_path.iterdir():
-        if item.is_dir() and item.name not in ("tests",
-                                               ".idea",
-                                               "scripts",
-                                               "logs",
-                                               "media",
-                                               "static",
-                                               "templates",
-                                               "venv",
-                                               "__pycache__",
-                                               "backup",
-                                               ".git"):
-            return item
+        if item.is_dir():
+            if project_path.name.lower().replace("-", "_") in item.name.lower().replace("-", "_"):
+                return item
 
 
 def main():
@@ -37,7 +28,7 @@ def main():
     # C:/Users/taima/PycharmProjects/bots/order-channel-bot/order_channel_bot/db/models/user.py
     shutil.copyfile(CONNECT_SRC_DIR / "model.py", workdir / "db/models" / "user.py")
     # C:/Users/taima/PycharmProjects/bots/order-bot/order_bot/apps/bot/locales/ru/conversation.ftl
-    shutil.copyfile(CONNECT_SRC_DIR / "conversation.ftl", workdir / "apps/bot/locales/ru" / "conversation.ftl")
+    shutil.copyfile(CONNECT_SRC_DIR / "conversation.ftl", workdir / "locales/ru" / "conversation.ftl")
 
     print("✅ Файлы скопированы")
 

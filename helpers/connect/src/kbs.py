@@ -5,21 +5,22 @@ from typing import TYPE_CHECKING
 from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
+from ...callback_data.connect import ConnectCallback, ConnectAction
+
 if TYPE_CHECKING:
-    from ...locales.stubs.ru.stub import TranslatorRunner
+    from .....locales.stubs.ru.stub import TranslatorRunner
 
 
-def connect(link: str, l10n: TranslatorRunner) -> InlineKeyboardMarkup:
+def connect(user_id: int, l10n: TranslatorRunner) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    # builder.button(
-    #     text=l10n.conversation.moderator.button.connect(),
-    #     callback_data=ConnectCallback(user_id=user_id, action=Action.connect)
-    # )
+    # Принять и Отклонить
     builder.button(
-        # text=l10n.conversation.moderator.button.connect(),
-        text=l10n.order.manager.button.take(),
-        url=link
-    )
+        text=l10n.conversation.connect.button.accept(),
+        callback_data=ConnectCallback(user_id=user_id, action=ConnectAction.CONNECT))
+    # builder.button(
+    #     text=l10n.conversation.connect.button.reject(),
+    #     callback_data=ConnectCallback(user_id=user_id, action=ConnectAction.CONNECT)
+    # )
     return builder.as_markup()
 
 

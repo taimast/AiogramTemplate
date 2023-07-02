@@ -42,7 +42,7 @@ class CLIArgsSettings(BaseModel):
             args_settings.env_file = args_settings.env_file or r"..\..\.env_dev"
         else:
             args_settings.log.stdout = None
-            args_settings.log.file = Level.WARNING
+            args_settings.log.file = Level.INFO
             args_settings.config_file = args_settings.config_file or "config.yml"
             args_settings.env_file = args_settings.env_file or r"..\..\.env"
 
