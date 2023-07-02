@@ -5,10 +5,10 @@ from aiogram.types import BotCommand
 
 class _BaseCommands(NamedTuple):
     START: BotCommand = BotCommand(command="start", description="🏠 Главное меню")
-    PROFILE: BotCommand = BotCommand(command="profile", description="👤 Мой профиль")
-    ABOUT: BotCommand = BotCommand(command="about", description="ℹ️ О боте")
-    SUPPORT: BotCommand = BotCommand(command="support", description="👨‍💻 Поддержка")
-    FEEDBACK: BotCommand = BotCommand(command="feedback", description="🗣️ Обратная связь")
+    # PROFILE: BotCommand = BotCommand(command="profile", description="👤 Мой профиль")
+    # ABOUT: BotCommand = BotCommand(command="about", description="ℹ️ О боте")
+    # SUPPORT: BotCommand = BotCommand(command="support", description="👨‍💻 Поддержка")
+    # FEEDBACK: BotCommand = BotCommand(command="feedback", description="🗣️ Обратная связь")
 
 
 class _AdminCommands(NamedTuple):

@@ -1,31 +1,14 @@
-from enum import Enum
+from enum import StrEnum
 
 from aiogram.filters.callback_data import CallbackData
 
 
-class Action(str, Enum):
-    all = "all"
-    view = "view"
-    create = "create"
-    delete = "delete"
-    edit = "edit"
-    connect = "connect"
-
-    done = "done"
-    return_order = "return_order"
-
-
-class UserCallback(CallbackData, prefix="user"):
-    id: int
-    action: Action
+class ConnectAction(StrEnum):
+    CONNECT = "connect"
+    DISCONNECT = "disconnect"
 
 
 class ConnectCallback(CallbackData, prefix="connect"):
-    action: Action
+    action: ConnectAction
     force: bool = False
     user_id: int | None
-
-
-class OrderCallback(CallbackData, prefix="order"):
-    user_id: int
-    action: Action
