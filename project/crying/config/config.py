@@ -15,8 +15,9 @@ from ..apps.merchant import MerchantAnnotated
 BASE_DIR = Path(__file__).parent.parent.parent
 LOG_DIR = BASE_DIR / "logs"
 MEDIA_DIR = BASE_DIR / 'media'
+DATABASE_DIR = BASE_DIR / "database"
 
-for DIR in [LOG_DIR, MEDIA_DIR]:
+for DIR in [LOG_DIR, MEDIA_DIR, DATABASE_DIR]:
     DIR.mkdir(exist_ok=True)
 
 LOCALES_DIR = BASE_DIR / "crying/locales"
