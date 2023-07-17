@@ -19,7 +19,7 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
     offset: int = 0
     limit: int = 10
     sort_order: SortOrder | None = None
-
+    data: str | None = None
     def make(self, offset: int) -> Self:
         return PaginatorCallback(
             offset=offset,

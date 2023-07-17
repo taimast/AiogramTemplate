@@ -7,6 +7,7 @@ services:
     volumes:
       - ./config.yml:/app/config.yml
       - ./logs:/app/logs
+      - ./database:/app/database
 #    environment:
 #      - DB__HOST=db
 #    depends_on:

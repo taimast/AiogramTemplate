@@ -1,8 +1,8 @@
-# AiogramProjectTemplate
+# Aiogram Project Template
 
-#### Шаблон бота на aiogram 3 с некоторым базовым функционалом.
+#### Этот шаблон был разработан для создания ботов на основе aiogram 3, и включает в себя несколько базовых функций.
 
-####
+#### Технологии
 
 - [Python 3.11](https://www.python.org/downloads/)
 - [Poetry](https://python-poetry.org/docs/#installation)
@@ -12,50 +12,47 @@
 
 ___
 
-## Включает
+## Возможности
 
-- Админ панель
-- Мидлвары
-- Настройки локализации через Fluent
-- Мерчанты
+- Административная панель
+- Промежуточное программное обеспечение (Middleware)
+- Настройка локализации через Fluent
+- Поддержка платёжных систем:
   - [CryptoCloud](https://cryptocloud.plus/)
   - [CryptoPay](https://github.com/LulzLoL231/pyCryptoPayAPI)
   - [Qiwi](https://qiwi.com/p2p-admin/api/)
   - [YooKassa](https://yookassa.ru/developers/)
   - USDT
-  - ~~[Payeer](https://payeer.com/)~~
-- CLI
+  - [Payeer](https://payeer.com/)
+- Командная строка (CLI)
 - Настройка Вебхука
-- Database ORM: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
-- Удобная конфигурация проекта через [Pydantic](https://github.com/pydantic/pydantic)
+- ORM базы данных: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
+- Удобное управление конфигурацией проекта через [Pydantic](https://github.com/pydantic/pydantic)
 
-## Создание проекта
+## Инициализация проекта
 
-Запустить скрипт `init_project.py`
-Например `python3 init_project.py -p <your_project_dir> -d`
+Для инициализации проекта запустите скрипт `init_project.py`, пример: `python3 init_project.py -p <your_project_dir> -d`
 
-- `d` - установка зависимостей
-- `p` - путь к папке проекта, default = `./`. Если папка не существует, то будет создан новый проект с
-  помощью `poetry new <your_project_dir>`
+- `-d` - установка зависимостей
+- `-p` - путь к директории проекта, по умолчанию - `./`. Если указанная директория не существует, то будет создан новый
+  проект с использованием `poetry new <your_project_dir>`
 
 ## Локализация
 
-Документация по [Fluent](https://projectfluent.org/fluent/guide/)
-`project\crying\utils\ftl_parser_cli.py`
-CLI для парсинга файлов переменных из ftl файлов в заглушку с поддержкой автодополнения,
-используется [fluentogram](https://github.com/Arustinal/fluentogram)
+Для локализации используется [Fluent](https://projectfluent.org/fluent/guide/). Для парсинга переменных из файлов `.ftl`
+в автозаполняемые заглушки используется утилита `project\crying\utils\ftl_parser_cli.py`, которая основана
+на [fluentogram](https://github.com/Arustinal/fluentogram).
 
-По умолчанию папка локализации `crying\apps\bot\locales`.
+По умолчанию, папка с локализациями находится по пути `crying\locales`.
 
-## Дополнительно
+## Примечания
 
-Пример как использовать [тут](https://github.com/Arustinal/fluentogram/blob/main/example/TypingGenerator.md), вместо
-i18n используется ftl_parser_cli
-`ftl_parser_cli` дополнительно поддерживает
+Пример использования доступен [здесь](https://github.com/Arustinal/fluentogram/blob/main/example/TypingGenerator.md).
+Вместо `i18n` используется `ftl_parser_cli`. `ftl_parser_cli` поддерживает следующие дополнительные опции:
 
-- `-dir-ftl` - для создания заглушки для указанной папки
-- `-track-ftl` - для отслеживания изменений в файлах ftl в указанной папке и автоматического обновления заглушки
+- `-dir-ftl` - создание заглушки для указанной директории
+- `-track-ftl` - отслеживание изменений в файлах `.ftl` в указанной директории и автоматическое обновление заглушки
 
-**Создание сертификата для webhook**
+Для создания сертификата для вебхука используйте следующую команду:
 
 `openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`

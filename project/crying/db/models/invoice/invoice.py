@@ -79,7 +79,7 @@ class Invoice(Base, TimestampMixin):
             .where(cls.expire_at > func.now())
             .where(cls.status == Status.PENDING)
         )
-        return result.scalars().all()
+        return result.unique().scalars().all()
 
     @classmethod
     async def get_last_invoice(
@@ -102,7 +102,7 @@ class Invoice(Base, TimestampMixin):
                 .where(cls.expire_at > func.now())
                 .order_by(cls.id.desc())
             )
-        ).scalar_one_or_none()
+        ).unique().scalar_one_or_none()
 
     # todo L1 TODO 22.04.2023 22:56 taima: Do successfully_paid and check_payment methods in one method
     async def successfully_paid(self):
