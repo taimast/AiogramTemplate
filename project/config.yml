@@ -3,7 +3,8 @@ bot:
   admins:
     - 000000000
 db:
-  path: ../db.sqlite3
+  path: ../database/db.sqlite3
+
 
 #db:
 #  user: postgres

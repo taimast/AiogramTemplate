@@ -21,14 +21,14 @@ class BaseQuery:
         if id := kwargs.get('id'):
             return await session.get(cls, id)
         result = await session.execute(select(cls).filter_by(**kwargs))
-        return result.scalar_one()
+        return result.unique().scalar_one()
 
     @classmethod
     async def get_or_none(cls: type[T], session: AsyncSession, **kwargs) -> T | None:
         if id := kwargs.get('id'):
             return await session.get(cls, id)
         result = await session.execute(select(cls).filter_by(**kwargs))
-        return result.scalar_one_or_none()
+        return result.unique().scalar_one_or_none()
 
     @classmethod
     async def create(cls: type[T], session: AsyncSession, **kwargs) -> T:
@@ -46,7 +46,7 @@ class BaseQuery:
     @classmethod
     async def delete(cls: type[T], session: AsyncSession, *expr) -> Sequence[int]:
         res = await session.execute(delete(cls).where(*expr).returning(cls.id))
-        return res.scalars().fetchall()
+        return res.unique().scalars().fetchall()
 
     async def delete_instance(self, session: AsyncSession) -> None:
         await session.delete(self)
@@ -77,4 +77,4 @@ class BaseQuery:
     async def count(cls: type[T], session: AsyncSession, *expr) -> int:
         query = select(func.count(cls.id)).where(*expr)
         result = await session.execute(query)
-        return result.scalar_one()
+        return result.unique().scalar_one()
