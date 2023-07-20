@@ -50,5 +50,5 @@ class CLIArgsSettings(BaseModel):
         return args_settings
 
     def update_settings(self, settings_cls: Type[Settings]):
-        settings_cls.__config__.config_file = self.config_file
-        settings_cls.__config__.env_file = self.env_file
+        settings_cls.model_config["config_file"] = self.config_file
+        settings_cls.model_config["env_file"] = self.env_file

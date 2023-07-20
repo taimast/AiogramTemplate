@@ -77,7 +77,7 @@ def clean_module_imports(data: str, keys: list[str] = ["merchant", "invoice"]):
 
 
 def install_dependencies(project_path: Path):
-    aiogram_version = 'aiogram@latest --allow-prereleases'
+    aiogram_version = 'aiogram@latest --allow-prereleases -E fast'
     dependencies = ["loguru",
                     "pyyaml",
                     "APScheduler",
@@ -92,6 +92,7 @@ def install_dependencies(project_path: Path):
 
                     "asyncpg",
                     "aiosqlite",
+                    "pydantic_settings",
                     "pydantic=*",
                     ]
     utils = ["watchdog", "sqlalchemy-utils", "psycopg2"]
