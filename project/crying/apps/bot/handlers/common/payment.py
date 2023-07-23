@@ -1,14 +1,14 @@
 from pprint import pformat
 
 from aiogram import F, Router, types
-from aiogram.filters import Text
 from loguru import logger
 
 router = Router()
 
 PAYMENT_PROVIDE_TOKEN = '381764678:TEST:29390'
 
-@router.callback_query(Text("payments"))
+
+@router.callback_query(F.data == "payments")
 async def process_callback_pay(call: types.CallbackQuery):
     await call.message.answer("Платежная система")
     await call.message.answer_invoice(

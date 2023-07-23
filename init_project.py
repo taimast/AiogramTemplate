@@ -62,17 +62,24 @@ def set_project_name_in_files(workdir: Path, project_name: str, ignore_merchant:
                 print(f"✅ {elem}")
 
                 if ignore_merchant:
-                    data = clean_module_imports(data)
+                    data = clear_module_imports(data)
+                    if elem.name == "config.py":
+                        data = clear_annotated(data)
 
                 elem.write_text(data, encoding="utf-8")
             else:
                 print(f"❌ {elem}")
 
 
-def clean_module_imports(data: str, keys: list[str] = ["merchant", "invoice"]):
+def clear_module_imports(data: str, keys: list[str] = ["merchant", "invoice"]):
     for key in keys:
         pattern = rf'^\s*from[^\n]*\.?{key}[^\n]*import[^\n]*\(([^\n]*\n)*?\)[^\n]*\n|^\s*from[^\n]*\.?{key}[^\n]*import[^\n]*\n'
         data = re.sub(pattern, '', data, flags=re.MULTILINE)
+    return data
+
+
+def clear_annotated(data: str):
+    data.replace("merchants: list[MerchantAnnotated] = Field(default_factory=list)", "")
     return data
 
 

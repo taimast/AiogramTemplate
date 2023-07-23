@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from aiogram import Router, types
-from aiogram.filters import Command, Text
+from aiogram import Router, types, F
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,8 +17,8 @@ router = Router()
 
 
 @router.message(Command(BaseCommands.START))
-@router.message(Text(startswith="«"))
-@router.callback_query(Text("start"))
+@router.message(F.text.startswith("«"))
+@router.callback_query(F.data == "start")
 async def start(
         message: types.Message | types.CallbackQuery,
         session: AsyncSession,

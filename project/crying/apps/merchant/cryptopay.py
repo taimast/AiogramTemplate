@@ -1,6 +1,12 @@
-from typing import Literal
+from typing import Literal, Any
+from unittest.mock import Mock
 
-from CryptoPayAPI import CryptoPay as CryptoPayAPI, schemas
+try:
+    from CryptoPayAPI import CryptoPay as CryptoPayAPI, schemas
+except ImportError:
+    CryptoPayAPI = Any
+    schemas = Mock()
+
 from pydantic import validator
 
 from .base import BaseMerchant, MerchantEnum

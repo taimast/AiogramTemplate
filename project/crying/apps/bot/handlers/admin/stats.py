@@ -1,5 +1,4 @@
-from aiogram import Router, types
-from aiogram.filters import Text
+from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from aiogram.utils import markdown as md
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,7 +9,7 @@ from .....db.models import User
 router = Router()
 
 
-@router.callback_query(Text("stats"))
+@router.callback_query(F.data == "stats")
 async def stats(call: types.CallbackQuery, session: AsyncSession, state: FSMContext):
     # Количество юзеров и количество юзеров за сегодня. Использовать md
     users_count = await User.count(session)

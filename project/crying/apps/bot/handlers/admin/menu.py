@@ -1,5 +1,5 @@
 from aiogram import Router, types, F
-from aiogram.filters import Command, Text, StateFilter
+from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 
 from project.crying.config import Settings
@@ -12,7 +12,7 @@ from ...keyboards.common import common_kbs
 router = Router()
 
 
-@router.callback_query(Text("admin"))
+@router.callback_query(F.data == "admin")
 @router.message(Command(AdminCommands.ADMIN))
 async def admin_start(message: types.CallbackQuery | types.Message, state: FSMContext):
     await state.clear()

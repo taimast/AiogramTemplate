@@ -11,4 +11,3 @@ class Database(BaseModel, abc.ABC):
     port: int = 5432
     timezone: str = "Europe/Moscow"
     dialect: str = "asyncpg"
-

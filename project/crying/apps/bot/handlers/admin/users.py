@@ -1,7 +1,6 @@
 import json
 
-from aiogram import Router, types
-from aiogram.filters import Text
+from aiogram import Router, types, F
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .....db.models import User
@@ -9,7 +8,7 @@ from .....db.models import User
 router = Router()
 
 
-@router.callback_query(Text("export_users"))
+@router.callback_query(F.data == "export_users")
 async def export_users(call: types.CallbackQuery, session: AsyncSession):
     await call.message.answer(f"Экспорт пользователей...")
     users = await User.all(session)
