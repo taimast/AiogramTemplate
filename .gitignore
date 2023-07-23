@@ -7,4 +7,6 @@ backup
 *probe*
 /db_data
 #scripts
-netangels
+*.sql*
+*.db
+*

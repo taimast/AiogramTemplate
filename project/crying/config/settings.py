@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from pydantic import BaseModel, BaseSettings, Field, SecretStr, validator
+from pydantic import BaseModel, Field, SecretStr, validator
 from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict as _SettingsConfigDict
 
@@ -107,8 +107,8 @@ class Settings(BaseSettings):
         )
 
     def dump(self):
-        with open(BASE_DIR / self.__config__.config_file, "w", encoding="utf-8") as f:
-            data = self.dict()
+        with open(BASE_DIR / self.model_config["config_file"], "w", encoding="utf-8") as f:
+            data = self.model_dump()
 
             def if_merchants(obj, k, v):
                 if k == "merchants":

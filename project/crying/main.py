@@ -40,7 +40,7 @@ async def main():
 
     # Initialize settings
     settings = Settings()
-    logger.info(f"Settings:\n{pformat(settings.dict())}")
+    logger.info(f"Settings:\n{pformat(settings.model_dump())}")
 
     # Initialize logging
     init_logging(cli_settings.log)
@@ -105,11 +105,11 @@ if __name__ == "__main__":
     try:
         try:
             import uvloop
+
+            with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
+                runner.run(main())
         except ImportError:
             logger.warning("uvloop is not installed")
             asyncio.run(main())
-        else:
-            with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
-                runner.run(main())
     except (KeyboardInterrupt, SystemExit):
         logger.info("Bot stopped")

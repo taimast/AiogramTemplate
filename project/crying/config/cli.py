@@ -22,7 +22,7 @@ class CLIArgsSettings(BaseModel):
     log: LogSettings = LogSettings()
     webhook: bool = False
     config_file: str | None
-    env_file: str | None
+    env_file: str | None = None
 
     @classmethod
     def parse_args(cls) -> 'CLIArgsSettings':

@@ -6,9 +6,6 @@ class SqliteDB(BaseModel):
     timezone: str = "Europe/Moscow"
     dialect: str = "aiosqlite"
 
-    class Config:
-        allow_mutation = False
-
     def __str__(self):
         return f"{self.path}"
 

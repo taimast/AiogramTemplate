@@ -1,20 +1,24 @@
 import asyncio
 
-from aiogram import Router, types, Bot
-from aiogram.filters import Text, StateFilter
+from aiogram import Router, types, Bot, F
+from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.utils import markdown as md
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ...keyboards.common import common_kbs
 from .....db.models import User
 
 router = Router()
 
 
-@router.callback_query(Text("mailing"))
+@router.callback_query(F.data == "mailing")
 async def mailing(call: types.CallbackQuery, state: FSMContext):
-    await call.message.answer("Напишите или перешлите сообщение, которое хотите разослать.")
+    await call.message.answer(
+        "Напишите или перешлите сообщение, которое хотите разослать.",
+        reply_markup=common_kbs.custom_back("admin")
+    )
     await state.set_state("mailing")
 
 

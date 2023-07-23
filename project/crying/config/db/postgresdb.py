@@ -1,5 +1,6 @@
-from pydantic import BaseModel, SecretStr
 from typing import Self
+
+from pydantic import BaseModel, SecretStr
 
 
 class PostgresDB(BaseModel):
@@ -10,9 +11,6 @@ class PostgresDB(BaseModel):
     port: int = 5432
     timezone: str = "Europe/Moscow"
     dialect: str = "asyncpg"
-
-    class Config:
-        allow_mutation = False
 
     def __str__(self):
         return f"{self.database}[{self.host}]"
