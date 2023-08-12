@@ -65,7 +65,7 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
         return d
 
 
-class Bot(BaseModel):
+class BotSettings(BaseModel):
     token: SecretStr
     admins: list[int] = Field(default_factory=list)
     super_admins: list[int] = Field(default_factory=list)
@@ -76,7 +76,7 @@ class Bot(BaseModel):
 
 
 class Settings(BaseSettings):
-    bot: Bot
+    bot: BotSettings
     db: PostgresDB | SqliteDB
     webhook: Webhook | None = None
     merchants: list[MerchantAnnotated] = Field(default_factory=list)
