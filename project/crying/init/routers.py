@@ -19,5 +19,5 @@ async def setup_routers(
 
     # Common handlers
     dp.include_router(common.router)
-
+    common.router.include_router(admin.stats.router)
     logger.info("Routers setup complete")

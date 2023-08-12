@@ -63,7 +63,7 @@ def set_project_name_in_files(workdir: Path, project_name: str, ignore_merchant:
 
                 if ignore_merchant:
                     data = clear_module_imports(data)
-                    if elem.name == "config.py":
+                    if elem.name == "settings.py":
                         data = clear_annotated(data)
 
                 elem.write_text(data, encoding="utf-8")
@@ -79,8 +79,8 @@ def clear_module_imports(data: str, keys: list[str] = ["merchant", "invoice"]):
 
 
 def clear_annotated(data: str):
-    data.replace("merchants: list[MerchantAnnotated] = Field(default_factory=list)", "")
-    return data
+    old = "merchants: list[MerchantAnnotated] = Field(default_factory=list)"
+    return data.replace(old, "")
 
 
 def install_dependencies(project_path: Path):
@@ -116,9 +116,10 @@ def main():
     # subprocess.Popen(['poetry', 'show', '--tree'])
     project_path, dependencies, ignore_merchant = parse_args()
     if not project_path:
-        permission = input("Путь до проекта не указан, установить в текущую директорию? [y/n]: ")
+        _project_path = Path.cwd()
+        permission = input(f"Путь до проекта не указан, установить в текущую директорию {_project_path}? [y/n]: ")
         if permission == "y":
-            project_path = Path.cwd()
+            project_path = _project_path
         else:
             exit("Укажите путь до проекта через аргумент -p")
 
