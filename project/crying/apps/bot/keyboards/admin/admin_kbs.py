@@ -29,7 +29,7 @@ def admin_start():
 def admins(admins: list[int]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for admin in admins:
-        builder.button(text=admin, callback_data=AdminCallback(action=Action.DELETE, id=admin))
+        builder.button(text=str(admin), callback_data=AdminCallback(action=Action.DELETE, id=admin))
     builder.button(text="Добавить админа", callback_data=AdminCallback(action=Action.CREATE))
     builder.adjust(1)
     builder.button(text="« Назад", callback_data="admin")
