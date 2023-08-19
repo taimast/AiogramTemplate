@@ -4,5 +4,5 @@ from .base import Action
 
 
 class AdminCallback(CallbackData, prefix="admin"):
-    id: int | None
+    id: int | None = None
     action: Action

@@ -25,14 +25,8 @@ db:
 #    certfile: cert.pem
 #    keyfile: private.key
 
-#merchant:
-#  crypto_cloud:
-#    shop_id: your_shop_id
-#    api_key:  your_api_key
-#
-#  yookassa:
-#    shop_id: 123123
-#    api_key: your_api_key
 
-#  qiwi:
-#    api_key: your_token
+merchants:
+  - merchant: yookassa
+    shop_id: 123123
+    api_key: your_api_key

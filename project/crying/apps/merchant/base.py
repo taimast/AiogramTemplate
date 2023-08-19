@@ -28,6 +28,7 @@ class MerchantEnum(StrEnum):
     YOOMONEY = "yoomoney"
     YOOKASSA = "yookassa"
     CRYPTO_PAY = "crypto_pay"
+    CRYPTOMUS = "cryptomus"
 
 
 class BaseMerchant(BaseModel, ABC):

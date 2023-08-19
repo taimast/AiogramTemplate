@@ -6,7 +6,8 @@ from typing import Type
 from loguru import logger
 from pydantic import BaseModel
 
-from ..config import Settings, LogSettings, Level
+from .log import LogSettings, Level
+from .settings import Settings
 
 
 class Mode(str, Enum):
