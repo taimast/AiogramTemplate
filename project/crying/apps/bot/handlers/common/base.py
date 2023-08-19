@@ -30,5 +30,5 @@ async def start(
         message = message.message
     await message.answer(
         l10n.start(name=message.from_user.full_name),
-        reply_markup=common_kbs.custom_back_kb("Тест оплаты", cd="payments")
+        reply_markup=common_kbs.inline_start()
     )

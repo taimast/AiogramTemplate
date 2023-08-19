@@ -42,7 +42,6 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
             self, field: FieldInfo, field_name: str
     ) -> tuple[Any, str, bool]:
         field_value = self.file_content.get(field_name)
-        print(f"{field_value=}")
         return field_value, field_name, False
 
     def prepare_field_value(
