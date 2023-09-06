@@ -1,14 +1,29 @@
+import functools
 from typing import NamedTuple
 
+from aiogram import Router, F
+from aiogram.filters import Command
 from aiogram.types import BotCommand
+
+
+def command_wrapper(router: Router, command: BotCommand):
+    def decorator(func):
+        @functools.wraps(func)
+        async def wrapper(*args, **kwargs):
+            kwargs.update({"command_info": command.command})
+            result = await func(*args, **kwargs)
+            return result
+
+        router.message.register(wrapper, Command(command))
+        router.message.register(wrapper, F.text.startswith(command.description[0]))
+        router.callback_query.register(wrapper, F.data == command.command)
+        return func
+
+    return decorator
 
 
 class _BaseCommands(NamedTuple):
     START: BotCommand = BotCommand(command="start", description="🏠 Главное меню")
-    # PROFILE: BotCommand = BotCommand(command="profile", description="👤 Мой профиль")
-    # ABOUT: BotCommand = BotCommand(command="about", description="ℹ️ О боте")
-    # SUPPORT: BotCommand = BotCommand(command="support", description="👨‍💻 Поддержка")
-    # FEEDBACK: BotCommand = BotCommand(command="feedback", description="🗣️ Обратная связь")
 
 
 class _AdminCommands(NamedTuple):
