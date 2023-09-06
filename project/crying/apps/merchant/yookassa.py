@@ -12,7 +12,7 @@ from ...db.models.invoice import Invoice
 
 class Amount(BaseModel):
     currency: str
-    value: float
+    value: str
 
 
 class Confirmation(BaseModel):
@@ -37,11 +37,30 @@ class Status(str, Enum):
     PENDING = "pending"
 
 
+class Customer(BaseModel):
+    email: str
+
+
+class Item(BaseModel):
+    description: str = "Товар"
+    quantity: int = 1
+    amount: Amount = Amount(currency="RUB", value='250.0')
+    vat_code: int = 1
+    payment_subject: str = "commodity"
+    payment_mode: str = "full_payment"
+
+
+class Receipt(BaseModel):
+    customer: Customer = Customer(email="some@gmail.com")
+    items: list[Item] = [Item()]
+
+
 class YooPaymentRequest(BaseModel):
     amount: Amount
     description: str | None
     confirmation: ConfirmationRequest | None
     capture: bool = True
+    receipt: Receipt | None = None
 
     # необязательный expire_at. Не указано в документации. Всегда равен 1 часу
     # "expires_at": str(datetime.datetime.now(TIME_ZONE) + datetime.timedelta(minutes=15))
@@ -59,8 +78,8 @@ class YooPayment(YooPaymentRequest):
     confirmation: Confirmation
     paid: bool
     status: Status
-    recipient: Recipient | None
-    income_amount: Amount | None
+    recipient: Recipient | None = None
+    income_amount: Amount | None = None
 
     def is_paid(self) -> bool:
         return self.paid
