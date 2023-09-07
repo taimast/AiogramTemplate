@@ -150,7 +150,7 @@ def main():
     print("Шаблон настроен")
 
     if dependencies:
-        print(f"Установка базовых зависимостей...")
+        print("Установка базовых зависимостей...")
         install_dependencies(project_path)
 
 

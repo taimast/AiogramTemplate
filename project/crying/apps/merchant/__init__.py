@@ -2,7 +2,6 @@ from typing import Annotated
 
 from pydantic import Field
 
-from .base import BaseMerchant, MerchantEnum
 from .cryptocloud import CryptoCloud
 from .cryptomus import Cryptomus
 from .cryptopay import CryptoPay

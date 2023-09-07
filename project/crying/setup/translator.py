@@ -30,5 +30,5 @@ def init_translator_hub() -> TranslatorHub:
         locales_map=locales_map,
         translators=translators,
     )
-    logger.info(f"Successfully loaded locales : " + ", ".join(translator_hub.locales_map))
+    logger.info("Successfully loaded locales : " + ", ".join(translator_hub.locales_map))
     return translator_hub
