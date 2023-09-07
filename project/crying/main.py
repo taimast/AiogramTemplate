@@ -5,17 +5,8 @@ from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from loguru import logger
 
-from project.crying.config import Settings, CLIArgsSettings, init_logging
-from project.crying.init import (
-    set_commands,
-    setup_middlewares,
-    setup_routers,
-    setup_scheduler,
-    init_translator_hub,
-    start_webhook,
-    init_db,
-    close_db
-)
+from project.crying import setup
+from project.crying.config import Settings
 
 
 async def on_startup(bot: Bot):
@@ -35,21 +26,21 @@ async def main():
     # return
 
     # Parse command line arguments
-    cli_settings = CLIArgsSettings.parse_args()
+    cli_settings = setup.parse_args()
     cli_settings.update_settings(Settings)
+
+    # Initialize logging
+    setup.init_logging(cli_settings.log)
 
     # Initialize settings
     settings = Settings()
     logger.info(f"Settings:\n{pformat(settings.model_dump())}")
 
-    # Initialize logging
-    init_logging(cli_settings.log)
-
     # Initialize database
-    session_maker = await init_db(settings.db)
+    session_maker = await setup.init_db(settings.db)
 
     # Initialize translator
-    translator_hub = init_translator_hub()
+    translator_hub = setup.init_translator_hub()
 
     # Initialize bot, storage and dispatcher
     bot = Bot(token=settings.bot.token.get_secret_value(), parse_mode="html")
@@ -68,16 +59,16 @@ async def main():
     dp.message.filter(F.chat.type == "private")
 
     # Setup routers
-    await setup_routers(dp, settings)
+    await setup.setup_routers(dp, settings)
 
     # Setup middlewares
-    setup_middlewares(dp=dp, session_maker=session_maker)
+    setup.setup_middlewares(dp, session_maker)
 
     # Setup scheduler
-    scheduler = setup_scheduler()
+    scheduler = setup.setup_scheduler()
 
     # Set bot commands
-    await set_commands(bot, settings)
+    await setup.set_commands(bot, settings)
 
     # Start bot
     try:
@@ -93,12 +84,12 @@ async def main():
 
         else:
             logger.info("Start bot in webhook mode")
-            await start_webhook(bot, dp, settings)
+            await setup.start_webhook(bot, dp, settings)
 
     finally:
         await bot.session.close()
         await dp.storage.close()
-        await close_db()
+        await setup.close_db()
 
 
 if __name__ == "__main__":

@@ -1,1 +1,0 @@
-ps aux | grep '/root/.cache/pypoetry/virtualenvs' | awk '{print $2}' | xargs kill
