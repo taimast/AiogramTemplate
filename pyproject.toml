@@ -34,6 +34,7 @@ fabric = "^3.0.1"
 decorator = "^5.1.1"
 invocations = "^3.1.0"
 msgspec = "^0.15.1"
+ruff = "^0.0.287"
 
 [tool.poetry.extras]
 qiwi = ["glqiwiapi"]

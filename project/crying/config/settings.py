@@ -25,7 +25,7 @@ DATABASE_DIR = BASE_DIR / "database"
 
 for DIR in [LOG_DIR, MEDIA_DIR, DATABASE_DIR]:
     DIR.mkdir(exist_ok=True)
-
+del DIR
 LOCALES_DIR = BASE_DIR / "crying/locales"
 TIME_ZONE = zoneinfo.ZoneInfo("Europe/Moscow")
 
