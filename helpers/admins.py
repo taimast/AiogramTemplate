@@ -18,7 +18,7 @@ class ExportUsers(StatesGroup):
 
 @router.callback_query(Text("add_admins"))
 async def add_admins(call: types.CallbackQuery, state: FSMContext):
-    await call.message.answer(f"Введи id админов через пробел", reply_markup=ReplyKeyboardRemove())
+    await call.message.answer("Введи id админов через пробел", reply_markup=ReplyKeyboardRemove())
     await state.set_state("add_admins")
 
 
@@ -37,7 +37,7 @@ async def add_admins_handler(message: types.Message, user: User, settings: Setti
 
 @router.callback_query(Text("delete_admins"))
 async def delete_admins(call: types.CallbackQuery, state: FSMContext):
-    await call.message.answer(f"Введи id админов через пробел", reply_markup=ReplyKeyboardRemove())
+    await call.message.answer("Введи id админов через пробел", reply_markup=ReplyKeyboardRemove())
     await state.set_state("delete_admins")
 
 

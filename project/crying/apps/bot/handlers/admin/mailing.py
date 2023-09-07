@@ -29,10 +29,12 @@ async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, 
     done_emoji = "✅ Done"
     current_emoji = time_emoji1
 
-    status_template = f"📨 Total: {{}}\n" \
-                      f"✅ Success: {{}}\n" \
-                      f"🚫 Failed: {{}}\n\n" \
-                      f"{{}}\n"
+    status_template = (
+        "📨 Total: {}\n"
+        "✅ Success: {}\n"
+        "🚫 Failed: {}\n\n"
+        "{}\n"
+    )
     try:
         status_message = await message.answer(status_template.format(0, 0, 0, current_emoji))
         success = 0

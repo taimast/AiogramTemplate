@@ -18,13 +18,13 @@ async def admin_start(message: types.CallbackQuery | types.Message, state: FSMCo
     await state.clear()
     if isinstance(message, types.CallbackQuery):
         message = message.message
-    await message.answer(f"Админ меню", reply_markup=admin_kbs.admin_start())
+    await message.answer("Админ меню", reply_markup=admin_kbs.admin_start())
 
 
 @router.callback_query(AdminCallback.filter(F.action == Action.ALL))
 async def admins(call: types.CallbackQuery, settings: Settings, state: FSMContext):
     await call.message.answer(
-        f"Список админов:",
+        "Список админов:",
         reply_markup=admin_kbs.admins(settings.bot.admins)
     )
 
@@ -48,7 +48,7 @@ async def delete_admin(
         await state.clear()
     else:
         await state.update_data({key: True})
-        await call.answer(f"Нажмите еще раз для подтверждения")
+        await call.answer("Нажмите еще раз для подтверждения")
 
 
 @router.callback_query(AdminCallback.filter(F.action == Action.CREATE))
@@ -59,7 +59,7 @@ async def create_admin(
         state: FSMContext
 ):
     await call.message.answer(
-        f"Введите id админа",
+        "Введите id админа",
         reply_markup=common_kbs.custom_back("admin")
     )
     await state.set_state("admin:create")
@@ -70,10 +70,10 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
     try:
         admin_id = int(message.text)
     except ValueError:
-        await message.answer(f"Неверный id админа")
+        await message.answer("Неверный id админа")
         return
     if admin_id in settings.bot.admins:
-        await message.answer(f"Админ уже существует")
+        await message.answer("Админ уже существует")
         return
     settings.bot.admins.append(admin_id)
     settings.dump()

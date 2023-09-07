@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from fabric import Connection, Result
+from fabric import Connection
 from github import Github
 from github import Repository
 from invoke import Responder
@@ -71,7 +71,7 @@ class Deployer:
             print(e)
 
     def create_deploy_key(self):
-        res: Result = self.connection.run(
+        self.connection.run(
             self.create_deploy_key_command,
             pty=True,
             watchers=[key_responder],
@@ -99,7 +99,7 @@ class Deployer:
             pty=True,
             # watchers=[always_yes_responder],
         )
-        print(f"Successfully setup docker")
+        print("Successfully setup docker")
 
     def deploy(self):
         key = self.create_deploy_key()
@@ -116,37 +116,37 @@ class Deployer:
 
     def start_docker(self):
         self._docker_compose('up -d')
-        print(f"Successfully started docker")
+        print("Successfully started docker")
 
     def stop_docker(self):
         self._docker_compose('stop')
-        print(f"Successfully stopped docker")
+        print("Successfully stopped docker")
 
     def down_docker(self):
         self._docker_compose('down')
-        print(f"Successfully downed docker")
+        print("Successfully downed docker")
 
     def restart_docker(self):
         self._docker_compose('restart')
-        print(f"Successfully restarted docker")
+        print("Successfully restarted docker")
 
     def build_docker(self):
         self._docker_compose('build')
-        print(f"Successfully build docker")
+        print("Successfully build docker")
 
     def rebuild_start_docker(self):
         self._docker_compose('stop')
         self._docker_compose('up -d --build')
-        print(f"Successfully rebuilt docker")
+        print("Successfully rebuilt docker")
 
     def down_build_start_docker(self):
         self._docker_compose('down')
         self._docker_compose('up -d --build')
-        print(f"Successfully downed and rebuilt docker")
+        print("Successfully downed and rebuilt docker")
 
     def copy_config(self, config_path: str = f'{BASE_DIR}/config.yml'):
         self.connection.put(config_path, f'/home/{self.repo_name}/config.yml')
-        print(f"Successfully copied config")
+        print("Successfully copied config")
 
 
 def main():
