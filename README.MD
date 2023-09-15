@@ -2,15 +2,6 @@
 
 #### Этот шаблон был разработан для создания ботов на основе aiogram 3, и включает в себя несколько базовых функций.
 
-#### Технологии
-
-- [Python 3.11](https://www.python.org/downloads/)
-- [Poetry](https://python-poetry.org/docs/#installation)
-- [aiogram 3](https://github.com/aiogram/aiogram/tree/dev-3.x)
-- [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
-- [PostgreSQL](https://www.postgresql.org/download/)
-
-___
 
 ## Возможности
 
