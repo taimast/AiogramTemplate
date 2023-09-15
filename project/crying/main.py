@@ -18,13 +18,7 @@ async def on_shutdown():
     pass
 
 
-# todo L1 TODO 18.02.2023 6:36 taima: Скопировать все из autoanswer
-# todo L1 TODO 18.02.2023 7:06 taima: Сделать ввиде раздельных импортируемых модулей
-# todo L1 TODO 18.02.2023 7:07 taima: Включить aiogram_admin в проект
 async def main():
-    # await db.main()
-    # return
-
     # Parse command line arguments
     cli_settings = setup.parse_args()
     cli_settings.update_settings(Settings)
@@ -43,7 +37,10 @@ async def main():
     translator_hub = setup.init_translator_hub()
 
     # Initialize bot, storage and dispatcher
-    bot = Bot(token=settings.bot.token.get_secret_value(), parse_mode="html")
+    bot = Bot(
+        token=settings.bot.token.get_secret_value(),
+        parse_mode="html"
+    )
     storage = MemoryStorage()
     dp = Dispatcher(
         storage=storage,
