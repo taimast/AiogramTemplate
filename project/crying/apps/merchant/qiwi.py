@@ -6,7 +6,6 @@ from loguru import logger
 try:
     from glQiwiApi import QiwiP2PClient
 except ImportError:
-    logger.warning("glQiwiApi not installed")
     QiwiP2PClient = None
 
 from pydantic import validator
