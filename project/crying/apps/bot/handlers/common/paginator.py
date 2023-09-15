@@ -37,4 +37,4 @@ async def paginator(
         )
     except TelegramBadRequest as e:
         if "message is not modified" in e.message:
-            await call.answer(l10n.errors.is_sorted())
+            await call.answer("Ничего не изменилось")
