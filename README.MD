@@ -32,8 +32,10 @@
 ## Локализация
 
 Для локализации используется [Fluent](https://projectfluent.org/fluent/guide/).  
-По умолчанию, папка с локализациями находится по пути `crying\locales`.
+По умолчанию, папка с локализациями находится по пути `crying/locales`.
 
-### Утилиты
-`project\crying\utils\ftl_parser_cli.py` - Live генерация заглушек для локализации. 
-`project\crying\utils\ftl_translator.py` - Автоматический перевод локализации на все языки через Google Translate и генерация ftl.
+## _Утилиты_
+- `project/crying/utils/ftl_parser_cli.py` - Live генерация заглушек для локализации. 
+- `project/crying/utils/ftl_translator.py` - Автоматический перевод локализации на все языки через Google Translate и генерация ftl.  
+- `project/crying/apps/bot/callback_data/paginator.py` - Пагинатор страниц для InlineKeyboardMarkup. 
+- `project/crying/db/models/user/mixins.py` - Миксины для моделей пользователей. На данный момент для Рефералки и Подключения пользователей к друг другу через бота. (Пример подключения в `helpers/connect`) 
