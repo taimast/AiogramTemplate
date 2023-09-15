@@ -29,15 +29,17 @@ def create_setting_files(project_path: Path, project_name: str):
     for file in (
             ".gitignore",
             "config.yml",
-            # "config_dev.yml",
+            "config_dev.yml",
             "README.md",
             "Dockerfile",
             "docker-compose.yml",
     ):
-        shutil.copy(TEMPLATE_DIR / file, project_path / file)
-        file_path = project_path / file
-        data = file_path.read_text(encoding="utf-8").replace("crying", project_name)
-        file_path.write_text(data, encoding="utf-8")
+        original_path = TEMPLATE_DIR / file
+        if original_path.exists():
+            shutil.copy(original_path, project_path / file)
+            file_path = project_path / file
+            data = file_path.read_text(encoding="utf-8").replace("crying", project_name)
+            file_path.write_text(data, encoding="utf-8")
 
 
 def set_project_name_in_files(workdir: Path, project_name: str, ignore_merchant: bool = False):

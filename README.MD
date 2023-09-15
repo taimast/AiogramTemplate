@@ -24,6 +24,7 @@ ___
   - [YooKassa](https://yookassa.ru/developers/)
   - USDT
   - [Payeer](https://payeer.com/)
+  - [Cryptomus](https://cryptomus.com/)
 - Командная строка (CLI)
 - Настройка Вебхука
 - ORM базы данных: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
