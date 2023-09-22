@@ -54,7 +54,7 @@ class Deployer:
             }
         )
         if self.create_deploy_key_file.exists():
-            self.create_deploy_key_command = self.create_deploy_key_file.read_text("utf-8")
+            self.create_deploy_key_command = self.create_deploy_key_file.read_text("utf-8").format(repo=self.repo_name)
         if self.setup_docker_file.exists():
             self.setup_docker_command = self.setup_docker_file.read_text("utf-8")
 
@@ -76,7 +76,7 @@ class Deployer:
             pty=True,
             watchers=[key_responder],
         )
-        key = self.connection.run('cat /root/.ssh/id_ed25519.pub').stdout.strip()
+        key = self.connection.run(f'cat /root/.ssh/id_ed25519_{self.repo_name}.pub').stdout.strip()
         print(f"Successfully created key: {key}")
         return key
 
@@ -88,6 +88,18 @@ class Deployer:
             warn=True
         )
         print(f"Successfully cloned repo: {self.repo_name}")
+
+    def http_clone_repo(self):
+        clone_url = self.repo.clone_url.replace('https://', f'https://taimast:{self.github_token}@')
+        self.connection.run(
+            f'git clone {clone_url} /home/{self.repo_name}',
+            pty=True,
+            watchers=[clone_responder],
+            warn=True
+        )
+        print(f"Successfully cloned repo: {self.repo_name}")
+
+
 
     def pull_repo(self):
         self.connection.run(f'cd /home/{self.repo_name} && git pull')
