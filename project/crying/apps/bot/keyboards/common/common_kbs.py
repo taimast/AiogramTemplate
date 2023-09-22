@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Iterable
 
 from aiogram.filters.callback_data import CallbackData
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardButton, KeyboardButton, InlineKeyboardMarkup
 from aiogram.utils import markdown as md
 from aiogram.utils.keyboard import ReplyKeyboardBuilder, InlineKeyboardBuilder
 
@@ -12,6 +12,18 @@ KB = KeyboardButton
 md = md
 if TYPE_CHECKING:
     from .....locales.stubs.ru.stub import TranslatorRunner
+
+
+def subscribe_channel(channels: Iterable[int | str], l10n: TranslatorRunner):
+    builder = InlineKeyboardBuilder()
+    for channel in channels:
+        if "https://t.me/" not in channel:
+            channel = f"https://t.me/{channel}"
+
+        builder.button(text=l10n.channel.button.subscribe(), url=channel)
+    builder.adjust(1)
+    builder.row(IKB(text=l10n.channel.button.subscribed(), callback_data="start"))
+    return builder.as_markup()
 
 
 def start() -> ReplyKeyboardMarkup:
