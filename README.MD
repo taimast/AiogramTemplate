@@ -2,15 +2,6 @@
 
 #### Этот шаблон был разработан для создания ботов на основе aiogram 3, и включает в себя несколько базовых функций.
 
-#### Технологии
-
-- [Python 3.11](https://www.python.org/downloads/)
-- [Poetry](https://python-poetry.org/docs/#installation)
-- [aiogram 3](https://github.com/aiogram/aiogram/tree/dev-3.x)
-- [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
-- [PostgreSQL](https://www.postgresql.org/download/)
-
-___
 
 ## Возможности
 
@@ -24,6 +15,7 @@ ___
   - [YooKassa](https://yookassa.ru/developers/)
   - USDT
   - [Payeer](https://payeer.com/)
+  - [Cryptomus](https://cryptomus.com/)
 - Командная строка (CLI)
 - Настройка Вебхука
 - ORM базы данных: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
@@ -39,20 +31,11 @@ ___
 
 ## Локализация
 
-Для локализации используется [Fluent](https://projectfluent.org/fluent/guide/). Для парсинга переменных из файлов `.ftl`
-в автозаполняемые заглушки используется утилита `project\crying\utils\ftl_parser_cli.py`, которая основана
-на [fluentogram](https://github.com/Arustinal/fluentogram).
+Для локализации используется [Fluent](https://projectfluent.org/fluent/guide/).  
+По умолчанию, папка с локализациями находится по пути `crying/locales`.
 
-По умолчанию, папка с локализациями находится по пути `crying\locales`.
-
-## Примечания
-
-Пример использования доступен [здесь](https://github.com/Arustinal/fluentogram/blob/main/example/TypingGenerator.md).
-Вместо `i18n` используется `ftl_parser_cli`. `ftl_parser_cli` поддерживает следующие дополнительные опции:
-
-- `-dir-ftl` - создание заглушки для указанной директории
-- `-track-ftl` - отслеживание изменений в файлах `.ftl` в указанной директории и автоматическое обновление заглушки
-
-Для создания сертификата для вебхука используйте следующую команду:
-
-`openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`
+## _Утилиты_
+- `project/crying/utils/ftl_parser_cli.py` - Live генерация заглушек для локализации. 
+- `project/crying/utils/ftl_translator.py` - Автоматический перевод локализации на все языки через Google Translate и генерация ftl.  
+- `project/crying/apps/bot/callback_data/paginator.py` - Пагинатор страниц для InlineKeyboardMarkup. 
+- `project/crying/db/models/user/mixins.py` - Миксины для моделей пользователей. На данный момент для Рефералки и Подключения пользователей к друг другу через бота. (Пример подключения в `helpers/connect`) 

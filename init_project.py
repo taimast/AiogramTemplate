@@ -29,13 +29,14 @@ def create_setting_files(project_path: Path, project_name: str):
     for file in (
             ".gitignore",
             "config.yml",
-            "config_dev.yml",
+            # "config_dev.yml",
             "README.md",
             "Dockerfile",
             "docker-compose.yml",
     ):
-        if (TEMPLATE_DIR / file).exists():
-            shutil.copy(TEMPLATE_DIR / file, project_path / file)
+        original_path = TEMPLATE_DIR / file
+        if original_path.exists():
+            shutil.copy(original_path, project_path / file)
             file_path = project_path / file
             data = file_path.read_text(encoding="utf-8").replace("crying", project_name)
             file_path.write_text(data, encoding="utf-8")
@@ -101,7 +102,7 @@ def install_dependencies(project_path: Path):
                     "asyncpg",
                     "aiosqlite",
                     "pydantic_settings",
-                    "pydantic",
+                    "pydantic=*",
                     ]
     utils = ["watchdog", "sqlalchemy-utils", "psycopg2"]
     utils = " ".join(utils)
@@ -141,11 +142,11 @@ def main():
     print("Файлы настроек созданы")
 
     dir_util.copy_tree(str(TEMPLATE_DIR / "crying"), str(workdir))
-    # dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
+    dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
     dir_util.copy_tree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"))
 
     set_project_name_in_files(workdir, project_name, ignore_merchant)
-    # set_project_name_in_files(project_path / "scripts", project_name)
+    set_project_name_in_files(project_path / "scripts", project_name)
     set_project_name_in_files(project_path / ".github", project_path.name)
 
     print("Шаблон настроен")
