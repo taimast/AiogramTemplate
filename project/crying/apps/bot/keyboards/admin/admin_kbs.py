@@ -7,23 +7,14 @@ from project.crying.apps.bot.callback_data.base import Action
 
 # todo 5/31/2022 2:33 PM taima: разделить основно функционал
 def admin_start():
-    keywords = [
-        # "mailing"
-        ("📨 Рассылка", "mailing"),
-        ("📊 Статистика", "stats"),
-        # Выгрузка пользователей
-        ("📥 Выгрузка пользователей", "export_users"),
-        # Админы
-        ("👤 Админы", AdminCallback(action=Action.ALL)),
-    ]
     builder = InlineKeyboardBuilder()
-
-    for text, callback_data in keywords:
-        builder.button(text=text, callback_data=callback_data)
+    builder.button(text="📨 Рассылка", callback_data="mailing")
+    builder.button(text="📊 Статистика", callback_data="stats")
+    builder.button(text="📥 Выгрузка пользователей", callback_data="export_users")
+    builder.button(text="👤 Админы", callback_data=AdminCallback(action=Action.ALL))
 
     builder.adjust(1)
     return builder.as_markup()
-    # return get_inline_keyboard(keyword)
 
 
 def admins(admins: list[int]) -> InlineKeyboardMarkup:

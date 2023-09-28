@@ -44,7 +44,7 @@ class ConnectMixin:
 
     @declared_attr
     def connected_user(cls) -> Mapped[User | None]:
-        return relationship(foreign_keys=[cls.connected_user_id], remote_side=cls.id)
+        return relationship(foreign_keys=[cls.connected_user_id], remote_side=cls.id, post_update=True)
 
     async def connect(self, user: User, reverse: bool = True) -> None:
         self.connected_user = user

@@ -6,13 +6,13 @@ authors = ["taimast <charlskenno@gmail.com>"]
 
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 loguru = "^0.7.0"
 PyYAML = "^6.0"
 APScheduler = "^3.9.1"
 cachetools = "^5.2.0"
 pydantic = "^2.0.3"
-aiogram = { version = ">=3.0.0b5", allow-prereleases = true }
+aiogram = { version = "^3", allow-prereleases = true }
 fluentogram = "^1.1.6"
 sqlalchemy = "^2.0.9"
 asyncpg = "^0.27.0"
@@ -34,7 +34,8 @@ fabric = "^3.0.1"
 decorator = "^5.1.1"
 invocations = "^3.1.0"
 msgspec = "^0.15.1"
-ruff = "^0.0.287"
+pyrogram = "^2.0.106"
+asyncache = "^0.3.1"
 
 [tool.poetry.extras]
 qiwi = ["glqiwiapi"]
