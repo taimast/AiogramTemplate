@@ -6,6 +6,7 @@ __pycache__
 *.cover
 *.log
 
+*.sqlite3
 poetry.lock
 logs
 *dev*

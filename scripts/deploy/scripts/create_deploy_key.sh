@@ -2,11 +2,9 @@
 
 # Set the default key name and passphrase
 
-if [ -z "$1" ]; then
-   KEY_NAME="id_ed25519"
-else
-    KEY_NAME="id_ed25519_${1}"
-fi
+
+KEY_NAME="id_ed25519_{repo}"
+
 
 PASSPHRASE="my passphrase"
 
