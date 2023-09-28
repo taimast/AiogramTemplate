@@ -6,7 +6,7 @@ from typing import Optional, Literal
 
 from pydantic import BaseModel, validator
 
-from .base import BaseMerchant, MerchantEnum
+from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
 from ...db.models.invoice import Invoice
 
 
@@ -75,7 +75,7 @@ class YooPaymentRequest(BaseModel):
 class YooPayment(YooPaymentRequest):
     id: uuid.UUID
     created_at: datetime.datetime
-    confirmation: Confirmation
+    confirmation: Confirmation|None = None
     paid: bool
     status: Status
     recipient: Recipient | None = None
@@ -106,7 +106,7 @@ class YooKassa(BaseMerchant):
             return_url: str = "https://t.me/"  # todo L2 14.08.2022 19:02 taima: прописать url
     ) -> Invoice:
         data = YooPaymentRequest(
-            amount=Amount(currency=currency, value=amount),
+            amount=Amount(currency=currency, value=str(amount)),
             confirmation=ConfirmationRequest(return_url=return_url),
             description=description,
         )
@@ -114,18 +114,19 @@ class YooKassa(BaseMerchant):
         response = await self.make_request(
             "POST",
             self.create_url,
-            json=data.dict(),
+            json=data.model_dump(),
             headers=idempotence_key
         )
         yoo_payment = YooPayment(**response)
         return Invoice(
             user_id=user_id,
-            amount=yoo_payment.amount.value,
+            amount=float(yoo_payment.amount.value),
             currency=yoo_payment.amount.currency,
-            invoice_id=yoo_payment.id,
+            invoice_id=str(yoo_payment.id),
             pay_url=yoo_payment.confirmation.confirmation_url,
             description=description,
             merchant=self.merchant,
+            expire_at=datetime.datetime.now() + datetime.timedelta(seconds=PAYMENT_LIFETIME)
         )
 
     async def is_paid(self, invoice_id: uuid.UUID) -> bool:

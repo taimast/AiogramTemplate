@@ -12,6 +12,7 @@ from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, Settings
 from .db import SqliteDB, PostgresDB
 from .webhook import Webhook
 from ..apps.merchant import MerchantAnnotated
+from ..apps.merchant.base import MerchantEnum
 
 
 class SettingsConfigDict(_SettingsConfigDict, total=False):
@@ -104,6 +105,12 @@ class Settings(BaseSettings):
             dotenv_settings,
             file_secret_settings
         )
+
+    def get_merchant(self, merchant: MerchantEnum) -> MerchantAnnotated | None:
+        for m in self.merchants:
+            if m.merchant == merchant:
+                return m
+        return None
 
     def dump(self):
         with open(BASE_DIR / self.model_config["config_file"], "w", encoding="utf-8") as f:
