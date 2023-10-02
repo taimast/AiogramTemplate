@@ -1,15 +1,15 @@
-from enum import StrEnum
+from enum import IntEnum, auto
 
 from aiogram.filters.callback_data import CallbackData
 
 
-class Action(StrEnum):
-    GET = "get"
-    CREATE = "create"
-    DELETE = "delete"
-    UPDATE = "update"
-    ALL = "all"
-    MENU = "menu"
+class Action(IntEnum):
+    GET = auto()
+    CREATE = auto()
+    DELETE = auto()
+    UPDATE = auto()
+    ALL = auto()
+    MENU = auto()
 
 
 class UserCallback(CallbackData, prefix="user"):

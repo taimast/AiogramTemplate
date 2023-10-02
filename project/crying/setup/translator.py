@@ -1,9 +1,23 @@
+from pathlib import Path
+
 from fluent_compiler.bundle import FluentBundle
 from fluentogram import TranslatorHub, FluentTranslator
 from loguru import logger
 
 from ..config import LOCALES_DIR
 from ..db.models.user import Locale
+
+
+def get_ftl_paths(path: Path) -> list[Path]:
+    paths = []
+    if not path.exists():
+        return paths
+    for file in path.iterdir():
+        if file.is_dir():
+            paths.extend(get_ftl_paths(file))
+        elif file.suffix == ".ftl":
+            paths.append(file)
+    return paths
 
 
 # todo L1  01.03.2023 15:15 taima: Перенести в config
@@ -18,10 +32,13 @@ def init_translator_hub() -> TranslatorHub:
         locale: (locale, "ru", "en")
         for locale in Locale
     }
+
     translators = [
         FluentTranslator(
             locale,
-            translator=FluentBundle.from_files(locale, filenames=LOCALES_DIR.glob(f"{locale}/*.ftl"))
+            translator=FluentBundle.from_files(
+                locale,
+                filenames=get_ftl_paths(LOCALES_DIR / locale))
         )
         for locale in Locale
     ]
