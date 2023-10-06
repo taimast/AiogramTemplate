@@ -10,3 +10,4 @@
 # todo L1 TODO 21.05.2023 4:24 taima: Реализовать web админку
 # todo L1 TODO 22.05.2023 16:16 taima: Переделать Logging
 # todo L1 TODO 12.08.2023 19:37 taima: Add keyboards class
+# todo L1 TODO 06.10.2023 14:30 taima: Написать Mixinы и генератов методов для CallbackData

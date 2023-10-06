@@ -22,11 +22,7 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
     data: str | None = None
 
     def make(self, offset: int) -> Self:
-        return PaginatorCallback(
-            offset=offset,
-            limit=self.limit,
-            sort_order=self.sort_order
-        )
+        return self.model_copy(update={"offset": offset})
 
     def next(self) -> Self:
         return self.make(self.offset + self.limit)
