@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING
 from aiogram import Router, types, F, Bot
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
+from aiogram.utils.media_group import MediaGroupBuilder
 from sqlalchemy.ext.asyncio import AsyncSession
+
 
 from project.crying.apps.bot.commands.bot_commands import BaseCommands
 from project.crying.apps.bot.keyboards.common import common_kbs
@@ -48,3 +50,9 @@ async def start(
         l10n.start(name=message.from_user.full_name),
         reply_markup=common_kbs.inline_start()
     )
+
+@router.callback_query()
+async def media(call:types.CallbackQuery):
+    group = MediaGroupBuilder()
+    group.add_photo()
+    group.build()
