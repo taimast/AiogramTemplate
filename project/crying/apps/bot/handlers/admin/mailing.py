@@ -71,7 +71,7 @@ async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, 
             except Exception as e:
                 failed += 1
                 logger.warning(f"Error while sending message to {user.id}: {e}")
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.3)
         task.cancel()
         await status_message.edit_text(
             status_template.format(

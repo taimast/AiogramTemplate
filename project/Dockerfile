@@ -5,4 +5,3 @@ RUN poetry install --no-root --without dev
 COPY crying crying
 COPY README.md README.md
 ENV PYTHONPATH=/app
-# todo L1 TODO 06.04.2023 18:57 taima: Запустить poetry install до копирования файлов

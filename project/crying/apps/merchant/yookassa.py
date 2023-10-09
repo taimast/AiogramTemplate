@@ -117,6 +117,8 @@ class YooKassa(BaseMerchant):
             json=data.model_dump(),
             headers=idempotence_key
         )
+        if response.get("type") == "error":
+            raise Exception(response)
         yoo_payment = YooPayment(**response)
         return Invoice(
             user_id=user_id,

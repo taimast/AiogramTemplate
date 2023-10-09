@@ -3,7 +3,7 @@
 # Set the default key name and passphrase
 
 
-KEY_NAME="id_ed25519_{repo}"
+KEY_NAME="id_ed25519"
 
 
 PASSPHRASE="my passphrase"
