@@ -1,4 +1,4 @@
-FROM ghcr.io/withlogicco/poetry:1.4.0-python-3.11-buster
+FROM ghcr.io/withlogicco/poetry:1.6.1
 WORKDIR /app
 COPY pyproject.toml ./
 RUN poetry install --no-root --without dev

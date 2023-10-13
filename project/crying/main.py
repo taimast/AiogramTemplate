@@ -22,7 +22,6 @@ async def main():
     # Parse command line arguments
     cli_settings = setup.parse_args()
     cli_settings.update_settings(Settings)
-
     # Initialize logging
     setup.init_logging(cli_settings.log)
 
