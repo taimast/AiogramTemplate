@@ -93,7 +93,7 @@ def install_dependencies(project_path: Path):
                     "cachetools",
                     # "glQiwiApi",
                     # "pycryptopay-sdk",
-                    "apscheduler",
+                    "apscheduler@latest --allow-prereleases",
                     "fluentogram",
                     "watchdog",
                     "jinja2",
@@ -142,11 +142,11 @@ def main():
     print("Файлы настроек созданы")
 
     dir_util.copy_tree(str(TEMPLATE_DIR / "crying"), str(workdir))
-    dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
+    # dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
     dir_util.copy_tree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"))
 
     set_project_name_in_files(workdir, project_name, ignore_merchant)
-    set_project_name_in_files(project_path / "scripts", project_name)
+    # set_project_name_in_files(project_path / "scripts", project_name)
     set_project_name_in_files(project_path / ".github", project_path.name)
 
     print("Шаблон настроен")
