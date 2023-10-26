@@ -9,7 +9,7 @@ authors = ["taimast <charlskenno@gmail.com>"]
 python = "^3.11"
 loguru = "^0.7.0"
 PyYAML = "^6.0"
-APScheduler = "^3.9.1"
+APScheduler = {version = "^4.0.0a3", allow-prereleases = true}
 cachetools = "^5.2.0"
 pydantic = "^2.0.3"
 aiogram = { version = "^3", allow-prereleases = true }
