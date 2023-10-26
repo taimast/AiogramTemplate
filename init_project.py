@@ -29,7 +29,7 @@ def create_setting_files(project_path: Path, project_name: str):
     for file in (
             ".gitignore",
             "config.yml",
-            # "config_dev.yml",
+            "config_dev.yml",
             "README.md",
             "Dockerfile",
             "docker-compose.yml",
