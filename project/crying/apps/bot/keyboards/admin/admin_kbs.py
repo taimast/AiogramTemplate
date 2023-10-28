@@ -16,6 +16,11 @@ def admin_start():
     builder.adjust(1)
     return builder.as_markup()
 
+def mailing_cancel():
+    builder = InlineKeyboardBuilder()
+    builder.button(text="🔴 Отменить рассылку", callback_data="mailing_cancel")
+    return builder.as_markup()
+
 
 def admins(admins: list[int]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
