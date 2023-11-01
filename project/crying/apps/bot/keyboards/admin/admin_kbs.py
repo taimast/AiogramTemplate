@@ -9,6 +9,8 @@ from project.crying.apps.bot.callback_data.base import Action
 def admin_start():
     builder = InlineKeyboardBuilder()
     builder.button(text="📨 Рассылка", callback_data="mailing")
+    # Отозвать последнюю рассылку
+    builder.button(text="🔄 Отозвать последнюю рассылку", callback_data="retract_last_mailing")
     builder.button(text="📊 Статистика", callback_data="stats")
     builder.button(text="📥 Выгрузка пользователей", callback_data="export_users")
     builder.button(text="👤 Админы", callback_data=AdminCallback(action=Action.ALL))
@@ -18,7 +20,7 @@ def admin_start():
 
 def mailing_cancel():
     builder = InlineKeyboardBuilder()
-    builder.button(text="🔴 Отменить рассылку", callback_data="mailing_cancel")
+    builder.button(text="🔴 Отменить", callback_data="mailing_cancel")
     return builder.as_markup()
 
 
