@@ -1,9 +1,5 @@
 from apscheduler import AsyncScheduler
-from apscheduler.triggers.interval import IntervalTrigger
 from loguru import logger
-
-from ..config import TIME_ZONE
-
 
 
 async def setup_scheduler() -> AsyncScheduler:

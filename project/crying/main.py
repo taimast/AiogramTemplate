@@ -61,7 +61,7 @@ async def main():
     setup.setup_middlewares(dp, session_maker)
 
     # Setup scheduler
-    scheduler = setup.setup_scheduler()
+    scheduler = await setup.setup_scheduler()
 
     # Set bot commands
     await setup.set_commands(bot, settings)

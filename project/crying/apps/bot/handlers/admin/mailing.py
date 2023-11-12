@@ -143,7 +143,7 @@ async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, 
         if cancelled:
             await mailing_obj.cancel()
         else:
-            await mailing_obj.retracted_status()
+            await mailing_obj.done()
         Mailing.mailings.append(mailing_obj)
         await message.answer("Админ меню", reply_markup=admin_kbs.admin_start())
 

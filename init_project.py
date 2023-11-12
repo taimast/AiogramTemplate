@@ -3,19 +3,28 @@ import os
 import re
 import shutil
 import subprocess
-from distutils import dir_util
+from dataclasses import dataclass
 from pathlib import Path
 
 TEMPLATE_DIR = Path(__file__).parent / "project"
 
 
-def parse_args():
+@dataclass
+class ProjectArgs:
+    project: str
+    dependencies: bool
+    ignore_merchant: bool
+    only_dependencies: bool = False
+
+
+def parse_args()->ProjectArgs:
     parser = argparse.ArgumentParser(description="config_file")
     parser.add_argument("-p", "--project", type=str)
     parser.add_argument("-d", "--dependencies", action="store_true", default=False)
+    parser.add_argument("-od", "--only-dependencies", action="store_true", default=False)
     parser.add_argument("-im", "--ignore-merchant", action="store_true", default=False)
     args = parser.parse_args()
-    return args.project, args.dependencies, args.ignore_merchant
+    return ProjectArgs(**args.__dict__)
 
 
 def get_project_dir(project_path):
@@ -86,29 +95,33 @@ def clear_annotated(data: str):
 
 
 def install_dependencies(project_path: Path):
-    aiogram_version = 'aiogram@latest --allow-prereleases -E fast'
     dependencies = ["loguru",
                     "pyyaml",
                     "APScheduler",
                     "cachetools",
                     # "glQiwiApi",
                     # "pycryptopay-sdk",
-                    "apscheduler@latest --allow-prereleases",
                     "fluentogram",
                     "watchdog",
-                    "jinja2",
+                    # "jinja2",
                     "sqlalchemy",
-
-                    "asyncpg",
+                    # "asyncpg",
                     "aiosqlite",
                     "pydantic_settings",
-                    "pydantic=*",
+                    "pydantic=2.1.1",
+                    "bs4",
+                    "lxml"
                     ]
-    utils = ["watchdog", "sqlalchemy-utils", "psycopg2"]
+    utils = [
+        "watchdog",
+        # "sqlalchemy-utils",
+        # "psycopg2"
+    ]
     utils = " ".join(utils)
     dependencies = " ".join(dependencies)
     os.system(f"cd {project_path} && "
-              f"poetry add {aiogram_version} && "
+              f"poetry add aiogram@latest --allow-prereleases -E fast && "
+              f"poetry add apscheduler@latest --allow-prereleases &&"
               f"poetry add {dependencies} &&"
               f"poetry add {utils} --group dev"
               )
@@ -116,7 +129,14 @@ def install_dependencies(project_path: Path):
 
 def main():
     # subprocess.Popen(['poetry', 'show', '--tree'])
-    project_path, dependencies, ignore_merchant = parse_args()
+    project_args = parse_args()
+
+
+
+    project_path, dependencies, ignore_merchant = (project_args.project,
+                                                   project_args.dependencies,
+                                                   project_args.ignore_merchant)
+
     if not project_path:
         _project_path = Path.cwd()
         permission = input(f"Путь до проекта не указан, установить в текущую директорию {_project_path}? [y/n]: ")
@@ -134,6 +154,11 @@ def main():
         else:
             exit("❌ Проект не создан. Укажите путь до проекта через аргумент -p")
 
+    if project_args.only_dependencies:
+        print("Установка зависимостей...")
+        install_dependencies(project_path)
+        exit("✅ Зависимости установлены")
+
     print(f"Настройка проекта {project_path}. Ignore Merchant: {ignore_merchant}")
     workdir: Path = get_project_dir(project_path)
     project_name = workdir.name
@@ -141,9 +166,9 @@ def main():
     create_setting_files(project_path, project_name)
     print("Файлы настроек созданы")
 
-    dir_util.copy_tree(str(TEMPLATE_DIR / "crying"), str(workdir))
+    shutil.copytree(str(TEMPLATE_DIR / "crying"), str(workdir), dirs_exist_ok=True)
     # dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
-    dir_util.copy_tree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"))
+    shutil.copytree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"))
 
     set_project_name_in_files(workdir, project_name, ignore_merchant)
     # set_project_name_in_files(project_path / "scripts", project_name)
