@@ -9,7 +9,7 @@ from ...commands.bot_commands import AdminCommands
 from ...keyboards.admin import admin_kbs
 from ...keyboards.common import common_kbs
 
-router = Router()
+router = Router(name=__name__)
 
 
 @router.callback_query(F.data == "admin")
@@ -82,3 +82,28 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
         reply_markup=admin_kbs.admins(settings.bot.admins)
     )
     await state.clear()
+
+
+# @router.callback_query(Callback.filter_delete())
+# async def delete_vacancy(
+#         call: types.CallbackQuery,
+#         callback_data: VacancyCallback,
+#         settings: Settings,
+#         state: FSMContext
+# ):
+#     data = await state.get_data()
+#     key = f"{callback_data.__prefix__}_{callback_data.id}"
+#     if key in data:
+#         settings.bot.vacancies.pop(callback_data.id)
+#         await call.message.edit_text(
+#             f"Вакансия {callback_data.id} удалена",
+#         )
+#         await call.message.answer(
+#             "Выберите вакансию:",
+#             reply_markup=common_kbs.get_vacancies(settings.bot.vacancies, True)
+#         )
+#         settings.dump()
+#         await state.clear()
+#     else:
+#         await state.update_data({key: True})
+#         await call.answer(f"Нажмите еще раз для подтверждения")

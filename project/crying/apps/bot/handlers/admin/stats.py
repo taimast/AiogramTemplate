@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ...keyboards.admin import admin_kbs
 from .....db.models import User
 
-router = Router()
+router = Router(name=__name__)
 
 
 @router.callback_query(F.data == "stats")

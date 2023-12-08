@@ -8,7 +8,7 @@ from support_bot.apps.bot.keyboards.admin import admin_kbs
 from support_bot.config import Settings
 from support_bot.db.models import User
 
-router = Router()
+router = Router(name=__name__)
 
 
 class ExportUsers(StatesGroup):

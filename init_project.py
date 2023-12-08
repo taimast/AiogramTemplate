@@ -97,7 +97,6 @@ def clear_annotated(data: str):
 def install_dependencies(project_path: Path):
     dependencies = ["loguru",
                     "pyyaml",
-                    "APScheduler",
                     "cachetools",
                     # "glQiwiApi",
                     # "pycryptopay-sdk",
@@ -108,7 +107,7 @@ def install_dependencies(project_path: Path):
                     # "asyncpg",
                     "aiosqlite",
                     "pydantic_settings",
-                    "pydantic=2.1.1",
+                    "pydantic>=2.1.1",
                     "bs4",
                     "lxml"
                     ]
@@ -168,7 +167,7 @@ def main():
 
     shutil.copytree(str(TEMPLATE_DIR / "crying"), str(workdir), dirs_exist_ok=True)
     # dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
-    shutil.copytree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"))
+    shutil.copytree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"), dirs_exist_ok=True)
 
     set_project_name_in_files(workdir, project_name, ignore_merchant)
     # set_project_name_in_files(project_path / "scripts", project_name)

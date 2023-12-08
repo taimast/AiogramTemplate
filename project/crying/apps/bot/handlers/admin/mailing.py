@@ -14,7 +14,7 @@ from ...keyboards.admin import admin_kbs
 from ...keyboards.common import common_kbs
 from .....db.models import User
 
-router = Router()
+router = Router(name=__name__)
 ChatID = int
 MessageID = int
 
@@ -28,8 +28,9 @@ class Mailing:
     update_interval: float = 0.6
     send_interval: float = 0.4
     delete_interval: float = 0.2
-    messages: list[(ChatID, MessageID)] = field(default_factory=list)
 
+    cancel_markup: types.InlineKeyboardMarkup | None = field(default_factory=lambda :admin_kbs.mailing_cancel())
+    messages: list[(ChatID, MessageID)] = field(default_factory=list)
     mailings: ClassVar[deque[Self]] = deque(maxlen=1)
 
     @classmethod
@@ -46,18 +47,17 @@ class Mailing:
     async def init_status_message(self, message: types.Message):
         self.status_message = await message.answer(
             self.status_template,
-            reply_markup=admin_kbs.mailing_cancel()
+            reply_markup=self.cancel_markup
         )
 
     async def live_updating_status(self):
-        reply_markup = admin_kbs.mailing_cancel()
         while True:
             await asyncio.sleep(self.update_interval)
             self.current_emoji = "⏳ In progress" if self.current_emoji == "⌛ In progress" else "⌛ In progress"
             try:
                 await self.status_message.edit_text(
                     self.status_template,
-                    reply_markup=reply_markup
+                    reply_markup=self.cancel_markup
                 )
             except Exception as e:
                 logger.warning(f"Error while updating status message: {e}")
@@ -107,7 +107,9 @@ class Mailing:
                 self.messages.remove((chat_id, message_id))
             except Exception as e:
                 self.failed += 1
-                logger.warning(f"Error while deleting message {message_id} from {chat_id}: {e}")
+                logger.warning(
+                    f"Error while deleting message {message_id} from {chat_id}: {e}"
+                )
             finally:
                 await asyncio.sleep(self.delete_interval)
 
@@ -134,7 +136,9 @@ async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, 
             await mailing_task
         except asyncio.CancelledError:
             cancelled = True
-        mailing_status_task.cancel()
+        finally:
+            mailing_status_task.cancel()
+
         try:
             await mailing_status_task
         except asyncio.CancelledError:
@@ -166,8 +170,9 @@ async def retract_last_mailing(call: types.CallbackQuery, bot: Bot):
             await mailing_task
         except asyncio.CancelledError:
             cancelled = True
+        finally:
+            mailing_status_task.cancel()
 
-        mailing_status_task.cancel()
         try:
             await mailing_status_task
         except asyncio.CancelledError:

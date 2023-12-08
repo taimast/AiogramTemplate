@@ -12,7 +12,7 @@ from .....config import Settings
 if TYPE_CHECKING:
     pass
 
-router = Router()
+router = Router(name=__name__)
 
 
 @router.my_chat_member(ChatMemberUpdatedFilter(ADMINISTRATOR))
