@@ -10,7 +10,7 @@ def command_wrapper(router: Router, command: BotCommand):
     def decorator(func):
         @functools.wraps(func)
         async def wrapper(*args, **kwargs):
-            kwargs.update({"command_info": command.command})
+            # kwargs.update({"command_info": command.command})
             result = await func(*args, **kwargs)
             return result
 

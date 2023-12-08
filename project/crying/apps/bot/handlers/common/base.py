@@ -11,12 +11,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from project.crying.apps.bot.commands.bot_commands import BaseCommands
 from project.crying.apps.bot.keyboards.common import common_kbs
+from project.crying.config import MEDIA_DIR
 from project.crying.db.models import User
 
 if TYPE_CHECKING:
     from project.crying.locales.stubs.ru.stub import TranslatorRunner
 
-router = Router()
+router = Router(name=__name__)
 
 @router.message(CommandStart(deep_link=True))
 async def deep_start(
@@ -51,8 +52,11 @@ async def start(
         reply_markup=common_kbs.inline_start()
     )
 
-@router.callback_query()
-async def media(call:types.CallbackQuery):
-    group = MediaGroupBuilder()
-    group.add_photo()
-    group.build()
+@router.message()
+async def media(message:types.Message):
+    builder = MediaGroupBuilder()
+    builder.add_photo(types.FSInputFile(MEDIA_DIR / "img.png"), caption="1")
+    builder.add_photo(types.FSInputFile(MEDIA_DIR / "img.png"))
+    builder.add_photo(types.FSInputFile(MEDIA_DIR / "img.png"))
+    group = builder.build()
+    await message.answer_media_group(group)

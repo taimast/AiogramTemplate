@@ -32,9 +32,9 @@ def setup_middlewares(dp: Dispatcher, session_maker: async_sessionmaker):
     dp.callback_query.middleware(translator_runner_middleware)
 
     # Chat action middleware
-    chat_action_middleware = ChatActionMiddleware()
-    dp.message.middleware(chat_action_middleware)
-    dp.callback_query.middleware(chat_action_middleware)
+    # chat_action_middleware = ChatActionMiddleware()
+    # dp.message.middleware(chat_action_middleware)
+    # dp.callback_query.middleware(chat_action_middleware)
 
     # Callback answer middleware
     dp.callback_query.middleware(CallbackAnswerMiddleware())

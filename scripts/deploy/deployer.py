@@ -76,7 +76,7 @@ class Deployer:
             pty=True,
             watchers=[key_responder],
         )
-        key = self.connection.run(f'cat /root/.ssh/id_ed25519_{self.repo_name}.pub').stdout.strip()
+        key = self.connection.run(f'cat /root/.ssh/id_ed25519.pub').stdout.strip()
         print(f"Successfully created key: {key}")
         return key
 

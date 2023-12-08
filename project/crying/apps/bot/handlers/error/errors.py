@@ -7,7 +7,7 @@ from aiogram.types.error_event import ErrorEvent
 from aiohttp import ContentTypeError
 from loguru import logger
 
-router = Router()
+router = Router(name=__name__)
 
 
 @router.errors()

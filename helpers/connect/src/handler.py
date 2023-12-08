@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from aiogram import Router, types, Bot, F
-from aiogram.filters import Text, Command
+from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardRemove
 from aiogram.utils import markdown as md
@@ -20,7 +20,7 @@ from .....db.models import User
 if TYPE_CHECKING:
     from .....locales.stubs.ru.stub import TranslatorRunner
 
-router = Router()
+router = Router(name=__name__)
 
 
 async def disconnect_user(bot: Bot, user: User, l10n: TranslatorRunner):
@@ -35,10 +35,11 @@ async def disconnect_user(bot: Bot, user: User, l10n: TranslatorRunner):
         await bot.send_message(user.id, l10n.conversation.end(), reply_markup=common_kbs.custom_back_kb())
 
 
-@router.message(Text(startswith="☑️"))
-async def end_conversation(message: types.Message, bot: Bot, user: User, l10n: TranslatorRunner, state: FSMContext):
+@router.message(F.text.startswith("☑️"))
+async def end_conversation(message: types.Message, bot: Bot, user: User, l10n: TranslatorRunner,session:AsyncSession, state: FSMContext):
     await state.clear()
     await disconnect_user(bot, user, l10n)
+    await session.commit()
 
 
 @router.message(IsConnectedFilter(), ~Command(BaseCommands.START))
@@ -96,9 +97,10 @@ async def connect(
         )
         return
     await _connect(bot, user, connected_user, l10n)
+    await session.commit()
 
 
-@router.message(Text(startswith="🗣️"))
+@router.message(F.text.startswith("🗣️"))
 async def connect(message: types.Message, bot: Bot, user: User, settings: Settings, l10n: TranslatorRunner):
     await message.answer(l10n.conversation.connect(), reply_markup=common_kbs.disconnect(l10n))
     await user.wait()

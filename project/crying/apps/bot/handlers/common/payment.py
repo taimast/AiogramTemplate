@@ -3,7 +3,7 @@ from pprint import pformat
 from aiogram import F, Router, types
 from loguru import logger
 
-router = Router()
+router = Router(name=__name__)
 
 PAYMENT_PROVIDE_TOKEN = '381764678:TEST:29390'
 

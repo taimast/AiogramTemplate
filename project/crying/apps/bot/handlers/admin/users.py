@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .....db.models import User
 
-router = Router()
+router = Router(name=__name__)
 
 
 @router.callback_query(F.data == "export_users")
