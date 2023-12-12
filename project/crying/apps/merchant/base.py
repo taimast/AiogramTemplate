@@ -29,7 +29,7 @@ class MerchantEnum(StrEnum):
     YOOKASSA = "yookassa"
     CRYPTO_PAY = "crypto_pay"
     CRYPTOMUS = "cryptomus"
-
+    WALLET_PAY = "wallet_pay"
 
 class BaseMerchant(BaseModel, ABC):
     shop_id: Optional[str]
