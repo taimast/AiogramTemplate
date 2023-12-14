@@ -109,7 +109,8 @@ def install_dependencies(project_path: Path):
                     "pydantic_settings",
                     "pydantic>=2.1.1",
                     "bs4",
-                    "lxml"
+                    "lxml",
+                    "alembic"
                     ]
     utils = [
         "watchdog",
