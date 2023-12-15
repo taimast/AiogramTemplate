@@ -34,7 +34,7 @@ def parse_args() -> CLIArgsSettings:
     parser.add_argument(
         "-m", "--mode",
         type=str,
-        default="prod",
+        default="dev",
         help="prod or dev"
     )
     parser.add_argument(

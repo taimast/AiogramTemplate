@@ -3,7 +3,7 @@ services:
   bot:
     build: ./
     restart: always
-    command: python crying/main.py
+    command: python crying/main.py -m prod
     volumes:
       - ./config.yml:/app/config.yml
       - ./logs:/app/logs

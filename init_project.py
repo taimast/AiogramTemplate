@@ -114,6 +114,7 @@ def install_dependencies(project_path: Path):
                     ]
     utils = [
         "watchdog",
+        "ruff"
         # "sqlalchemy-utils",
         # "psycopg2"
     ]
