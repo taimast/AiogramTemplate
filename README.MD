@@ -21,6 +21,7 @@
 - Командная строка (CLI)
 - Настройка Вебхука
 - ORM базы данных: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
+- Инструмент миграции БД: [Alembic](https://github.com/sqlalchemy/alembic)
 - Удобное управление конфигурацией проекта через [Pydantic](https://github.com/pydantic/pydantic)
 
 ## Инициализация проекта
