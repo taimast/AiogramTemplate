@@ -1,3 +1,4 @@
+import datetime
 from typing import Literal, Any
 from unittest.mock import Mock
 
@@ -9,7 +10,7 @@ except ImportError:
 
 from pydantic import validator
 
-from .base import BaseMerchant, MerchantEnum
+from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
 from ...db.models.invoice import Invoice
 
 
@@ -36,6 +37,7 @@ class CryptoPay(BaseMerchant):
             # paid_btn_name=PaidButtonNames.VIEW_ITEM,
             # paid_btn_url='https://example.com'
         )
+        expired_at = datetime.datetime.now() + datetime.timedelta(seconds=PAYMENT_LIFETIME)
         return Invoice(
             user_id=user_id,
             amount=amount,
@@ -44,6 +46,7 @@ class CryptoPay(BaseMerchant):
             pay_url=invoice.pay_url,
             description=description,
             merchant=self.merchant,
+            expire_at=expired_at
         )
 
     async def is_paid(self, invoice_id: str) -> bool:
@@ -51,4 +54,4 @@ class CryptoPay(BaseMerchant):
             invoice_ids=invoice_id,
             status=schemas.InvoiceStatus.PAID
         )
-        return bool(invoices)
+        return invoices[0].status == schemas.InvoiceStatus.PAID
