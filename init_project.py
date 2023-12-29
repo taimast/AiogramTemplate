@@ -181,6 +181,10 @@ def main():
         print("Установка базовых зависимостей...")
         install_dependencies(project_path)
 
+        # initial alembic
+        os.system('alembic revision --autogenerate -m "initial"')
+        os.system('alembic upgrade head')
+
 
 if __name__ == "__main__":
     main()

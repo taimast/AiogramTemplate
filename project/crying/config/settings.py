@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from pydantic import BaseModel, Field, SecretStr, validator
+from pydantic import BaseModel, Field, SecretStr, validator, field_serializer
 from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict as _SettingsConfigDict
 
@@ -74,6 +74,10 @@ class BotSettings(BaseModel):
     def validate_admins(cls, v):
         return v or []
 
+    @field_serializer("token")
+    def serialize_token(self, v: SecretStr) -> str:
+        return v.get_secret_value()
+
 
 class Settings(BaseSettings):
     bot: BotSettings
@@ -114,33 +118,4 @@ class Settings(BaseSettings):
 
     def dump(self):
         with open(BASE_DIR / self.model_config["config_file"], "w", encoding="utf-8") as f:
-            data = self.model_dump()
-
-            def if_merchants(obj, k, v):
-                if k == "merchants":
-                    merchants = []
-
-                    for merchant in v:
-                        merchants.append(
-                            {"merchant": str(merchant["merchant"]),
-                             "shop_id": merchant["shop_id"],
-                             "api_key": merchant["api_key"].get_secret_value(),
-                             }
-                        )
-                    obj[k] = merchants
-
-            def recursive_remove_secret(obj):
-                if isinstance(obj, dict):
-                    for k, v in obj.items():
-                        if k == "merchants":
-                            if_merchants(obj, k, v)
-                        elif isinstance(v, SecretStr):
-                            obj[k] = v.get_secret_value()
-                        else:
-                            recursive_remove_secret(v)
-                elif isinstance(obj, list):
-                    for v in obj:
-                        recursive_remove_secret(v)
-
-            recursive_remove_secret(data)
-            yaml.dump(data, f, allow_unicode=True, sort_keys=False)
+            yaml.dump(self.model_dump(mode="json"), f, allow_unicode=True, sort_keys=False)

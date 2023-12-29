@@ -31,13 +31,7 @@ sqlalchemy-utils = "^0.41.1"
 [tool.poetry.group.dev.dependencies]
 jinja2 = "^3.1.2"
 pygithub = "^1.58.1"
-paramiko = "^3.1.0"
-sshtunnel = "^0.4.0"
-fabric = "^3.0.1"
-decorator = "^5.1.1"
 invocations = "^3.1.0"
-msgspec = "^0.15.1"
-pyrogram = "^2.0.106"
 asyncache = "^0.3.1"
 
 [tool.poetry.extras]

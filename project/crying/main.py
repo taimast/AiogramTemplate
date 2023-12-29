@@ -7,11 +7,11 @@ from loguru import logger
 
 from project.crying import setup
 from project.crying.config import Settings
+from project.crying.utils.other import send_info
 
 
 async def on_startup(bot: Bot):
-    username = (await bot.me()).username
-    logger.warning(f"Bot @{username} started")
+    _task = asyncio.create_task(send_info(bot))
 
 
 async def on_shutdown():
