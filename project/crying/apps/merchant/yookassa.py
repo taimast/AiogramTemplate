@@ -109,6 +109,7 @@ class YooKassa(BaseMerchant):
             amount=Amount(currency=currency, value=str(amount)),
             confirmation=ConfirmationRequest(return_url=return_url),
             description=description,
+            receipt = Receipt(items=[Item(amount=Amount(currency=currency, value=str(float(amount))))])
         )
         idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}
         response = await self.make_request(

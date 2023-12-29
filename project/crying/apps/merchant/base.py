@@ -7,7 +7,7 @@ from enum import StrEnum
 from typing import Optional, Any, Literal, TYPE_CHECKING
 
 from aiohttp import ClientSession
-from pydantic import BaseModel, SecretStr
+from pydantic import BaseModel, SecretStr, field_serializer
 
 if TYPE_CHECKING:
     from ...db.models.invoice import Invoice
@@ -45,6 +45,14 @@ class BaseMerchant(BaseModel, ABC):
     @property
     def headers(self) -> dict:
         return {}
+
+    @field_serializer("session")
+    def serialize_session(self, v: ClientSession) -> None:
+        pass
+
+    @field_serializer("api_key")
+    def serialize_api_key(self, v: SecretStr) -> str:
+        return v.get_secret_value()
 
     async def get_session(self):
         if self.session is None or self.session.closed:
