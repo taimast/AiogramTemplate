@@ -9,11 +9,11 @@ from ...commands.bot_commands import AdminCommands
 from ...keyboards.admin import admin_kbs
 from ...keyboards.common import common_kbs
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
 
-@router.callback_query(F.data == "admin")
-@router.message(Command(AdminCommands.ADMIN))
+@on.callback_query(F.data == "admin")
+@on.message(Command(AdminCommands.ADMIN))
 async def admin_start(message: types.CallbackQuery | types.Message, state: FSMContext):
     await state.clear()
     if isinstance(message, types.CallbackQuery):
@@ -21,7 +21,7 @@ async def admin_start(message: types.CallbackQuery | types.Message, state: FSMCo
     await message.answer("Админ меню", reply_markup=admin_kbs.admin_start())
 
 
-@router.callback_query(AdminCallback.filter(F.action == Action.ALL))
+@on.callback_query(AdminCallback.filter(F.action == Action.ALL))
 async def admins(call: types.CallbackQuery, settings: Settings, state: FSMContext):
     await call.message.answer(
         "Список админов:",
@@ -29,7 +29,7 @@ async def admins(call: types.CallbackQuery, settings: Settings, state: FSMContex
     )
 
 
-@router.callback_query(AdminCallback.filter(F.action == Action.DELETE))
+@on.callback_query(AdminCallback.filter(F.action == Action.DELETE))
 async def delete_admin(
         call: types.CallbackQuery,
         callback_data: AdminCallback,
@@ -51,7 +51,7 @@ async def delete_admin(
         await call.answer("Нажмите еще раз для подтверждения")
 
 
-@router.callback_query(AdminCallback.filter(F.action == Action.CREATE))
+@on.callback_query(AdminCallback.filter(F.action == Action.CREATE))
 async def create_admin(
         call: types.CallbackQuery,
         callback_data: AdminCallback,
@@ -65,7 +65,7 @@ async def create_admin(
     await state.set_state("admin:create")
 
 
-@router.message(StateFilter("admin:create"))
+@on.message(StateFilter("admin:create"))
 async def create_admin_id(message: types.Message, settings: Settings, state: FSMContext):
     try:
         admin_id = int(message.text)
@@ -84,7 +84,7 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
     await state.clear()
 
 
-# @router.callback_query(Callback.filter_delete())
+# @on.callback_query(Callback.filter_delete())
 # async def delete_vacancy(
 #         call: types.CallbackQuery,
 #         callback_data: VacancyCallback,

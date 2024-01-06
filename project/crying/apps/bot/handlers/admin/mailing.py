@@ -14,7 +14,7 @@ from ...keyboards.admin import admin_kbs
 from ...keyboards.common import common_kbs
 from .....db.models import User
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 ChatID = int
 MessageID = int
 
@@ -113,7 +113,7 @@ class Mailing:
             finally:
                 await asyncio.sleep(self.delete_interval)
 
-@router.callback_query(F.data == "mailing")
+@on.callback_query(F.data == "mailing")
 async def mailing(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer(
         "Напишите или перешлите сообщение, которое хотите разослать.",
@@ -122,7 +122,7 @@ async def mailing(call: types.CallbackQuery, state: FSMContext):
     await state.set_state("mailing")
 
 
-@router.message(StateFilter("mailing"))
+@on.message(StateFilter("mailing"))
 async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, state: FSMContext):
     try:
         mailing_obj = Mailing()
@@ -158,7 +158,7 @@ async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, 
     await state.clear()
 
 
-@router.callback_query(F.data == "retract_last_mailing")
+@on.callback_query(F.data == "retract_last_mailing")
 async def retract_last_mailing(call: types.CallbackQuery, bot: Bot):
     mailing_obj = Mailing.get_last()
     if mailing_obj:
@@ -189,7 +189,7 @@ async def retract_last_mailing(call: types.CallbackQuery, bot: Bot):
         await call.message.answer("Нет последних рассылок")
 
 
-@router.callback_query(F.data == "mailing_cancel")
+@on.callback_query(F.data == "mailing_cancel")
 async def mailing_cancel(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     mailing_task: asyncio.Task = data.get("mailing_task")

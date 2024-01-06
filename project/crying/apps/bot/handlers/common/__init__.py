@@ -2,9 +2,9 @@ from aiogram import Router
 
 from . import base, group, payment
 
-router = Router(name="common")
-router.include_routers(
-    base.router,
-    group.router,
-    payment.router,
+on = Router(name="common")
+on.include_routers(
+    base.on,
+    group.on,
+    payment.on,
 )

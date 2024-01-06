@@ -17,9 +17,9 @@ from project.crying.db.models import User
 if TYPE_CHECKING:
     from project.crying.locales.stubs.ru.stub import TranslatorRunner
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
-@router.message(CommandStart(deep_link=True))
+@on.message(CommandStart(deep_link=True))
 async def deep_start(
         message: types.Message,
         bot: Bot,
@@ -35,9 +35,9 @@ async def deep_start(
         await session.commit()
     await start(message, l10n, bot, state)
 
-@router.message(Command(BaseCommands.START))
-@router.message(F.text.startswith("«"))
-@router.callback_query(F.data == "start")
+@on.message(Command(BaseCommands.START))
+@on.message(F.text.startswith("«"))
+@on.callback_query(F.data == "start")
 async def start(
         message: types.Message | types.CallbackQuery,
         session: AsyncSession,
@@ -52,7 +52,7 @@ async def start(
         reply_markup=common_kbs.inline_start()
     )
 
-@router.message()
+@on.message()
 async def media(message:types.Message):
     builder = MediaGroupBuilder()
     builder.add_photo(types.FSInputFile(MEDIA_DIR / "img.png"), caption="1")

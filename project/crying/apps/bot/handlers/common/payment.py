@@ -3,12 +3,12 @@ from pprint import pformat
 from aiogram import F, Router, types
 from loguru import logger
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
 PAYMENT_PROVIDE_TOKEN = '381764678:TEST:29390'
 
 
-@router.callback_query(F.data == "payments")
+@on.callback_query(F.data == "payments")
 async def process_callback_pay(call: types.CallbackQuery):
     await call.message.answer("Платежная система")
     await call.message.answer_invoice(
@@ -26,7 +26,7 @@ async def process_callback_pay(call: types.CallbackQuery):
     )
 
 
-@router.shipping_query()
+@on.shipping_query()
 async def process_shipping_query(shipping_query: types.ShippingQuery):
     logger.info("process_shipping_query")
     logger.info(pformat(shipping_query.dict()))
@@ -43,14 +43,14 @@ async def process_shipping_query(shipping_query: types.ShippingQuery):
     )
 
 
-@router.pre_checkout_query()
+@on.pre_checkout_query()
 async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
     logger.info("process_pre_checkout_query")
     logger.info(pformat(pre_checkout_query.dict()))
     await pre_checkout_query.answer(ok=True, error_message='Test error message')
 
 
-@router.message(F.content_type == types.ContentType.SUCCESSFUL_PAYMENT)
+@on.message(F.content_type == types.ContentType.SUCCESSFUL_PAYMENT)
 async def process_successful_payment(message: types.Message):
     logger.info("process_successful_payment")
     logger.info(pformat(message.dict()))

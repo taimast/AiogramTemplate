@@ -6,10 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ...keyboards.admin import admin_kbs
 from .....db.models import User
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
 
-@router.callback_query(F.data == "stats")
+@on.callback_query(F.data == "stats")
 async def stats(call: types.CallbackQuery, session: AsyncSession, state: FSMContext):
     # Количество юзеров и количество юзеров за сегодня. Использовать md
     users_count = await User.count(session)

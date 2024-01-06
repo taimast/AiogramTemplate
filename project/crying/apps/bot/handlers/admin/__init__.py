@@ -2,11 +2,11 @@ from aiogram import Router
 
 from . import menu, mailing, stats, users
 
-router = Router(name="admin")
+on = Router(name="admin")
 
-router.include_routers(
-    menu.router,
-    mailing.router,
-    stats.router,
-    users.router
+on.include_routers(
+    menu.on,
+    mailing.on,
+    stats.on,
+    users.on
 )

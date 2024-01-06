@@ -45,6 +45,7 @@ class Format:
                     "<level>{level: <8}</level> | "
                     "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
                     "<level>{message}</level>")
+
     # default: str = None
 
 
@@ -76,7 +77,7 @@ def init_logging(log_settings: LogSettings):
         handlers.append(dict(
             sink=sys.stderr,
             level=log_settings.stdout,
-            format=Format.middle,
+            # format=Format.middle,
             # enqueue=True,
             backtrace=True,
             diagnose=True,
