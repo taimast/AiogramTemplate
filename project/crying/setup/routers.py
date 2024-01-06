@@ -10,14 +10,14 @@ async def setup_routers(
         settings: Settings,
 ):
     # Handling errors
-    dp.include_router(error.router)
+    dp.include_router(error.on)
 
     # Admin handlers
-    admin.router.message.filter(F.from_user.id.in_(settings.bot.admins))
-    admin.router.callback_query.filter(F.from_user.id.in_(settings.bot.admins))
-    dp.include_router(admin.router)
+    admin.on.message.filter(F.from_user.id.in_(settings.bot.admins))
+    admin.on.callback_query.filter(F.from_user.id.in_(settings.bot.admins))
+    dp.include_router(admin.on)
 
     # Common handlers
-    dp.include_router(common.router)
-    # common.router.include_router(admin.stats.router)
+    dp.include_router(common.on)
+    # common.on.include_router(admin.stats.on)
     logger.info("Routers setup complete")

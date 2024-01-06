@@ -11,14 +11,14 @@ from project.crying.apps.bot.callback_data.paginator import PaginatorCallback
 if TYPE_CHECKING:
     from .....locales.stubs.ru.stub import TranslatorRunner
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
 PgConsumer = Callable[[Sequence, PaginatorCallback], types.InlineKeyboardMarkup]
 # PgProducer = Callable[[Sequence, PaginatorCallback], list[InputMedia]]
 PgProducer = Callable[[Sequence, PaginatorCallback], str]
 
 
-@router.callback_query(PaginatorCallback.filter())
+@on.callback_query(PaginatorCallback.filter())
 # @flags.callback_answer(pre=True)
 async def paginator(
         call: types.CallbackQuery,

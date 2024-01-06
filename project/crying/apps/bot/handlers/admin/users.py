@@ -5,10 +5,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .....db.models import User
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
 
-@router.callback_query(F.data == "export_users")
+@on.callback_query(F.data == "export_users")
 async def export_users(call: types.CallbackQuery, session: AsyncSession):
     await call.message.answer("Экспорт пользователей...")
     users = await User.all(session)

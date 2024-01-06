@@ -23,6 +23,7 @@ pydantic-settings = "^2.0.2"
 bs4 = "^0.0.1"
 lxml = "^4.9.3"
 alembic = "^1.13.0"
+fabric = "^3.2.2"
 
 [tool.poetry.group.utils.dependencies]
 watchdog = "^3.0.0"
@@ -33,6 +34,7 @@ jinja2 = "^3.1.2"
 pygithub = "^1.58.1"
 invocations = "^3.1.0"
 asyncache = "^0.3.1"
+openai = "^1.6.1"
 
 [tool.poetry.extras]
 qiwi = ["glqiwiapi"]

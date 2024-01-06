@@ -12,10 +12,10 @@ from project.crying.config import Settings
 if TYPE_CHECKING:
     pass
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
 
-@router.my_chat_member(ChatMemberUpdatedFilter(ADMINISTRATOR))
+@on.my_chat_member(ChatMemberUpdatedFilter(ADMINISTRATOR))
 async def my_chat_member(update: types.Message, bot: Bot, settings: Settings):
     is_admin_group = False
     for admin in settings.bot.super_admins:

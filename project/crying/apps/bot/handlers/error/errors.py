@@ -7,10 +7,10 @@ from aiogram.types.error_event import ErrorEvent
 from aiohttp import ContentTypeError
 from loguru import logger
 
-router = Router(name=__name__)
+on = Router(name=__name__)
 
 
-@router.errors()
+@on.errors()
 async def error_handler(event: ErrorEvent, bot: Bot, event_from_user: User):
     # text = ("Произошла ошибка при обработке сообщения.\n"
     #         "Попробуйте еще раз или обратитесь к администратору.\n"
