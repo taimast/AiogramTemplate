@@ -1,14 +1,14 @@
 # Aiogram Project Template
 
-#### Этот шаблон был разработан для создания ботов на основе aiogram 3, и включает в себя несколько базовых функций.
+#### This template was designed to create bots based on aiogram 3, and includes several basic functions.
 
 
-## Возможности
+## Features
 
-- Административная панель
-- Промежуточное программное обеспечение (Middleware)
-- Настройка локализации через Fluent
-- Поддержка платёжных систем:
+- Administrative panel
+- Middleware
+- Localization settings via Fluent
+- Support for payment systems:
   - [CryptoCloud](https://cryptocloud.plus/)
   - [CryptoPay](https://github.com/LulzLoL231/pyCryptoPayAPI)
   - [Qiwi](https://qiwi.com/p2p-admin/api/)
@@ -18,27 +18,27 @@
   - [Cryptomus](https://cryptomus.com/)
   - [WalletPay](https://pay.wallet.tg/)
 
-- Командная строка (CLI)
-- Настройка Вебхука
-- ORM базы данных: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy/)
-- Инструмент миграции БД: [Alembic](https://github.com/sqlalchemy/alembic)
-- Удобное управление конфигурацией проекта через [Pydantic](https://github.com/pydantic/pydantic)
+- Command Line (CLI)
+- Configuring the Webhook
+- Database ORM: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy /)
+- DB Migration Tool: [Alembic](https://github.com/sqlalchemy/alembic )
+- Convenient project configuration management via [Pydantic](https://github.com/pydantic/pydantic )
 
-## Инициализация проекта
+## Initialization of the project
 
-Для инициализации проекта запустите скрипт `init_project.py`, пример: `python3 init_project.py -p <your_project_dir> -d`
+To initialize the project, run the script `init_project.py `, example: `python3 init_project.py -p <your_project_dir> -d`
 
-- `-d` - установка зависимостей
-- `-p` - путь к директории проекта, по умолчанию - `./`. Если указанная директория не существует, то будет создан новый
-  проект с использованием `poetry new <your_project_dir>`
+- `-d` - installing dependencies
+- `-p` is the path to the project directory, by default - `./`. If the specified directory does not exist, a new one will be created
+  a project using `poetry new <your_project_dir>`
 
-## Локализация
+## Localization
 
-Для локализации используется [Fluent](https://projectfluent.org/fluent/guide/).  
-По умолчанию, папка с локализациями находится по пути `crying/locales`.
+[Fluent] is used for localization(https://projectfluent.org/fluent/guide /).
+By default, the folder with localizations is located at the path `crying/locales'.
 
-## _Утилиты_
-- `project/crying/utils/ftl_parser_cli.py` - Live генерация заглушек для локализации. 
-- `project/crying/utils/ftl_translator.py` - Автоматический перевод локализации на все языки через Google Translate и генерация ftl.  
-- `project/crying/apps/bot/callback_data/paginator.py` - Пагинатор страниц для InlineKeyboardMarkup. 
-- `project/crying/db/models/user/mixins.py` - Миксины для моделей пользователей. На данный момент для Рефералки и Подключения пользователей к друг другу через бота. (Пример подключения в `helpers/connect`) 
+## _utilities_
+- `project/crying/utils/ftl_parser_cli.py ` - Live generation of stubs for localization.
+- `project/crying/utils/ftl_translator.py ` - Automatic localization translation into all languages via Google Translate and ftl generation.
+- `project/crying/apps/bot/callback_data/paginator.py ` - Paginator of pages for InlineKeyboardMarkup.
+- `project/crying/db/models/user/mixins.py ` - Mixins for user models. At the moment, for Referrals and Connecting users to each other through a bot. (Example of connection in `helpers/connect')

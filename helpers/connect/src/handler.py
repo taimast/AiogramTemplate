@@ -24,6 +24,7 @@ router = Router(name=__name__)
 
 
 async def disconnect_user(bot: Bot, user: User, l10n: TranslatorRunner):
+    await user.awaitable_attrs.connected_user
     if not user.connected_user:
         return
     connected_user = user.connected_user
@@ -44,6 +45,7 @@ async def end_conversation(message: types.Message, bot: Bot, user: User, l10n: T
 
 @router.message(IsConnectedFilter(), ~Command(BaseCommands.START))
 async def connected(message: types.Message, bot: Bot, user: User, settings: Settings, l10n: TranslatorRunner):
+    await user.awaitable_attrs.connected_user
     connected_user = user.connected_user
     # connected_is_admin = connected_user.id in settings.bot.admins
     if user.id not in settings.bot.admins:

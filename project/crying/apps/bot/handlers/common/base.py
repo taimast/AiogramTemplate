@@ -51,12 +51,3 @@ async def start(
         l10n.start(name=message.from_user.full_name),
         reply_markup=common_kbs.inline_start()
     )
-
-@on.message()
-async def media(message:types.Message):
-    builder = MediaGroupBuilder()
-    builder.add_photo(types.FSInputFile(MEDIA_DIR / "img.png"), caption="1")
-    builder.add_photo(types.FSInputFile(MEDIA_DIR / "img.png"))
-    builder.add_photo(types.FSInputFile(MEDIA_DIR / "img.png"))
-    group = builder.build()
-    await message.answer_media_group(group)
