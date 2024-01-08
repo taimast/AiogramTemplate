@@ -3,7 +3,7 @@ from typing import Self
 from aiogram import F
 from aiogram.filters.callback_data import CallbackData
 
-from .base import Action
+from .actions import Action
 
 
 class FilterActionMixin(CallbackData, prefix="filter_action_mixin"):

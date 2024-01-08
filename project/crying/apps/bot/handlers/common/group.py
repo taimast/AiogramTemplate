@@ -1,16 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from aiogram import Router, types, Bot
 from aiogram.enums import ChatMemberStatus
 from aiogram.filters import ChatMemberUpdatedFilter, ADMINISTRATOR
 from loguru import logger
 
 from project.crying.config import Settings
-
-if TYPE_CHECKING:
-    pass
 
 on = Router(name=__name__)
 

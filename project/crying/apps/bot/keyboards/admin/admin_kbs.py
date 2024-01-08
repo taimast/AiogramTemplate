@@ -2,21 +2,22 @@ from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from project.crying.apps.bot.callback_data.admin import AdminCallback
-from project.crying.apps.bot.callback_data.base import Action
+from project.crying.apps.bot.callback_data.actions import Action
 
 
 # todo 5/31/2022 2:33 PM taima: разделить основно функционал
 def admin_start():
     builder = InlineKeyboardBuilder()
-    builder.button(text="📨 Рассылка", callback_data="mailing")
+    builder.button(text="📨 Рассылка", callback_data=AdminCallback.mailing())
     # Отозвать последнюю рассылку
-    builder.button(text="🔄 Отозвать последнюю рассылку", callback_data="retract_last_mailing")
-    builder.button(text="📊 Статистика", callback_data="stats")
-    builder.button(text="📥 Выгрузка пользователей", callback_data="export_users")
+    builder.button(text="🔄 Отозвать последнюю рассылку", callback_data=AdminCallback.retract_last_mailing())
+    builder.button(text="📊 Статистика", callback_data=AdminCallback.stats())
+    builder.button(text="📥 Выгрузка пользователей", callback_data=AdminCallback.export_users())
     builder.button(text="👤 Админы", callback_data=AdminCallback(action=Action.ALL))
 
     builder.adjust(1)
     return builder.as_markup()
+
 
 def mailing_cancel():
     builder = InlineKeyboardBuilder()
