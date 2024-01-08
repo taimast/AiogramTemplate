@@ -3,12 +3,13 @@ import json
 from aiogram import Router, types, F
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ...callback_data.admin import AdminCallback
 from .....db.models import User
 
 on = Router(name=__name__)
 
 
-@on.callback_query(F.data == "export_users")
+@on.callback_query(AdminCallback.filter_export_users())
 async def export_users(call: types.CallbackQuery, session: AsyncSession):
     await call.message.answer("Экспорт пользователей...")
     users = await User.all(session)

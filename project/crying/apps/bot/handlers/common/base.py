@@ -5,19 +5,17 @@ from typing import TYPE_CHECKING
 from aiogram import Router, types, F, Bot
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.media_group import MediaGroupBuilder
 from sqlalchemy.ext.asyncio import AsyncSession
-
 
 from project.crying.apps.bot.commands.bot_commands import BaseCommands
 from project.crying.apps.bot.keyboards.common import common_kbs
-from project.crying.config import MEDIA_DIR
 from project.crying.db.models import User
 
 if TYPE_CHECKING:
     from project.crying.locales.stubs.ru.stub import TranslatorRunner
 
 on = Router(name=__name__)
+
 
 @on.message(CommandStart(deep_link=True))
 async def deep_start(
@@ -34,6 +32,7 @@ async def deep_start(
     if user.set_referrer(referrer_id):
         await session.commit()
     await start(message, l10n, bot, state)
+
 
 @on.message(Command(BaseCommands.START))
 @on.message(F.text.startswith("«"))

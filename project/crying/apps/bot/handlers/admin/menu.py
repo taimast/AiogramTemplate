@@ -4,7 +4,7 @@ from aiogram.fsm.context import FSMContext
 
 from project.crying.config import Settings
 from ...callback_data.admin import AdminCallback
-from ...callback_data.base import Action
+from ...callback_data.actions import Action
 from ...commands.bot_commands import AdminCommands
 from ...keyboards.admin import admin_kbs
 from ...keyboards.common import common_kbs
