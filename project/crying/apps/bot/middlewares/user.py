@@ -9,7 +9,6 @@ from project.crying.db.models import User
 
 
 class UserMiddleware(BaseMiddleware):
-
     async def __call__(
             self,
             handler: Callable[[Message | CallbackQuery, dict[str, Any]], Awaitable[Any]],

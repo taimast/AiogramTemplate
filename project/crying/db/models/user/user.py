@@ -31,3 +31,6 @@ class User(BaseUser):
         result = await session.execute(
             select(cls).where(cls.created_at >= datetime.date.today()))
         return len(result.all())
+
+    def pretty(self):
+        return f"{self.full_name} @{self.username}"

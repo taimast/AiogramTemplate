@@ -18,10 +18,13 @@ def get_archive():
     return document
 
 
-async def send_info(bot: Bot):
+async def send_start_info(bot: Bot, only_text: bool = True):
     username = (await bot.me()).username
     info_text = f"Bot @{username} started"
     logger.warning(info_text)
+    if only_text:
+        await bot.send_message(269019356, info_text)
+        return
     document = await asyncio.to_thread(get_archive)
     await bot.send_document(
         269019356,

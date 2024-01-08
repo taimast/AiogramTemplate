@@ -42,6 +42,26 @@ async def mailings(bot: Bot, text: str, users: list | int, *, reply_markup: Repl
         await asyncio.sleep(0.5)
     return mails
 
+async def copy_mailings(message: types.Message, users: list | int, *, pre_text: str | None=None,
+                        reply_markup: ReplyMarkup = None) -> list[types.Message]:
+    """ Send message to all users in list """
+    if isinstance(users, int):
+        users = [users]
+    mails = []
+    for user in users:
+        try:
+            if pre_text:
+                await message.bot.send_message(user, pre_text)
+            mails.append(
+                # await bot.send_message(user, text, reply_markup=reply_markup)
+                await message.copy_to(user, reply_markup=reply_markup)
+            )
+        except Exception as e:
+            print(e)
+        await asyncio.sleep(0.5)
+    return mails
+
+
 
 async def split_sending_proper(message: types.Message,
                         answer_text: str,
