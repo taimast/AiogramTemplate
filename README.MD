@@ -29,8 +29,9 @@
 To initialize the project, run the script `init_project.py `, example: `python3 init_project.py -p <your_project_dir> -d`
 
 - `-d` - installing dependencies
-- `-p` is the path to the project directory, by default - `./`. If the specified directory does not exist, a new one will be created
+- `-p` - is the path to the project directory, by default - `./`. If the specified directory does not exist, a new one will be created
   a project using `poetry new <your_project_dir>`
+- `im` - ignore merchants, if you do not need to install dependencies for payment systems
 
 ## Localization
 
