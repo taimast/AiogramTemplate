@@ -47,7 +47,7 @@ def create_setting_files(project_path: Path, project_name: str):
         if original_path.exists():
             shutil.copy(original_path, project_path / file)
             file_path = project_path / file
-            data = file_path.read_text(encoding="utf-8").replace("crying", project_name)
+            data = file_path.read_text(encoding="utf-8").replace("src", project_name)
             file_path.write_text(data, encoding="utf-8")
 
 
@@ -67,9 +67,9 @@ def set_project_name_in_files(workdir: Path, project_name: str, ignore_merchant:
         else:
             if (elem.suffix != ".pyc") and ("dev" not in elem.name) and ("probe" not in elem.name):
                 data = elem.read_text(encoding="utf-8")
-                data = data.replace("project/crying", project_name) \
-                    .replace('project.crying', project_name) \
-                    .replace('crying', project_name)
+                data = data.replace("src", project_name) \
+                    .replace('src', project_name) \
+                    .replace('src', project_name)
                 print(f"✅ {elem}")
 
                 if ignore_merchant:
@@ -167,7 +167,7 @@ def main():
     create_setting_files(project_path, project_name)
     print("Файлы настроек созданы")
 
-    shutil.copytree(str(TEMPLATE_DIR / "crying"), str(workdir), dirs_exist_ok=True)
+    shutil.copytree(str(TEMPLATE_DIR / "src"), str(workdir), dirs_exist_ok=True)
     # dir_util.copy_tree(str(TEMPLATE_DIR / "scripts"), str(project_path / "scripts"))
     shutil.copytree(str(TEMPLATE_DIR / ".github"), str(project_path / ".github"), dirs_exist_ok=True)
 

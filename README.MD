@@ -36,10 +36,21 @@ To initialize the project, run the script `init_project.py `, example: `python3 
 ## Localization
 
 [Fluent] is used for localization(https://projectfluent.org/fluent/guide /).
-By default, the folder with localizations is located at the path `crying/locales'.
+By default, the folder with localizations is located at the path `src/locales'.
 
 ## _utilities_
-- `project/crying/utils/ftl_parser_cli.py ` - Live generation of stubs for localization.
-- `project/crying/utils/ftl_translator.py ` - Automatic localization translation into all languages via Google Translate and ftl generation.
-- `project/crying/apps/bot/callback_data/paginator.py ` - Paginator of pages for InlineKeyboardMarkup.
-- `project/crying/db/models/user/mixins.py ` - Mixins for user models. At the moment, for Referrals and Connecting users to each other through a bot. (Example of connection in `helpers/connect')
+- `src/utils/ftl_parser_cli.py ` - Live generation of stubs for localization.
+- `src/utils/ftl_translator.py ` - Automatic localization translation into all languages via Google Translate and ftl generation.
+- `src/apps/bot/callback_data/paginator.py ` - Paginator of pages for InlineKeyboardMarkup.
+- `src/db/models/user/mixins.py ` - Mixins for user models. At the moment, for Referrals and Connecting users to each other through a bot. (Example of connection in `helpers/connect')
+
+
+### Установка
+
+1. Заполнить `config.yml`
+2. Запустить `docker compose up -d`
+
+### При изменении данных
+
+1. Запустить `docker compose down` (остановить контейнер)
+2. Запустить `docker compose up -d --build` (пересобрать контейнер и запустить его)

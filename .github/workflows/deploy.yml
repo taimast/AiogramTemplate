@@ -9,23 +9,25 @@ on:
       - master
 
 jobs:
-  python-ckecks:
+  build-and-deploy:
+
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@v0.1.10
         with:
-          python-version: 3.11
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          #          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd /home/src
+            git pull
+            docker compose stop
+            docker compose up --build -d
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install flake8
-
-      - name: Lint with flake8
-        run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 ./project --count --select=E9,F63,F7,F82 --show-source --statistics
+# todo L1 TODO 21.05.2023 15:31 taima: Add python syntax check to CI
