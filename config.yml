@@ -1,0 +1,32 @@
+bot:
+  token: your_token
+  admins:
+    - 000000000
+db:
+  path: ./database/db.sqlite3
+
+
+#db:
+#  user: postgres
+#  password: postgres
+#  database: src
+#  host: localhost
+#  port: 5432
+
+
+# Detailed information in the config folder
+#webhook:
+#  domain: 195.22.712.246:8443
+#  port: 8443
+#
+
+## create certificate - `openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`
+#  ssl_cert:
+#    certfile: cert.pem
+#    keyfile: private.key
+
+
+merchants:
+  - merchant: yookassa
+    shop_id: 123123
+    api_key: your_api_key

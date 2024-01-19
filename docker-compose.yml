@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  bot:
+    build: ./
+    restart: always
+    command: bash -c "alembic upgrade head && python src/main.py -m prod"
+    volumes:
+      - ./config.yml:/app/config.yml
+      - ./logs:/app/logs
+      - ./database:/app/database
+#    environment:
+#      - DB__HOST=db
+#    depends_on:
+#      - db
+#  db:
+#    image: postgres:14
+#    restart: always
+#    environment:
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_USER: postgres
+#      POSTGRES_DB: src
+#    #    ports:
+#    #      - "5433:5432"
+#    volumes:
+#      - ./db_data:/var/lib/postgresql/data
