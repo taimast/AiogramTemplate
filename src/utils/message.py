@@ -3,6 +3,7 @@ from typing import TypeVar
 
 from aiogram import types, Bot
 from aiogram.exceptions import TelegramBadRequest
+from aiogram.types import MessageId
 from bs4 import BeautifulSoup
 from loguru import logger
 
@@ -44,8 +45,13 @@ async def mailings(bot: Bot, text: str, users: list | int, *, reply_markup: Repl
     return mails
 
 
-async def copy_mailings(message: types.Message, users: list | int, *, pre_text: str | None = None,
-                        reply_markup: ReplyMarkup = None) -> list[types.Message]:
+async def copy_mailings(
+        message: types.Message,
+        users: list | int,
+        *,
+        pre_text: str | None = None,
+        reply_markup: ReplyMarkup = None
+) -> list[MessageId]:
     """ Send message to all users in list """
     if isinstance(users, int):
         users = [users]
