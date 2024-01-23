@@ -54,6 +54,9 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
     def slice(self, items: Sequence[T]) -> Sequence[T]:
         return items[self.offset:self.offset + self.limit]
 
+    def slice_first(self, items: Sequence[T]) -> T:
+        return self.slice(items)[0]
+
     def sort(self, items: list[T], key: Callable[[T], Any]) -> list[T]:
         if not self.sort_order:
             return items
