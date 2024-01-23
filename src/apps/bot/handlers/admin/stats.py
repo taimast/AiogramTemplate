@@ -1,4 +1,4 @@
-from aiogram import Router, types, F
+from aiogram import Router, types
 from aiogram.fsm.context import FSMContext
 from aiogram.utils import markdown as md
 from sqlalchemy.ext.asyncio import AsyncSession

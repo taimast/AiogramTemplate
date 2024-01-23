@@ -1,9 +1,9 @@
 import inspect
-from enum import Enum, StrEnum
+from enum import StrEnum
 from pathlib import Path
 
 from src.apps.bot.callback_data.actions import (
-AdminAction,
+    AdminAction,
 )
 
 imports = """
@@ -14,9 +14,7 @@ from .mixins import ActionMixin
 """
 
 
-
-
-def generate_class_code(*action_enums: type[StrEnum], gen_action:bool = False):
+def generate_class_code(*action_enums: type[StrEnum], gen_action: bool = False):
     template = f"""
 {imports}
 """
@@ -38,7 +36,7 @@ def generate_class_code(*action_enums: type[StrEnum], gen_action:bool = False):
             action_source = inspect.getsource(enum)
         else:
             action_source = ""
-        prefix  = base_class_name.replace('Action', '').lower()
+        prefix = base_class_name.replace('Action', '').lower()
         class_template = f"""
 {action_source}
 
@@ -46,8 +44,8 @@ class {prefix.title()}Callback(ActionMixin, CallbackData, prefix="{prefix}"):
     action: {base_class_name}
 {"".join(methods)}
     """
-        template += class_template.strip()+"\n\n\n"
-    return template.strip()+"\n"
+        template += class_template.strip() + "\n\n\n"
+    return template.strip() + "\n"
 
 
 generated_code = generate_class_code(

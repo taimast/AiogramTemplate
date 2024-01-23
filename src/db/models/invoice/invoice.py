@@ -64,7 +64,6 @@ class Invoice(Base, TimestampMixin):
 
     merchant: Mapped[MerchantEnum | None]
 
-
     def __str__(self):
         return f"[{self.__class__.__name__}] {self.user} {self.amount} {self.currency}"
 

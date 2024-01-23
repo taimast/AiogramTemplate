@@ -29,6 +29,3 @@ class Dialog:
 
     def back(self) -> MarkupType:
         return self.markups.pop()
-
-
-

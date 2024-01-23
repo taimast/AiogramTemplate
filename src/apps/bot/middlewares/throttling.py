@@ -7,7 +7,7 @@ from cachetools import TTLCache
 
 class ThrottlingMiddleware(BaseMiddleware):
     def __init__(self, ttl: float = 10) -> None:
-        self.cache:TTLCache[int, bool] = TTLCache(maxsize=10_000, ttl=ttl)
+        self.cache: TTLCache[int, bool] = TTLCache(maxsize=10_000, ttl=ttl)
 
     async def __call__(self,
                        handler: Callable[[Update, Dict[str, Any]], Awaitable[Any]],
@@ -18,4 +18,3 @@ class ThrottlingMiddleware(BaseMiddleware):
             return
         self.cache[user.id] = True
         return await handler(event, data)
-

@@ -12,6 +12,7 @@ ReplyMarkup = TypeVar("ReplyMarkup", types.InlineKeyboardMarkup, types.ReplyKeyb
 
 SUPPORTED_TAGS_SIGN = ['b', 'i', 'a', 'code', 'pre']
 
+
 async def split_sending(message: types.Message,
                         answer_text: str,
                         reply_markup: ReplyMarkup = None):
@@ -42,7 +43,8 @@ async def mailings(bot: Bot, text: str, users: list | int, *, reply_markup: Repl
         await asyncio.sleep(0.5)
     return mails
 
-async def copy_mailings(message: types.Message, users: list | int, *, pre_text: str | None=None,
+
+async def copy_mailings(message: types.Message, users: list | int, *, pre_text: str | None = None,
                         reply_markup: ReplyMarkup = None) -> list[types.Message]:
     """ Send message to all users in list """
     if isinstance(users, int):
@@ -62,10 +64,9 @@ async def copy_mailings(message: types.Message, users: list | int, *, pre_text: 
     return mails
 
 
-
 async def split_sending_proper(message: types.Message,
-                        answer_text: str,
-                        reply_markup: ReplyMarkup = None):
+                               answer_text: str,
+                               reply_markup: ReplyMarkup = None):
     """
      Split message if it's length is more than 4096 symbols
         and remove all tags except supported and replace them with children

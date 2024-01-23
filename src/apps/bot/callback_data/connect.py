@@ -1,5 +1,4 @@
 from aiogram import F
-from aiogram.filters.callback_data import CallbackData
 
 from .actions import Action, ConnectAction
 from .mixins import ActionMixin

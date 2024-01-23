@@ -24,7 +24,7 @@ class Locale(StrEnum):
 class User(BaseUser):
     __tablename__ = 'users'
     language_code: Mapped[Locale | None] = mapped_column(default=Locale.RUSSIAN)
-    invoices: Mapped[list[Invoice]] = relationship( back_populates='user')
+    invoices: Mapped[list[Invoice]] = relationship(back_populates='user')
 
     @classmethod
     async def today_count(cls, session: AsyncSession) -> int:

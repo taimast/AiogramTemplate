@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...callback_data.admin import AdminCallback
 from ...keyboards.admin import admin_kbs
-from ...keyboards.common import common_kbs
+from ...keyboards.common import helper_kbs
 from .....db.models import User
 from .....utils.mailing import Mailing
 
@@ -19,7 +19,7 @@ on = Router(name=__name__)
 async def mailing(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer(
         "Напишите или перешлите сообщение, которое хотите разослать.",
-        reply_markup=common_kbs.custom_back("admin")
+        reply_markup=helper_kbs.custom_back("admin")
     )
     await state.set_state("mailing")
 

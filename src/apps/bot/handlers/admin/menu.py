@@ -3,11 +3,11 @@ from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 
 from src.config import Settings
-from ...callback_data.admin import AdminCallback
 from ...callback_data.actions import Action
+from ...callback_data.admin import AdminCallback
 from ...commands.bot_commands import AdminCommands
 from ...keyboards.admin import admin_kbs
-from ...keyboards.common import common_kbs, helper_kbs
+from ...keyboards.common import helper_kbs
 
 on = Router(name=__name__)
 
@@ -82,7 +82,6 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
         reply_markup=admin_kbs.admins(settings.bot.admins)
     )
     await state.clear()
-
 
 # @on.callback_query(Callback.filter_delete())
 # async def delete_vacancy(

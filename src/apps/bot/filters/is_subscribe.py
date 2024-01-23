@@ -32,4 +32,3 @@ class IsSubscribeFilter(BaseFilter):
                 reply_markup=common_kbs.subscribe_channel(subscribe_channels, l10n)
             )
         return is_subscribed
-

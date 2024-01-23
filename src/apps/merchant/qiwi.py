@@ -1,8 +1,6 @@
 import datetime
 from typing import Optional, Literal
 
-from loguru import logger
-
 try:
     from glQiwiApi import QiwiP2PClient
 except ImportError:

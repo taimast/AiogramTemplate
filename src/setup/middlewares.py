@@ -1,6 +1,5 @@
 from aiogram import Dispatcher
 from aiogram.utils.callback_answer import CallbackAnswerMiddleware
-from aiogram.utils.chat_action import ChatActionMiddleware
 from loguru import logger
 from sqlalchemy.ext.asyncio import async_sessionmaker
 

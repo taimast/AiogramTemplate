@@ -1,8 +1,8 @@
 from aiogram.types import InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from src.apps.bot.callback_data.admin import AdminCallback
 from src.apps.bot.callback_data.actions import Action
+from src.apps.bot.callback_data.admin import AdminCallback
 
 
 # todo 5/31/2022 2:33 PM taima: разделить основно функционал

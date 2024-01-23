@@ -1,6 +1,6 @@
 import json
 
-from aiogram import Router, types, F
+from aiogram import Router, types
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ...callback_data.admin import AdminCallback

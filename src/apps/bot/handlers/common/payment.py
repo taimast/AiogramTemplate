@@ -55,4 +55,3 @@ async def process_successful_payment(message: types.Message):
     logger.info("process_successful_payment")
     logger.info(pformat(message.dict()))
     await message.answer('Спасибо за покупку! {}'.format(message.successful_payment.total_amount))
-

@@ -1,9 +1,9 @@
 from typing import Literal
 
-    
+
 class TranslatorRunner:
     def get(self, path: str, **kwargs) -> str: ...
-    
+
     button: Button
     channel: Channel
 
@@ -29,4 +29,3 @@ class ChannelButton:
 
     @staticmethod
     def subscribed() -> Literal["""✔️ Я подписался"""]: ...
-

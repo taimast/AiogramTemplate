@@ -75,7 +75,7 @@ class YooPaymentRequest(BaseModel):
 class YooPayment(YooPaymentRequest):
     id: uuid.UUID
     created_at: datetime.datetime
-    confirmation: Confirmation|None = None
+    confirmation: Confirmation | None = None
     paid: bool
     status: Status
     recipient: Recipient | None = None
@@ -109,7 +109,7 @@ class YooKassa(BaseMerchant):
             amount=Amount(currency=currency, value=str(amount)),
             confirmation=ConfirmationRequest(return_url=return_url),
             description=description,
-            receipt = Receipt(items=[Item(amount=Amount(currency=currency, value=str(float(amount))))])
+            receipt=Receipt(items=[Item(amount=Amount(currency=currency, value=str(float(amount))))])
         )
         idempotence_key = {"Idempotence-Key": str(uuid.uuid4())}
         response = await self.make_request(
