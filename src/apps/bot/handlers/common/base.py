@@ -31,8 +31,7 @@ async def deep_start(
     referrer_id = int(command.args)
     if user.set_referrer(referrer_id):
         await session.commit()
-    await start(message, l10n, bot, state)
-
+    await start(message, session, l10n, state)
 
 @on.message(Command(BaseCommands.START))
 @on.message(F.text.startswith("«"))
