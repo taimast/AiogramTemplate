@@ -1,4 +1,4 @@
-# Aiogram Project Template
+# [Aiogram Project Template](https://github.com/taimast/AiogramTemplate)
 
 #### This template was designed to create bots based on aiogram 3, and includes several basic functions.
 
