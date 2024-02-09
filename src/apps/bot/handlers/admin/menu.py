@@ -1,5 +1,5 @@
 from aiogram import Router, types, F
-from aiogram.filters import Command, StateFilter
+from aiogram.filters import Command, StateFilter, CommandObject
 from aiogram.fsm.context import FSMContext
 
 from src.config import Settings
@@ -106,3 +106,13 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
 #     else:
 #         await state.update_data({key: True})
 #         await call.answer(f"Нажмите еще раз для подтверждения")
+
+@on.message(Command("sm"))
+async def sm(message: types.Message, command:CommandObject, settings: Settings):
+    user, text = command.args.split(" ")
+    if user.isdigit():
+        user = int(user)
+
+    await message.bot.send_message(user, text)
+    sm = await message.answer("Отправлено")
+

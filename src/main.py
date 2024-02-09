@@ -3,6 +3,7 @@ from pprint import pformat
 
 from aiogram import Bot, F, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.fsm.strategy import FSMStrategy
 from loguru import logger
 
 from src import setup
@@ -45,6 +46,7 @@ async def main():
         storage=storage,
         settings=settings,
         translator_hub=translator_hub,
+        fsm_strategy=FSMStrategy.GLOBAL_USER
     )
 
     # Register startup and shutdown handlers
