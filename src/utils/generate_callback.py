@@ -13,6 +13,7 @@ from aiogram import F
 from aiogram.filters.callback_data import CallbackData
 from enum import StrEnum
 from .mixins import ActionMixin
+from .actions import Action
 """
 @dataclass
 class GenCode:
@@ -51,7 +52,7 @@ def generate_class_code(*action_enums: type[StrEnum], gen_action: bool = False):
 {action_source}
 
 class {prefix.title()}Callback(ActionMixin, CallbackData, prefix="{prefix}"):
-    action: {base_class_name}
+    action: Action | {base_class_name}
 {"".join(methods)}
     """
         template += class_template.strip() + "\n\n\n"
