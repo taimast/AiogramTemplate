@@ -24,15 +24,6 @@
 - DB Migration Tool: [Alembic](https://github.com/sqlalchemy/alembic )
 - Convenient project configuration management via [Pydantic](https://github.com/pydantic/pydantic )
 
-## Initialization of the project
-
-To initialize the project, run the script `init_project.py `, example: `python3 init_project.py -p <your_project_dir> -d`
-
-- `-d` - installing dependencies
-- `-p` - is the path to the project directory, by default - `./`. If the specified directory does not exist, a new one will be created
-  a project using `poetry new <your_project_dir>`
-- `im` - ignore merchants, if you do not need to install dependencies for payment systems
-
 ## Localization
 
 [Fluent] is used for localization(https://projectfluent.org/fluent/guide /).
