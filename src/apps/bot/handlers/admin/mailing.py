@@ -89,7 +89,7 @@ async def retract_last_mailing(call: types.CallbackQuery, bot: Bot):
             await mailing_obj.retracted_status()
 
         Mailing.mailings.pop()
-        await call.message.edit_text("Рассылка отозвана")
+        await call.message.edit_text("Рассылка отозвана", reply_markup=admin_kbs.admin_start())
     else:
         await call.message.answer("Нет последних рассылок")
 
