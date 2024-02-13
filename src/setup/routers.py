@@ -1,4 +1,5 @@
 from aiogram import Dispatcher, F
+from aiogram.filters import CommandStart
 from loguru import logger
 
 from ..apps.bot.handlers import admin, common, error
@@ -13,6 +14,7 @@ async def setup_routers(
     dp.include_router(error.on)
 
     # Admin handlers
+    admin.on.message.filter(~CommandStart())
     admin.on.message.filter(F.from_user.id.in_(settings.bot.admins))
     admin.on.callback_query.filter(F.from_user.id.in_(settings.bot.admins))
     dp.include_router(admin.on)
