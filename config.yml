@@ -26,7 +26,7 @@ db:
 #    keyfile: private.key
 
 
-merchants:
-  - merchant: yookassa
-    shop_id: 123123
-    api_key: your_api_key
+#merchants:
+#  - merchant: yookassa
+#    shop_id: 123123
+#    api_key: your_api_key
