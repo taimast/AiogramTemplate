@@ -5,7 +5,7 @@
 
 ## Features
 
-- Administrative panel
+- Admin panel
 - Middleware
 - Localization settings via Fluent
 - Support for payment systems:
