@@ -20,7 +20,7 @@
 
 - Command Line (CLI)
 - Configuring the Webhook
-- Database ORM: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy /)
+- Database ORM: [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy)
 - DB Migration Tool: [Alembic](https://github.com/sqlalchemy/alembic )
 - Convenient project configuration management via [Pydantic](https://github.com/pydantic/pydantic )
 
