@@ -40,7 +40,10 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
         return self.make(page * self.limit)
 
     def switch_to_last(self, length: int) -> Self:
-        return self.switch_to(length // self.limit)
+        last_page = length // self.limit
+        if length % self.limit == 0:
+            last_page -= 1
+        return self.switch_to(last_page)
 
     def switch_to_first(self) -> Self:
         return self.switch_to(0)
@@ -89,7 +92,9 @@ class PaginatorCallback(CallbackData, prefix="paginator"):
             # В самый конец
             IKButton(text="≫", callback_data=self.switch_to_last(length).pack())
         )
-        counter_str = f"{self.offset // self.limit + 1} / {length // self.limit + 1}"
+        first_page = self.offset // self.limit
+        last_page = length // self.limit
+        counter_str = f"{first_page} / {last_page}"
         builder.row(IKButton(text=counter_str, callback_data="None"))
 
     # Кнопки сортировки по убыванию и возрастанию

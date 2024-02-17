@@ -8,6 +8,7 @@ from .cryptopay import CryptoPay
 from .qiwi import Qiwi
 from .yookassa import YooKassa
 
+
 MerchantAnnotated = Annotated[
     Qiwi | YooKassa | CryptoPay | CryptoCloud | Cryptomus,
     Field(discriminator="merchant")

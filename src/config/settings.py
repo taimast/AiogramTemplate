@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import zoneinfo
+import typing
 from pathlib import Path
 from typing import Any
 
@@ -9,26 +9,17 @@ from pydantic import BaseModel, Field, SecretStr, validator, field_serializer
 from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict as _SettingsConfigDict
 
+from .consts import BASE_DIR
 from .db import SqliteDB, PostgresDB
 from .webhook import Webhook
 from ..apps.merchant import MerchantAnnotated
 from ..apps.merchant.base import MerchantEnum
 
 
+# seconds
+
 class SettingsConfigDict(_SettingsConfigDict, total=False):
     config_file: str
-
-
-BASE_DIR = Path(__file__).parent.parent.parent
-LOG_DIR = BASE_DIR / "logs"
-MEDIA_DIR = BASE_DIR / 'media'
-DATABASE_DIR = BASE_DIR / "database"
-
-for DIR in [LOG_DIR, MEDIA_DIR, DATABASE_DIR]:
-    DIR.mkdir(exist_ok=True)
-del DIR
-LOCALES_DIR = BASE_DIR / "src/locales"
-TIME_ZONE = zoneinfo.ZoneInfo("Europe/Moscow")
 
 
 def load_yaml(file: str | Path) -> dict[str, Any] | list[Any]:
@@ -110,7 +101,7 @@ class Settings(BaseSettings):
             file_secret_settings
         )
 
-    def get_merchant(self, merchant: MerchantEnum) -> MerchantAnnotated | None:
+    def get_merchant(self, merchant: MerchantEnum) ->MerchantAnnotated | None:
         for m in self.merchants:
             if m.merchant == merchant:
                 return m

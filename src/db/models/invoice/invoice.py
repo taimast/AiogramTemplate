@@ -12,10 +12,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, selectinload
 from ..base import TimestampMixin
 from ..base.declarative import Base
 from ..user import User
-from ....apps.merchant.base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
+from ....apps.merchant.base import MerchantEnum, PAYMENT_LIFETIME
 
-MerchantType = TypeVar("MerchantType", bound=BaseMerchant)
 
+# класс с методами для работы с мерчантами
 
 class Currency(StrEnum):
     """Currency codes."""
@@ -85,7 +85,7 @@ class Invoice(Base, TimestampMixin):
             user_id: int,
             amount: int | float | str,
             currency: Currency,
-            merchant: MerchantType,
+            merchant: MerchantEnum,
     ) -> Invoice | None:
         """Get last unpaid invoice."""
         return (
@@ -111,10 +111,11 @@ class Invoice(Base, TimestampMixin):
     async def create_invoice(
             cls,
             session: AsyncSession,
-            merchant: MerchantType,
+            merchant: MerchantEnum,
             user: User,
             amount: int | float | str,
             **kwargs,
     ) -> Self:
         """Create invoice."""
         raise NotImplementedError
+
