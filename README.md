@@ -26,7 +26,7 @@
 
 ## Localization
 
-[Fluent] is used for localization(https://projectfluent.org/fluent/guide /).
+[Fluent](https://projectfluent.org/fluent/guide) is used for localization.
 By default, the folder with localizations is located at the path `src/locales'.
 
 ## _utilities_
