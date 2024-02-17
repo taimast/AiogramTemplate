@@ -43,5 +43,5 @@ By default, the folder with localizations is located at the path `src/locales'.
 
 ### When changing data
 
-1. Run `docker compose down` (stop container)
+1. Run `docker compose stop` (stop container)
 2. Run `docker compose up -d --build` (rebuild the container and run it)
