@@ -33,6 +33,7 @@ async def deep_start(
         await session.commit()
     await start(message, session, l10n, state)
 
+
 @on.message(Command(BaseCommands.START))
 @on.message(F.text.startswith("«"))
 @on.callback_query(F.data == "start")

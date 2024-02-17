@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime
 from abc import abstractmethod
 from enum import StrEnum
-from typing import Self, TypeVar
+from typing import Self
 
 from sqlalchemy import String, func, ForeignKey, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -118,4 +118,3 @@ class Invoice(Base, TimestampMixin):
     ) -> Self:
         """Create invoice."""
         raise NotImplementedError
-

@@ -83,6 +83,7 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
     )
     await state.clear()
 
+
 # @on.callback_query(Callback.filter_delete())
 # async def delete_vacancy(
 #         call: types.CallbackQuery,
@@ -108,11 +109,10 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
 #         await call.answer(f"Нажмите еще раз для подтверждения")
 
 @on.message(Command("sm"))
-async def sm(message: types.Message, command:CommandObject, settings: Settings):
+async def sm(message: types.Message, command: CommandObject, settings: Settings):
     user, text = command.args.split(" ")
     if user.isdigit():
         user = int(user)
 
     await message.bot.send_message(user, text)
     sm = await message.answer("Отправлено")
-

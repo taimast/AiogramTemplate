@@ -1,10 +1,7 @@
 import inspect
-import os
 import sys
 from dataclasses import dataclass
-from enum import StrEnum
-from pathlib import Path
-from pprint import pprint
+
 from src.apps.bot.callback_data.actions import *
 from src.config import BASE_DIR
 
@@ -15,10 +12,13 @@ from enum import StrEnum
 from .mixins import ActionMixin
 from .actions import Action
 """
+
+
 @dataclass
 class GenCode:
     name: str
     code: str
+
 
 def generate_class_code(*action_enums: type[StrEnum], gen_action: bool = False):
     template = f"""
@@ -67,7 +67,8 @@ class {prefix.title()}Callback(ActionMixin, CallbackData, prefix="{prefix}"):
 
 def generate_all_callbacks():
     # Получаем список всех actions из файла actions.py
-    actions = [obj for name, obj in inspect.getmembers(sys.modules[__name__]) if inspect.isclass(obj) and issubclass(obj, StrEnum)]
+    actions = [obj for name, obj in inspect.getmembers(sys.modules[__name__]) if
+               inspect.isclass(obj) and issubclass(obj, StrEnum)]
     # filter out all Action classes
     actions = [action for action in actions if "Action" in action.__name__]
 
@@ -81,8 +82,10 @@ def generate_all_callbacks():
         callback_code = generate_class_code(action, gen_action=False)
         callback_path.write_text(callback_code, "utf-8")
 
+
 def main():
     generate_all_callbacks()
+
 
 if __name__ == '__main__':
     main()

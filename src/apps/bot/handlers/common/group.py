@@ -34,4 +34,3 @@ async def yes(update: types.CallbackQuery, state: FSMContext):
     join_request: types.ChatJoinRequest = data.get("join_request")
     await join_request.approve()
     await update.message.answer("accepted")
-

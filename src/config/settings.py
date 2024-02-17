@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import typing
 from pathlib import Path
 from typing import Any
 
@@ -101,7 +100,7 @@ class Settings(BaseSettings):
             file_secret_settings
         )
 
-    def get_merchant(self, merchant: MerchantEnum) ->MerchantAnnotated | None:
+    def get_merchant(self, merchant: MerchantEnum) -> MerchantAnnotated | None:
         for m in self.merchants:
             if m.merchant == merchant:
                 return m

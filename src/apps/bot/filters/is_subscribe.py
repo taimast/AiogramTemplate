@@ -6,7 +6,7 @@ from aiogram import Bot
 from aiogram.filters import BaseFilter
 from aiogram.types import Message, CallbackQuery
 
-from src.apps.bot.keyboards.common import common_kbs, helper_kbs
+from src.apps.bot.keyboards.common import helper_kbs
 from src.utils.subscribe import is_subscribed
 
 if TYPE_CHECKING:
