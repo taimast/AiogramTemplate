@@ -36,12 +36,12 @@ By default, the folder with localizations is located at the path `src/locales'.
 - `src/db/models/user/mixins.py ` - Mixins for user models. At the moment, for Referrals and Connecting users to each other through a bot. (Example of connection in `helpers/connect')
 
 
-### Установка
+### Installation
 
-1. Заполнить `config.yml`
-2. Запустить `docker compose up -d`
+1. Fill in the `config.yml`
+2. Run `docker compose up -d`
 
-### При изменении данных
+### When changing data
 
-1. Запустить `docker compose down` (остановить контейнер)
-2. Запустить `docker compose up -d --build` (пересобрать контейнер и запустить его)
+1. Run `docker compose down` (stop container)
+2. Run `docker compose up -d --build` (rebuild the container and run it)
