@@ -19,7 +19,7 @@ on = Router(name=__name__)
 
 @on.message(CommandStart(deep_link=True))
 async def deep_start(
-        message: types.Message,
+        msg: types.Message,
         bot: Bot,
         command: CommandObject,
         session: AsyncSession,
@@ -31,22 +31,22 @@ async def deep_start(
     referrer_id = int(command.args)
     if user.set_referrer(referrer_id):
         await session.commit()
-    await start(message, session, l10n, state)
+    await start(msg, session, l10n, state)
 
 
 @on.message(Command(BaseCommands.START))
 @on.message(F.text.startswith("«"))
 @on.callback_query(F.data == "start")
 async def start(
-        message: types.Message | types.CallbackQuery,
+        msg: types.Message | types.CallbackQuery,
         session: AsyncSession,
         l10n: TranslatorRunner,
         state: FSMContext
 ):
     await state.clear()
-    if isinstance(message, types.CallbackQuery):
-        message = message.message
-    await message.answer(
-        l10n.start(name=message.from_user.full_name),
+    if isinstance(msg, types.CallbackQuery):
+        message = msg.message
+    await msg.answer(
+        l10n.start(name=msg.from_user.full_name),
         reply_markup=common_kbs.inline_start()
     )

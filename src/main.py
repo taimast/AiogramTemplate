@@ -10,6 +10,7 @@ from src import setup
 from src.config import Settings
 from src.utils.other import send_start_info
 
+from aiogram.client.default import DefaultBotProperties
 
 async def on_startup(bot: Bot):
     _task = asyncio.create_task(send_start_info(bot, only_text=True))
@@ -35,11 +36,12 @@ async def main():
 
     # Initialize translator
     translator_hub = setup.init_translator_hub()
-
     # Initialize bot, storage and dispatcher
     bot = Bot(
         token=settings.bot.token.get_secret_value(),
-        parse_mode="html"
+        default=DefaultBotProperties(
+            parse_mode="html"
+        )
     )
     storage = MemoryStorage()
     dp = Dispatcher(
@@ -64,6 +66,7 @@ async def main():
 
     # Setup scheduler
     scheduler = await setup.setup_scheduler()
+
 
     # Set bot commands
     await setup.set_commands(bot, settings)

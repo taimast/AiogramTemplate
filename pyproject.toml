@@ -10,7 +10,7 @@ python = ">=3.11,<4.0"
 uvloop = { version = ">=0.17.0", markers = "sys_platform != 'win32'" }
 loguru = "^0.7.0"
 PyYAML = "^6.0"
-aiogram = {version = "^3.3.0", allow-prereleases = true}
+aiogram = "^3.4.1"
 APScheduler = {version = "^4.0.0a4", allow-prereleases = true}
 pydantic = "^2.0.3"
 fluentogram = "^1.1.6"
@@ -24,6 +24,7 @@ cachetools = "^5.3.2"
 [tool.poetry.group.dev.dependencies]
 watchdog = "^3.0.0"
 sqlalchemy-utils = "^0.41.1"
+jurigged = "^0.5.7"
 
 [tool.poetry.extras]
 qiwi = ["glqiwiapi"]
