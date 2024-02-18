@@ -5,6 +5,7 @@ from .mixins import ActionMixin
 
 
 class AdminCallback(ActionMixin, prefix="admin"):
+    id:int|None = None
     action: Action | AdminAction
 
     @classmethod
