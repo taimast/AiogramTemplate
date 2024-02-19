@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Self
+
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import (
     ReplyKeyboardMarkup,
@@ -20,24 +22,26 @@ md = md
 
 class CustomInlineKeyboardBuilder(_InlineKeyboardBuilder):
 
-    def add_back(self, text: str = "«", cd: str | CallbackData = "start") -> InlineKeyboardMarkup:
+    def row_button(self, **kwargs):
+        self.row()
+        return self.button(**kwargs)
+
+    def add_back(self, text: str = "«", cd: str | CallbackData = "start") -> Self:
         if not isinstance(cd, str):
             cd = cd.pack()
-        self.row(IKB(text=text, callback_data=cd))
-        return self.as_markup()
+        return self.row(IKB(text=text, callback_data=cd))
 
-    def add_admin_back(self, text: str = "«", cd: str | CallbackData = "admin") -> InlineKeyboardMarkup:
+    def add_admin_back(self, text: str = "«", cd: str | CallbackData = "admin") -> Self:
         return self.add_back(text, cd)
 
-    def add_start_back(self, text: str = "«", cd: str | CallbackData = "start") -> InlineKeyboardMarkup:
+    def add_start_back(self, text: str = "«", cd: str | CallbackData = "start") -> Self:
         return self.add_back(text, cd)
 
 
 class CustomReplyKeyboardBuilder(_ReplyKeyboardBuilder):
 
-    def add_back(self, text: str = "«") -> ReplyKeyboardMarkup:
-        self.row(KB(text=text))
-        return self.as_markup(resize_keyboard=True)
+    def add_back(self, text: str = "«") -> Self:
+        return self.row(KB(text=text))
 
 
 def custom_back_kb(text: str = "«", cd: str | CallbackData = "start") -> InlineKeyboardMarkup:
