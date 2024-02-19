@@ -23,8 +23,7 @@ md = md
 class CustomInlineKeyboardBuilder(_InlineKeyboardBuilder):
 
     def row_button(self, **kwargs):
-        self.row()
-        return self.button(**kwargs)
+        return self.row(IKB(**kwargs))
 
     def add_back(self, text: str = "«", cd: str | CallbackData = "start") -> Self:
         if not isinstance(cd, str):
