@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import typing
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, select, func
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import mapped_column, Mapped, relationship, declared_attr
 
 if typing.TYPE_CHECKING:
@@ -34,6 +35,11 @@ class ReferralMixin:
         else:
             self.referrer_id = referrer
             return True
+
+    @classmethod
+    async def all_referrals_count(cls, session: AsyncSession) -> int:
+        stmt = select(func.count(cls.id)).where(cls.referrer_id.isnot(None))
+        return (await session.execute(stmt)).scalar()
 
 
 class ConnectMixin:
