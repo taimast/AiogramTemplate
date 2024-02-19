@@ -2,6 +2,7 @@ import asyncio
 from pprint import pformat
 
 from aiogram import Bot, F, Dispatcher
+from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.strategy import FSMStrategy
 from loguru import logger
@@ -10,7 +11,6 @@ from src import setup
 from src.config import Settings
 from src.utils.other import send_start_info
 
-from aiogram.client.default import DefaultBotProperties
 
 async def on_startup(bot: Bot):
     _task = asyncio.create_task(send_start_info(bot, only_text=True))
@@ -67,7 +67,6 @@ async def main():
     # Setup scheduler
     scheduler = await setup.setup_scheduler()
 
-
     # Set bot commands
     await setup.set_commands(bot, settings)
 
@@ -93,15 +92,18 @@ async def main():
         await setup.close_db()
 
 
+async def start_runner():
+    try:
+        import uvloop
+        with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
+            runner.run(main())
+    except ImportError:
+        logger.warning("uvloop is not installed")
+        asyncio.run(main())
+
+
 if __name__ == "__main__":
     try:
-        try:
-            import uvloop
-
-            with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
-                runner.run(main())
-        except ImportError:
-            logger.warning("uvloop is not installed")
-            asyncio.run(main())
+        start_runner()
     except (KeyboardInterrupt, SystemExit):
         logger.info("Bot stopped")
