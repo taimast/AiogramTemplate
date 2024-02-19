@@ -29,7 +29,7 @@ async def process_callback_pay(call: types.CallbackQuery):
 @on.shipping_query()
 async def process_shipping_query(shipping_query: types.ShippingQuery):
     logger.info("process_shipping_query")
-    logger.info(pformat(shipping_query.dict()))
+    logger.info(pformat(shipping_query.model_dump()))
     await shipping_query.answer(
         ok=True,
         shipping_options=[
@@ -46,12 +46,12 @@ async def process_shipping_query(shipping_query: types.ShippingQuery):
 @on.pre_checkout_query()
 async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery):
     logger.info("process_pre_checkout_query")
-    logger.info(pformat(pre_checkout_query.dict()))
+    logger.info(pformat(pre_checkout_query.model_dump()))
     await pre_checkout_query.answer(ok=True, error_message='Test error message')
 
 
 @on.message(F.content_type == types.ContentType.SUCCESSFUL_PAYMENT)
 async def process_successful_payment(message: types.Message):
     logger.info("process_successful_payment")
-    logger.info(pformat(message.dict()))
+    logger.info(pformat(message.model_dump()))
     await message.answer('Спасибо за покупку! {}'.format(message.successful_payment.total_amount))

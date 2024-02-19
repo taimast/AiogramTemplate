@@ -5,7 +5,7 @@ from abc import abstractmethod
 from enum import StrEnum
 from typing import Self
 
-from sqlalchemy import String, func, ForeignKey, select
+from sqlalchemy import String, func, ForeignKey, select, JSON
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Mapped, mapped_column, relationship, selectinload
 
@@ -51,7 +51,7 @@ class Invoice(Base, TimestampMixin):
     expire_at: Mapped[datetime.datetime | None] = mapped_column(
         default=func.now() + datetime.timedelta(seconds=PAYMENT_LIFETIME)
     )
-    additional_info: Mapped[str | None] = mapped_column(String(255))
+    extra_data: Mapped[dict] = mapped_column(JSON, default={})
     pay_url: Mapped[str | None] = mapped_column(String(255))
     status: Mapped[Status | None] = mapped_column(String(10), default=Status.PENDING)
 
@@ -92,7 +92,7 @@ class Invoice(Base, TimestampMixin):
             await session.execute(
                 select(cls)
                 .where(cls.user_id == user_id)
-                .where(cls.amount == amount)
+                .where(cls.amount == float(amount))
                 .where(cls.currency == currency)
                 .where(cls.merchant == merchant)
                 .where(cls.status == Status.PENDING)
