@@ -15,7 +15,7 @@ from src.apps.merchant.base import MerchantEnum
 from src.config import Settings
 from src.db.models import Invoice, User, Currency
 
-router = Router()
+on = Router()
 
 if typing.TYPE_CHECKING:
     from src.locales.stubs.ru.stub import TranslatorRunner
@@ -27,7 +27,7 @@ class ExampleSub(BaseModel):
     price: float = 5.0
 
 
-@router.callback_query(StateFilter("payment-create"))
+@on.callback_query(StateFilter("payment-create"))
 async def payment_merchant(
         call: types.CallbackQuery,
         session: AsyncSession,
@@ -66,7 +66,7 @@ async def payment_merchant(
     await state.clear()
 
 
-@router.callback_query(F.data == "i_paid")
+@on.callback_query(F.data == "i_paid")
 async def i_paid(
         call: types.CallbackQuery,
         l10n: TranslatorRunner,

@@ -2,8 +2,8 @@
 # todo L1 26.11.2022 15:41 taima: Автоматическое создание сертификата и ключа для https
 # todo L1 07.12.2022 1:14 taima: Сгруппировать аргументы CLI в группы
 # todo L1 07.12.2022 3:05 taima: Заменить Loguru на стандартный логгер
-# todo L1 11.12.2022 20:04 taima: Переименовать init на initialize
-# todo L1 12.12.2022 16:43 taima: Перенести настройки из AutoAnswer в конфиг
+# done L1 11.12.2022 20:04 taima: Переименовать init на initialize
+# done L1 12.12.2022 16:43 taima: Перенести настройки из AutoAnswer в конфиг
 # todo L1 TODO 27.02.2023 2:44 taima: Исправить получение данные через атрибуты fluentogram
 # todo L1 TODO 06.04.2023 4:30 taima: генерация api ключей
 # todo L1 TODO 29.04.2023 23:38 taima: Подключить встроенную юкассу
@@ -12,9 +12,9 @@
 # todo L1 TODO 12.08.2023 19:37 taima: Add keyboards class
 # todo L1 TODO 06.10.2023 14:30 taima: Написать Mixinы и генератов методов для CallbackData
 # todo L1 TODO 25.11.2023 14:06 taima: Перевести в классы markdowns
-# todo L1 TODO 12.12.2023 13:58 rasul: add init alembic
+# done L1 TODO 12.12.2023 13:58 rasul: add init alembic
 # todo L1 TODO 14.12.2023 13:25 taima:  Доработать автоматическе создание ключа на севере и подключение к github actions
-# todo L1 TODO 10.01.2024 21:35 taima: Переименовать внутренную папку в scr вместо названия проекта
+# done L1 TODO 10.01.2024 21:35 taima: Переименовать внутренную папку в scr вместо названия проекта
 # todo L1 TODO 11.01.2024 0:10 taima:  Можно контролить реакции на сообщения
 # todo L1 TODO 13.01.2024 3:40 taima: Добавить webapp для админки и статистики
 # todo L1 TODO 17.02.2024 11:36 taima: Добавить отправку статистики мне в админку
