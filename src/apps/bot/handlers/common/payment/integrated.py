@@ -5,7 +5,7 @@ from loguru import logger
 
 on = Router(name=__name__)
 
-PAYMENT_PROVIDE_TOKEN = '381764678:TEST:29390'
+PAYMENT_PROVIDE_TOKEN = '3817642678:TEST:293290'
 
 
 @on.callback_query(F.data == "payments")
