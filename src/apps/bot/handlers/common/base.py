@@ -45,7 +45,7 @@ async def start(
 ):
     await state.clear()
     if isinstance(msg, types.CallbackQuery):
-        message = msg.message
+        msg = msg.message
     await msg.answer(
         l10n.start(name=msg.from_user.full_name),
         reply_markup=common_kbs.inline_start()
