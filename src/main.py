@@ -92,7 +92,7 @@ async def main():
         await setup.close_db()
 
 
-async def start_runner():
+def start_runner():
     try:
         import uvloop
         with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
