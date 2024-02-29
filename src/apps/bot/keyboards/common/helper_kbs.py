@@ -36,12 +36,16 @@ class CustomInlineKeyboardBuilder(_InlineKeyboardBuilder):
     def add_start_back(self, text: str = "«", cd: str | CallbackData = "start") -> Self:
         return self.add_back(text, cd)
 
+    def one_row(self):
+        return self.adjust(1)
+
 
 class CustomReplyKeyboardBuilder(_ReplyKeyboardBuilder):
 
     def add_back(self, text: str = "«") -> Self:
         return self.row(KB(text=text))
-
+    def one_row(self):
+        return self.adjust(1)
 
 def custom_back_kb(text: str = "«", cd: str | CallbackData = "start") -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()

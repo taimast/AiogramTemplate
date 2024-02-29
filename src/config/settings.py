@@ -55,6 +55,7 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
         return d
 
 
+
 class BotSettings(BaseModel):
     token: SecretStr
     admins: list[int] = Field(default_factory=list)

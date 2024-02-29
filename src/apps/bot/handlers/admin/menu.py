@@ -60,7 +60,7 @@ async def create_admin(
 ):
     await call.message.answer(
         "Введите id админа",
-        reply_markup=helper_kbs.custom_back("admin")
+        reply_markup=helper_kbs.custom_back_kb("admin")
     )
     await state.set_state("admin:create")
 
