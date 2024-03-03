@@ -58,7 +58,7 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
 
 class BotSettings(BaseModel):
     token: SecretStr
-    admins: set[int] = Field(default_factory=list)
+    admins: set[int] = Field(default_factory=set)
     super_admins: list[int] = Field(default_factory=list)
 
     @model_validator(mode="after")
