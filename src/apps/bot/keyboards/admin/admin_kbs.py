@@ -1,3 +1,5 @@
+from typing import Sequence, Iterable
+
 from aiogram.types import InlineKeyboardMarkup
 
 from src.apps.bot.callback_data.actions import Action
@@ -25,7 +27,7 @@ def mailing_cancel():
     return builder.as_markup()
 
 
-def admins(admins: list[int]) -> InlineKeyboardMarkup:
+def admins(admins: Iterable[int]) -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
     for admin in admins:
         builder.button(text=str(admin), callback_data=AdminCallback(action=Action.DELETE, id=admin))

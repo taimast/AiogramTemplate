@@ -19,7 +19,7 @@ on = Router(name=__name__)
 async def mailing(call: types.CallbackQuery, state: FSMContext):
     await call.message.answer(
         "Напишите или перешлите сообщение, которое хотите разослать.",
-        reply_markup=helper_kbs.custom_back("admin")
+        reply_markup=helper_kbs.custom_back_kb("admin")
     )
     await state.set_state("mailing")
 

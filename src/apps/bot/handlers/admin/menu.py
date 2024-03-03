@@ -3,6 +3,7 @@ from aiogram.filters import Command, StateFilter, CommandObject
 from aiogram.fsm.context import FSMContext
 
 from src.config import Settings
+from src.db.models import User
 from ...callback_data.actions import Action
 from ...callback_data.admin import AdminCallback
 from ...commands.bot_commands import AdminCommands
@@ -37,6 +38,9 @@ async def delete_admin(
         state: FSMContext
 ):
     data = await state.get_data()
+    if callback_data.id == call.from_user.id:
+        await call.answer("Нельзя удалить самого себя")
+        return
     key = f"admin_{callback_data.id}"
     if key in data:
         settings.bot.admins.remove(callback_data.id)
@@ -60,7 +64,7 @@ async def create_admin(
 ):
     await call.message.answer(
         "Введите id админа",
-        reply_markup=helper_kbs.custom_back_kb("admin")
+        reply_markup=helper_kbs.custom_back_kb(cd="admin")
     )
     await state.set_state("admin:create")
 
@@ -75,7 +79,7 @@ async def create_admin_id(message: types.Message, settings: Settings, state: FSM
     if admin_id in settings.bot.admins:
         await message.answer("Админ уже существует")
         return
-    settings.bot.admins.append(admin_id)
+    settings.bot.admins.add(admin_id)
     settings.dump()
     await message.answer(
         f"Админ {admin_id} создан",

