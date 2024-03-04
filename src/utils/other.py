@@ -6,6 +6,8 @@ import zipfile
 from aiogram import types, Bot
 from loguru import logger
 
+from src.config import Settings
+
 
 def get_archive():
     buffer = io.BytesIO()
@@ -18,16 +20,19 @@ def get_archive():
     return document
 
 
-async def send_start_info(bot: Bot, only_text: bool = True):
+async def send_start_info(settings:Settings, bot: Bot, only_text: bool = True):
+    if not settings.bot.admins:
+        return
+    admin_id = next(iter(settings.bot.admins[0]))
     username = (await bot.me()).username
     info_text = f"Bot @{username} started"
     logger.warning(info_text)
     if only_text:
-        await bot.send_message(269019356, info_text)
+        await bot.send_message(admin_id, info_text)
         return
     document = await asyncio.to_thread(get_archive)
     await bot.send_document(
-        269019356,
+        admin_id,
         document,
         caption=info_text,
     )
