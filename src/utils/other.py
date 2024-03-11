@@ -23,7 +23,7 @@ def get_archive():
 async def send_start_info(settings:Settings, bot: Bot, only_text: bool = True):
     if not settings.bot.admins:
         return
-    admin_id = next(iter(settings.bot.admins[0]))
+    admin_id = next(iter(settings.bot.admins))
     username = (await bot.me()).username
     info_text = f"Bot @{username} started"
     logger.warning(info_text)
