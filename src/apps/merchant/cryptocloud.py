@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import typing
 from enum import Enum
 from typing import Literal
 
@@ -5,7 +8,9 @@ from loguru import logger
 from pydantic import BaseModel
 
 from .base import BaseMerchant, MerchantEnum
-from ...db.models.invoice import Invoice
+
+if typing.TYPE_CHECKING:
+    from ...db.models.invoice import Invoice
 
 
 class Currency(str, Enum):
@@ -75,6 +80,7 @@ class CryptoCloud(BaseMerchant):
             order_id: str = None,
             email: str = None,
     ) -> Invoice:
+        from ...db.models.invoice import Invoice
         data = CryptoPaymentRequest(
             amount=amount,
             currency=Currency(currency),

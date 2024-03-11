@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+import typing
 import uuid
 from base64 import b64encode
 from enum import Enum
@@ -7,7 +10,9 @@ from typing import Optional, Literal
 from pydantic import BaseModel, validator
 
 from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
-from ...db.models.invoice import Invoice
+
+if typing.TYPE_CHECKING:
+    from ...db.models.invoice import Invoice
 
 
 class Amount(BaseModel):
@@ -105,6 +110,7 @@ class YooKassa(BaseMerchant):
             currency: str = "RUB",
             return_url: str = "https://t.me/"  # todo L2 14.08.2022 19:02 taima: прописать url
     ) -> Invoice:
+        from ...db.models.invoice import Invoice
         data = YooPaymentRequest(
             amount=Amount(currency=currency, value=str(amount)),
             confirmation=ConfirmationRequest(return_url=return_url),

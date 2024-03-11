@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import typing
 from enum import StrEnum
 from typing import ClassVar
 
@@ -6,8 +9,10 @@ from pydantic import SecretStr, BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .base import BaseMerchant
-from ...db.models import User
-from ...db.models.invoice import Invoice, Currency
+
+if typing.TYPE_CHECKING:
+    from ...db.models.invoice import Invoice, Currency
+    from ...db.models import User
 
 
 class State(StrEnum):
@@ -73,7 +78,7 @@ class USDT(BaseMerchant):
             session: AsyncSession,
             user: User,
             amount: int | float | str,
-            currency: Currency = Currency.USDT,
+            currency: Currency = "USDT",
             **kwargs
     ) -> Invoice:
         pass

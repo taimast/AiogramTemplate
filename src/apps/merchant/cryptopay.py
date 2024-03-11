@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 from typing import Literal, Any
 from unittest.mock import Mock
@@ -11,7 +13,10 @@ except ImportError:
 from pydantic import validator
 
 from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
-from ...db.models.invoice import Invoice
+import typing
+
+if typing.TYPE_CHECKING:
+    from ...db.models.invoice import Invoice
 
 
 class CryptoPay(BaseMerchant):
@@ -30,6 +35,7 @@ class CryptoPay(BaseMerchant):
             description: str | None = None,
             **kwargs
     ) -> Invoice:
+        from ...db.models.invoice import Invoice
         invoice = await self.cp.create_invoice(
             asset=currency,
             amount=amount,

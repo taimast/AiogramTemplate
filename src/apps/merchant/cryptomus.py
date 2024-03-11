@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 import asyncio
+import typing
 import uuid
 from typing import Literal, Optional, Any
 
 from pydantic import Field, validator
 
 from .base import BaseMerchant, MerchantEnum
-from ...db.models import Currency
-from ...db.models.invoice import Invoice
+
+if typing.TYPE_CHECKING:
+    from ...db.models.invoice import Invoice
+    from ...db.models.invoice import Currency
 
 try:
     from pyCryptomusAPI import Invoice as CryptomusInvoice, pyCryptomusAPI
@@ -33,10 +38,11 @@ class Cryptomus(BaseMerchant):
             self,
             user_id: int,
             amount: int | float | str,
-            currency: Currency = "USD",
+            currency: 'Currency' = "USD",
             description: str | None = None,
             **kwargs
     ) -> Invoice:
+        from ...db.models.invoice import Invoice
         order_id = uuid.uuid4().hex
         invoice: CryptomusInvoice = await asyncio.to_thread(
             self.client.create_invoice,

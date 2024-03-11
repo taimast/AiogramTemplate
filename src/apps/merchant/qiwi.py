@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datetime
 from typing import Optional, Literal
 
@@ -9,7 +11,10 @@ except ImportError:
 from pydantic import validator
 
 from .base import PAYMENT_LIFETIME, TIME_ZONE, BaseMerchant, MerchantEnum
-from ...db.models import Invoice
+import typing
+
+if typing.TYPE_CHECKING:
+    from ...db.models import Invoice
 
 
 # todo L1 24.11.2022 18:29 taima: Использовать кастомную платежную систему вместо модуля glQiwiApi
@@ -35,6 +40,7 @@ class Qiwi(BaseMerchant):
             description: str = None,
             email: str = None,
     ) -> Invoice:
+        from ...db.models import Invoice
         bill = await self.client.create_p2p_bill(
             amount=amount,
             comment=description or f"Product {amount}",

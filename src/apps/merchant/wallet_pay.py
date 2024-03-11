@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import datetime
+import typing
 import uuid
 from typing import Optional, Literal
 
@@ -6,7 +9,9 @@ from WalletPay import AsyncWalletPayAPI
 from pydantic import validator
 
 from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
-from ...db.models.invoice import Invoice
+
+if typing.TYPE_CHECKING:
+    from ...db.models.invoice import Invoice
 
 
 class WalletPay(BaseMerchant):
@@ -32,6 +37,7 @@ class WalletPay(BaseMerchant):
             email: str = None,
             **kwargs
     ) -> Invoice:
+        from ...db.models.invoice import Invoice
         external_id = str(uuid.uuid4())
         order = await self.client.create_order(
             amount=amount,
