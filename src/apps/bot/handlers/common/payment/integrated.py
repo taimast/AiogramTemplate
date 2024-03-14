@@ -17,7 +17,7 @@ async def process_callback_pay(call: types.CallbackQuery):
         provider_token=PAYMENT_PROVIDE_TOKEN,
         currency='rub',
         prices=[
-            types.LabeledPrice(label='1 месяц', amount=84 * 100),
+            types.LabeledPrice(label='1 месяц', amount=10 * 100),
             # types.LabeledPrice(label='Test2', amount=20000)
         ],
         start_parameter='test-invoice',
