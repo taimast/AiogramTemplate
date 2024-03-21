@@ -27,6 +27,7 @@ yoomoney = "^0.1.0"
 requests = "^2.31.0"
 bs4 = "^0.0.2"
 lxml = "^5.1.0"
+stripe = "^8.7.0"
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^3.0.0"
