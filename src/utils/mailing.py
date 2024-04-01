@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from typing import ClassVar, Self
 
 from aiogram import types, Bot
+from aiogram.exceptions import TelegramRetryAfter
 from aiogram.utils import markdown as md
 from loguru import logger
 
@@ -17,7 +18,7 @@ class Mailing:
     failed: int = 0
     status_message: types.Message | None = None
     current_emoji: str = "⏳ In progress"
-    update_interval: float = 0.6
+    update_interval: float = 1.0
     send_interval: float = 0.4
     delete_interval: float = 0.2
 
@@ -55,22 +56,32 @@ class Mailing:
                 logger.warning(f"Error while updating status message: {e}")
 
     async def send(self, bot: Bot, user_id: int, message: types.Message):
-        try:
-            sm = await bot.copy_message(
-                user_id,
-                message.chat.id,
-                message.message_id,
-            )
-            self.messages.append((user_id, sm.message_id))
-            self.success += 1
-        except Exception as e:
-            self.failed += 1
-            logger.warning(f"Error while sending message to {user_id}: {e}")
+        sm = await bot.copy_message(
+            user_id,
+            message.chat.id,
+            message.message_id,
+        )
+        self.messages.append((user_id, sm.message_id))
+        self.success += 1
 
     async def send_to_all(self, bot: Bot, user_ids: list[int], message: types.Message):
         for user in user_ids:
-            await self.send(bot, user, message)
-            await asyncio.sleep(self.send_interval)
+            try:
+                await self.send(bot, user, message)
+            except Exception as e:
+                self.failed += 1
+                logger.warning(f"Error while sending message to {user}: {e}")
+
+            except TelegramRetryAfter as e:
+                logger.warning(f"Telegram API limit exceeded: {e}")
+                await asyncio.sleep(e.retry_after)
+                try:
+                    await self.send(bot, user, message)
+                except Exception as e:
+                    self.failed += 1
+                    logger.error(f"Error while sending message to {user}: {e}")
+            finally:
+                await asyncio.sleep(self.send_interval)
 
     async def done(self):
         await self.status_message.edit_text(
