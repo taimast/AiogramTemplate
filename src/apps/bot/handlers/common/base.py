@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 from aiogram import Router, types, F, Bot
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
+from aiogram.types import ReactionTypeEmoji
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.apps.bot.commands.bot_commands import BaseCommands
@@ -46,7 +47,10 @@ async def start(
     await state.clear()
     if isinstance(msg, types.CallbackQuery):
         msg = msg.message
-    await msg.answer(
+    sm = await msg.answer(
         l10n.start(name=msg.from_user.full_name),
         reply_markup=common_kbs.inline_start()
     )
+    await sm.react([ReactionTypeEmoji(emoji="👍")])
+
+
