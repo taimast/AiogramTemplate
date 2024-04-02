@@ -18,7 +18,7 @@ class Mailing:
     failed: int = 0
     status_message: types.Message | None = None
     current_emoji: str = "⏳ In progress"
-    update_interval: float = 1.0
+    update_interval: float = 5.0
     send_interval: float = 0.4
     delete_interval: float = 0.2
 
@@ -82,6 +82,27 @@ class Mailing:
                     logger.error(f"Error while sending message to {user}: {e}")
             finally:
                 await asyncio.sleep(self.send_interval)
+
+    async def send_notifications(self, bot: Bot, user_ids: list[int], message: types.Message):
+        batch_size = 25  # количество сообщений в одной партии
+        sleep_time = 1  # время паузы в секундах между партиями
+
+        for i in range(0, len(user_ids), batch_size):
+            tasks = []
+            for user in user_ids[i:i + batch_size]:
+                tasks.append(asyncio.create_task(self.send(bot, user, message)))
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            next_sleep = sleep_time
+            for result in results:
+                if isinstance(result, TelegramRetryAfter):
+                    logger.warning(f"Telegram API limit exceeded: {result}")
+                    next_sleep = max(next_sleep, result.retry_after)
+                elif isinstance(result, Exception):
+                    self.failed += 1
+                    logger.error(f"Error while sending message: {result}")
+
+            await asyncio.sleep(next_sleep)
 
     async def done(self):
         await self.status_message.edit_text(
