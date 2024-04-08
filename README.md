@@ -17,6 +17,9 @@
   - [Payeer](https://payeer.com/)
   - [Cryptomus](https://cryptomus.com/)
   - [WalletPay](https://pay.wallet.tg/)
+  - [Payok](https://payok.io/)
+  - [Aaio](https://aaio.so/)
+  - [BetaTransfer](https://betatransfer.io/)
 
 - Command Line (CLI)
 - Configuring the Webhook
