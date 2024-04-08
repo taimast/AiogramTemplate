@@ -3,14 +3,10 @@ from __future__ import annotations
 import datetime
 from typing import Literal, Any
 from unittest.mock import Mock
+from CryptoPayAPI import CryptoPay as CryptoPayAPI, schemas
 
-try:
-    from CryptoPayAPI import CryptoPay as CryptoPayAPI, schemas
-except ImportError:
-    CryptoPayAPI = Any
-    schemas = Mock()
 
-from pydantic import validator
+from pydantic import validator, field_serializer
 
 from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
 import typing
@@ -20,12 +16,17 @@ if typing.TYPE_CHECKING:
 
 
 class CryptoPay(BaseMerchant):
-    cp: CryptoPayAPI | None
+    cp: CryptoPayAPI | None = None
     merchant: Literal[MerchantEnum.CRYPTO_PAY]
 
     @validator('cp', always=True)
     def validate_cp(cls, v, values):
         return v or CryptoPayAPI(values.get("api_key").get_secret_value())
+
+    @field_serializer('cp')
+    def serialize_cp(cp: CryptoPayAPI | None) -> Any:
+        return None
+
 
     async def create_invoice(
             self,

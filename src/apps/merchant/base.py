@@ -31,8 +31,10 @@ class MerchantEnum(StrEnum):
     CRYPTOMUS = "cryptomus"
     WALLET_PAY = "wallet_pay"
     STRIPE = "stripe"
-
-
+    TRIBUTE = "tribute"
+    BETA_TRANSFER_PAY = "beta_transfer_pay"
+    PAYOK = "payok"
+    AAIO = "aaio"
 class BaseMerchant(BaseModel, ABC):
     shop_id: Optional[str] = None
     api_key: SecretStr

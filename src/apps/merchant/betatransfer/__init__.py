@@ -1,0 +1,1 @@
+from .merchant import BetaTransferPay

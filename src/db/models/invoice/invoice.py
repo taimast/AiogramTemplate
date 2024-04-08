@@ -45,7 +45,7 @@ class Invoice(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     user: Mapped[User] = relationship(back_populates="invoices")
-    currency: Mapped[Currency | None]
+    currency: Mapped[str | None]
     amount: Mapped[float | None]
     invoice_id: Mapped[str] = mapped_column(String(50), index=True)
     expire_at: Mapped[datetime.datetime | None] = mapped_column(

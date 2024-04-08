@@ -18,7 +18,7 @@ class Mailing:
     failed: int = 0
     status_message: types.Message | None = None
     current_emoji: str = "⏳ In progress"
-    update_interval: float = 5.0
+    update_interval: float = 10
     send_interval: float = 0.4
     delete_interval: float = 0.2
 
@@ -43,23 +43,27 @@ class Mailing:
             reply_markup=self.cancel_markup
         )
 
+    async def update_status(self):
+        self.current_emoji = "⏳ In progress" if self.current_emoji == "⌛ In progress" else "⌛ In progress"
+        try:
+            await self.status_message.edit_text(
+                self.status_template,
+                reply_markup=self.cancel_markup
+            )
+        except Exception as e:
+            logger.warning(f"Error while updating status message: {e}")
+
     async def live_updating_status(self):
         while True:
             await asyncio.sleep(self.update_interval)
-            self.current_emoji = "⏳ In progress" if self.current_emoji == "⌛ In progress" else "⌛ In progress"
-            try:
-                await self.status_message.edit_text(
-                    self.status_template,
-                    reply_markup=self.cancel_markup
-                )
-            except Exception as e:
-                logger.warning(f"Error while updating status message: {e}")
+            await self.update_status()
 
-    async def send(self, bot: Bot, user_id: int, message: types.Message):
+    async def send(self, bot: Bot, user_id: int, message: types.Message, rm=None):
         sm = await bot.copy_message(
             user_id,
             message.chat.id,
             message.message_id,
+            reply_markup=rm
         )
         self.messages.append((user_id, sm.message_id))
         self.success += 1
@@ -83,14 +87,14 @@ class Mailing:
             finally:
                 await asyncio.sleep(self.send_interval)
 
-    async def send_notifications(self, bot: Bot, user_ids: list[int], message: types.Message):
+    async def send_notifications(self, bot: Bot, user_ids: list[int], message: types.Message, rm=None):
         batch_size = 25  # количество сообщений в одной партии
         sleep_time = 1  # время паузы в секундах между партиями
 
         for i in range(0, len(user_ids), batch_size):
             tasks = []
             for user in user_ids[i:i + batch_size]:
-                tasks.append(asyncio.create_task(self.send(bot, user, message)))
+                tasks.append(asyncio.create_task(self.send(bot, user, message, rm)))
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
             next_sleep = sleep_time

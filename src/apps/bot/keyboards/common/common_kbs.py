@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup
+from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, WebAppInfo
 
 from src.apps.bot.keyboards.common.helper_kbs import (
     CustomReplyKeyboardBuilder,
@@ -14,5 +14,6 @@ def start() -> ReplyKeyboardMarkup:
 
 def inline_start() -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
-    builder.add_start_back()
+    builder.button(text="start", url="https://t.me/")
+    # builder.add_start_back()
     return builder.as_markup(resize_keyboard=True)
