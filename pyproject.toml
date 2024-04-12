@@ -29,6 +29,8 @@ bs4 = "^0.0.2"
 lxml = "^5.1.0"
 stripe = "^8.7.0"
 aaioapi = "^2.5.6"
+pypayment = "^1.7.14"
+pycryptopay-sdk = {git = "https://github.com/taimast/pyCryptoPayAPI.git"}
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^3.0.0"
