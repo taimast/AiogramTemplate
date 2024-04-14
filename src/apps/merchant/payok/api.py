@@ -249,23 +249,3 @@ def createPay(
     url = f"https://payok.io/pay?amount={amount}&payment={payment}&desc={desc}&shop={shop}&sign={sign}&email={email}&success_url=&method={method}&customparam={custom}"
     return url
 
-
-def main():
-    API_ID = 5692
-    API_KEY = '1645ABFABE273AB80BBEC4339EADA9F9-3B4D201FF2C67115753A20A32B3B37B2-1559A15B776D405F5D90987DDE9EE829'
-    SECRET = "d262f6752bb52a31068bf25cb4b0666c"
-    # balance = getBalance(
-    #     5692,
-    #     '1645ABFABE273AB80BBEC4339EADA9F9-3B4D201FF2C67115753A20A32B3B37B2-1559A15B776D405F5D90987DDE9EE829'
-    # )
-    invoice = createPay(
-        SECRET,
-        100,
-        "UAH",
-        API_ID,
-        "Description"
-    )
-    print(invoice)
-
-if __name__ == '__main__':
-    main()
