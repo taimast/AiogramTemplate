@@ -13,7 +13,7 @@ class BaseQuery:
         instance = await cls.get_or_none(session, **kwargs)
         if instance is not None:
             return instance, False
-        instance = await cls.create(session, **kwargs, **(defaults or {}))
+        instance = cls.create(session, **kwargs, **(defaults or {}))
         return instance, True
 
     @classmethod
@@ -31,7 +31,7 @@ class BaseQuery:
         return result.unique().scalar_one_or_none()
 
     @classmethod
-    async def create(cls: type[T], session: AsyncSession, **kwargs) -> T:
+    def create(cls: type[T], session: AsyncSession, **kwargs) -> T:
         # ignore extra kwargs
         # todo L1 TODO 17.04.2023 2:59 taima:  use `cls.__table__.columns` instead of `hasattr(cls, k)`
         valid_columns = {c.name for c in cls.__table__.columns}
