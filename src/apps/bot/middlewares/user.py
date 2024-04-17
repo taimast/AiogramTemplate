@@ -21,7 +21,7 @@ class UserMiddleware(BaseMiddleware):
         db_user = await User.get_or_none(session, id=user.id)
         if not db_user:
             logger.info(f"Новый пользователь {user=}")
-            db_user = await User.create(session, **user.model_dump(exclude={"language_code"}))
+            db_user = User.create(session, **user.model_dump(exclude={"language_code"}))
             await session.commit()
 
         data["user"] = db_user
