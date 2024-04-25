@@ -37,7 +37,7 @@ async def add_buttons(message: types.Message, state: FSMContext):
 
 @on.message(StateFilter("pre-mailing"))
 @on.callback_query(F.data == "send_mailing")
-async def mailing_send(message: types.Message, session: AsyncSession, total_admin: bool, bot: Bot, state: FSMContext):
+async def mailing_send(message: types.Message, session: AsyncSession, bot: Bot, state: FSMContext):
     data = await state.get_data()
     send_message: types.Message = data.get("send_message")
     if isinstance(message, types.CallbackQuery):
@@ -65,7 +65,7 @@ async def mailing_send(message: types.Message, session: AsyncSession, total_admi
 
 
 @on.callback_query(F.data == "confirm_mailing")
-async def mailing_send(call: types.CallbackQuery, session: AsyncSession, total_admin: bool, bot: Bot,
+async def mailing_send(call: types.CallbackQuery, session: AsyncSession, bot: Bot,
                        state: FSMContext):
     data = await state.get_data()
     send_message: types.Message = data.get("send_message")
@@ -118,7 +118,7 @@ async def mailing_send(call: types.CallbackQuery, session: AsyncSession, total_a
 
 
 @on.callback_query(AdminCallback.filter_retract_last_mailing())
-async def retract_last_mailing(call: types.CallbackQuery, total_admin: bool, bot: Bot):
+async def retract_last_mailing(call: types.CallbackQuery, bot: Bot):
     mailing_obj = Mailing.get_last()
     if mailing_obj:
 

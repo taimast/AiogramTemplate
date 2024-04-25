@@ -13,6 +13,8 @@ class EditMessageMiddleware(BaseMiddleware):
     ) -> Any:
         if isinstance(event, Message):
             data["edit"] = event.answer
+            data["orig_msg"] = event
         elif isinstance(event, CallbackQuery):
             data["edit"] = event.message.edit_text
+            data["orig_msg"] = event.message
         return await handler(event, data)
