@@ -8,7 +8,7 @@ from enum import StrEnum
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-
+from aiogram.utils import markdown as md
 from .base import BaseUser
 
 if typing.TYPE_CHECKING:
@@ -34,3 +34,11 @@ class User(BaseUser):
 
     def pretty(self):
         return f"{self.full_name} @{self.username}"
+
+
+    @property
+    def link(self):
+        user_link = md.hlink(user.full_name, f"tg://user?id={self.id}")
+        if self.username:
+            user_link = md.hlink(user.full_name, f"https://t.me/{self.username}")
+        return user_link
