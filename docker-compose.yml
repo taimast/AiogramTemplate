@@ -17,7 +17,7 @@ services:
 #    image: postgres:14
 #    restart: always
 #    environment:
-#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_PASSWORD: some_big_password
 #      POSTGRES_USER: postgres
 #      POSTGRES_DB: src
 #    #    ports:

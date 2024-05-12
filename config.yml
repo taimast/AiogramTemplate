@@ -8,8 +8,8 @@ db:
 
 #db:
 #  user: postgres
-#  password: postgres
-#  database: src
+#  password: aiogramtemplate
+#  database: aiogramtemplate
 #  host: localhost
 #  port: 5432
 

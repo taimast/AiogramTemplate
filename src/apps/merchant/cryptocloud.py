@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import typing
 from enum import Enum
 from typing import Literal
@@ -7,7 +8,7 @@ from typing import Literal
 from loguru import logger
 from pydantic import BaseModel
 
-from .base import BaseMerchant, MerchantEnum
+from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
 
 if typing.TYPE_CHECKING:
     from ...db.models.invoice import Invoice
@@ -101,6 +102,7 @@ class CryptoCloud(BaseMerchant):
                 order_id=order_id,
                 email=email,
                 merchant=self.merchant,
+                expire_at=datetime.datetime.now() + datetime.timedelta(seconds=PAYMENT_LIFETIME)
             )
         logger.error(f"Error create invoice {response}")
         raise Exception(f"Error create invoice {response}")

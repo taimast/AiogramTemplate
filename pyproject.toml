@@ -10,11 +10,11 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
 uvloop = { version = ">=0.17.0", markers = "sys_platform != 'win32'" }
+aiogram = "^3.6.0"
+pydantic = "^2.7.1"
 loguru = "^0.7.0"
 PyYAML = "^6.0"
-aiogram = "^3.4.1"
 APScheduler = { version = "^4.0.0a4", allow-prereleases = true }
-pydantic = "^2.0.3"
 fluentogram = "^1.1.6"
 sqlalchemy = "^2.0.9"
 psycopg2 = "^2.9.6"

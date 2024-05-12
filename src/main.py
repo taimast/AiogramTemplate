@@ -50,7 +50,6 @@ async def main():
         translator_hub=translator_hub,
         fsm_strategy=FSMStrategy.GLOBAL_USER
     )
-
     # Register startup and shutdown handlers
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
