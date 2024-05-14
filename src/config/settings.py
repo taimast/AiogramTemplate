@@ -111,4 +111,4 @@ class Settings(BaseSettings):
 
     def dump(self):
         with open(BASE_DIR / self.model_config["config_file"], "w", encoding="utf-8") as f:
-            yaml.dump(self.model_dump(mode="json"), f, allow_unicode=True, sort_keys=False)
+            yaml.dump(self.model_dump(mode="json", exclude_none=True), f, allow_unicode=True, sort_keys=False)

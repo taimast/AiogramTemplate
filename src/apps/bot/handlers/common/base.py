@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import pprint
 from typing import TYPE_CHECKING
 
 from aiogram import Router, types, F, Bot
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReactionTypeEmoji
+from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from src.apps.bot.commands.bot_commands import BaseCommands
 from src.apps.bot.keyboards.common import common_kbs
+from src.apps.bot.keyboards.common.helper_kbs import md
 from src.db.models import User
 
 if TYPE_CHECKING:
@@ -51,6 +53,4 @@ async def start(
         l10n.start(name=msg.from_user.full_name),
         reply_markup=common_kbs.inline_start()
     )
-    await sm.react([ReactionTypeEmoji(emoji="👍")])
-
-
+    await msg.react([ReactionTypeEmoji(emoji="👍")])
