@@ -65,12 +65,12 @@ class {prefix.title()}Callback(ActionMixin, CallbackData, prefix="{prefix}"):
 # path = r"G:\CodeProjects\PycharmProjects\AiogramProjectTemplate\project\src\apps\bot\callback_data\admin.py"
 # Path(path).write_text(generated_code, "utf-8")
 
-def generate_all_callbacks():
+def generate_all_callbacks(action_name: str = "Action"):
     # Получаем список всех actions из файла actions.py
     actions = [obj for name, obj in inspect.getmembers(sys.modules[__name__]) if
                inspect.isclass(obj) and issubclass(obj, StrEnum)]
     # filter out all Action classes
-    actions = [action for action in actions if "Action" in action.__name__]
+    actions = [action for action in actions if action_name in action.__name__]
 
     # Для каждого action генерируем Callback и сохраняем в новый модуль
     for action in actions:

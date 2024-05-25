@@ -2,9 +2,10 @@ from typing import Sequence, Iterable
 
 from aiogram.types import InlineKeyboardMarkup
 
-from src.apps.bot.callback_data.actions import Action
+from src.apps.bot.callback_data.actions import Action, AdminAction
 from src.apps.bot.callback_data.admin import AdminCallback
 from src.apps.bot.keyboards.common.helper_kbs import CustomInlineKeyboardBuilder
+from src.config import Settings
 
 
 # todo 5/31/2022 2:33 PM taima: разделить основно функционал
@@ -63,5 +64,16 @@ def admin_button() -> InlineKeyboardMarkup:
 
 def back() -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
+    builder.add_admin_back()
+    return builder.as_markup()
+def edit_texts(sett:Settings):
+    builder = CustomInlineKeyboardBuilder()
+    for name, field in sett.bot.texts.model_fields.items():
+        builder.button(
+            text=field.title,
+            callback_data=AdminCallback(action=AdminAction.EDIT_TEXT, data=name)
+        )
+
+    builder.adjust(2)
     builder.add_admin_back()
     return builder.as_markup()

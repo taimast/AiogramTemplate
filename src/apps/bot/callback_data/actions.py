@@ -21,3 +21,5 @@ class AdminAction(StrEnum):
     EXPORT_USERS = "export_users"
     RETRACT_LAST_MAILING = "retract_last_mailing"
     MAILING_CANCEL = "mailing_cancel"
+    EDIT_TEXTS = "edit_texts"
+    EDIT_TEXT = "edit_text"

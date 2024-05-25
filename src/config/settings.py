@@ -54,12 +54,14 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
                 d[field_key] = field_value
         return d
 
-
+class BotTexts(BaseModel):
+    start_message:str = Field(default="Привет! Выберите действие: 🎈", title="Приветственное сообщение")
 
 class BotSettings(BaseModel):
     token: SecretStr
     admins: set[int] = Field(default_factory=set)
     super_admins: list[int] = Field(default_factory=list)
+    texts: BotTexts = Field(default_factory=BotTexts)
 
     @model_validator(mode="after")
     def validate_all(self):
