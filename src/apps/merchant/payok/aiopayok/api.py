@@ -19,11 +19,11 @@ class Payok(BaseClient):
     API_DOCS = 'https://payok.io/cabinet/documentation/doc_main.php'
 
     def __init__(
-        self,
-        api_id: int,
-        api_key: str,
-        secret_key: Optional[str] = None,
-        shop: Optional[int] = None,
+            self,
+            api_id: int,
+            api_key: str,
+            secret_key: Optional[str] = None,
+            shop: Optional[int] = None,
     ) -> None:
         '''
         Init Payok API client
@@ -50,9 +50,9 @@ class Payok(BaseClient):
         return Balance(**response)
 
     async def get_transactions(
-        self,
-        payment: Optional[Union[int, str]] = None,
-        offset: Optional[int] = None
+            self,
+            payment: Optional[Union[int, str]] = None,
+            offset: Optional[int] = None
     ) -> Union[Transaction, List[Transaction]]:
         '''
         Get transactions
@@ -84,16 +84,16 @@ class Payok(BaseClient):
         return transactions
 
     async def create_pay(
-        self,
-        amount: float,
-        payment: Union[int, str],
-        currency: Optional[str] = Currencies.RUB,
-        desc: Optional[str] = 'Description',
-        email: Optional[str] = None,
-        success_url: Optional[str] = None,
-        method: Optional[str] = None,
-        lang: Optional[str] = None,
-        custom: Optional[str] = None
+            self,
+            amount: float,
+            payment: Union[int, str],
+            currency: Optional[str] = Currencies.RUB,
+            desc: Optional[str] = 'Description',
+            email: Optional[str] = None,
+            success_url: Optional[str] = None,
+            method: Optional[str] = None,
+            lang: Optional[str] = None,
+            custom: Optional[str] = None
     ) -> str:
         '''
         Create payform url

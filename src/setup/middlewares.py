@@ -8,7 +8,6 @@ from ..apps.bot.middlewares import (
     TranslatorRunnerMiddleware,
     DBSessionMiddleware
 )
-from ..apps.bot.middlewares.edit_message import EditMessageMiddleware
 
 
 def setup_middlewares(dp: Dispatcher, session_maker: async_sessionmaker):
@@ -39,7 +38,6 @@ def setup_middlewares(dp: Dispatcher, session_maker: async_sessionmaker):
     # edit = EditMessageMiddleware()
     # dp.message.middleware(edit)
     # dp.callback_query.middleware(edit)
-
 
     # Callback answer middleware
     dp.callback_query.middleware(CallbackAnswerMiddleware())

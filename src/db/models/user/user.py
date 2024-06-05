@@ -5,10 +5,11 @@ import datetime
 import typing
 from enum import StrEnum
 
+from aiogram.utils import markdown as md
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from aiogram.utils import markdown as md
+
 from .base import BaseUser
 
 if typing.TYPE_CHECKING:
@@ -34,7 +35,6 @@ class User(BaseUser):
 
     def pretty(self):
         return f"{self.full_name} @{self.username}"
-
 
     @property
     def link(self):

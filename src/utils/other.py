@@ -23,7 +23,7 @@ def get_archive():
     return document
 
 
-async def send_start_info(settings:Settings, bot: Bot, only_text: bool = True):
+async def send_start_info(settings: Settings, bot: Bot, only_text: bool = True):
     if not settings.bot.admins:
         return
     admin_id = next(iter(settings.bot.admins))
@@ -40,7 +40,10 @@ async def send_start_info(settings:Settings, bot: Bot, only_text: bool = True):
         caption=info_text,
     )
 
+
 T = TypeVar('T')
+
+
 # Структура для вызова функции по банчам
 @dataclass
 class BatchExecutor(Generic[T]):

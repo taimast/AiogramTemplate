@@ -14,7 +14,7 @@ class Transaction(BaseModel):
     comission_percent: float
     comission_fixed: float
     amount_profit: float
-    method: str| None = None
+    method: str | None = None
     payment_id: Union[int, str]
     description: str
     date: str

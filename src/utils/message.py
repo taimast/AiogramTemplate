@@ -3,7 +3,6 @@ from typing import TypeVar
 
 from aiogram import types, Bot
 from aiogram.exceptions import TelegramBadRequest
-from aiogram.types import MessageId
 from bs4 import BeautifulSoup
 from loguru import logger
 
@@ -48,9 +47,9 @@ async def mailings(bot: Bot, text: str, users: list | int, *, reply_markup: Repl
 async def copy_mailings(
         message: types.Message,
         users: list | int, *,
-        pre_text: str | None=None,
-        after_text: str | None=None,
-                        reply_markup: ReplyMarkup = None
+        pre_text: str | None = None,
+        after_text: str | None = None,
+        reply_markup: ReplyMarkup = None
 ) -> list[types.Message]:
     """ Send message to all users in list """
     if isinstance(users, int):
@@ -70,7 +69,6 @@ async def copy_mailings(
             print(e)
         await asyncio.sleep(0.5)
     return mails
-
 
 
 async def split_sending_proper(message: types.Message,

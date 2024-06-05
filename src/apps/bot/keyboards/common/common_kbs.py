@@ -1,4 +1,4 @@
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, WebAppInfo
+from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup
 
 from src.apps.bot.keyboards.common.helper_kbs import (
     CustomReplyKeyboardBuilder,

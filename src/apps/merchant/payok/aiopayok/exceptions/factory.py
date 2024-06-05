@@ -12,7 +12,7 @@ class CodeErrorFactory(Exception):
 
     @classmethod
     def __call__(
-        cls, code: Optional[int] = None, desc: Optional[int] = None
+            cls, code: Optional[int] = None, desc: Optional[int] = None
     ) -> Union["CodeErrorFactory", Type["CodeErrorFactory"]]:
         if desc:
             return cls.exception_to_raise(code, desc)
@@ -20,7 +20,7 @@ class CodeErrorFactory(Exception):
 
     @classmethod
     def exception_to_handle(
-        cls, code: Optional[int] = None
+            cls, code: Optional[int] = None
     ) -> Type["CodeErrorFactory"]:
         if code is None:
             return cls
@@ -35,7 +35,7 @@ class CodeErrorFactory(Exception):
 
     @classmethod
     def exception_to_raise(
-        cls, code: int, desc: str
+            cls, code: int, desc: str
     ) -> "CodeErrorFactory":
         """ Returns an error with error code and error_description"""
         exception_type = type(cls.generate_exc_classname(code), (cls,), {})

@@ -22,7 +22,7 @@ md = md
 
 class CustomInlineKeyboardBuilder(_InlineKeyboardBuilder):
 
-    def row_button(self, callback_data: CallbackData|str = None, **kwargs):
+    def row_button(self, callback_data: CallbackData | str = None, **kwargs):
         if isinstance(callback_data, CallbackData):
             callback_data = callback_data.pack()
         return self.row(IKB(callback_data=callback_data, **kwargs))

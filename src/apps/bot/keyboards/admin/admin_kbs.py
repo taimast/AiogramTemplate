@@ -1,4 +1,4 @@
-from typing import Sequence, Iterable
+from typing import Iterable
 
 from aiogram.types import InlineKeyboardMarkup
 
@@ -20,11 +20,15 @@ def admin_start():
 
     builder.adjust(1)
     return builder.as_markup()
+
+
 def confirm_mailing() -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
     builder.button(text="☑️ Да", callback_data="confirm_mailing")
     builder.add_admin_back()
     return builder.as_markup()
+
+
 def created_buttons(text: str):
     builder = CustomInlineKeyboardBuilder()
     # Добавьте кнопки для сообщения в формате кнопка1-ссылка1. Каждый с новой строки. Или нажмите Пропустить
@@ -34,11 +38,14 @@ def created_buttons(text: str):
         builder.button(text=button.strip(), url=url.strip())
     builder.one_row()
     return builder.as_markup()
+
+
 def add_buttons() -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
     builder.button(text="Пропустить", callback_data="send_mailing")
     builder.add_admin_back()
     return builder.as_markup()
+
 
 def mailing_cancel():
     builder = CustomInlineKeyboardBuilder()
@@ -66,7 +73,9 @@ def back() -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
     builder.add_admin_back()
     return builder.as_markup()
-def edit_texts(sett:Settings):
+
+
+def edit_texts(sett: Settings):
     builder = CustomInlineKeyboardBuilder()
     for name, field in sett.bot.texts.model_fields.items():
         builder.button(

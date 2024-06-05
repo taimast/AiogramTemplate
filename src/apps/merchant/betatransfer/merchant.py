@@ -9,7 +9,7 @@ from pypayment import PaymentStatus
 
 from src.apps.merchant.base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
 from src.apps.merchant.betatransfer.betatransfer import BetaTrans
-from src.apps.merchant.betatransfer.methods import BTPaymentType, BTPaymentTypeRUB
+from src.apps.merchant.betatransfer.methods import BTPaymentTypeRUB
 
 if typing.TYPE_CHECKING:
     from src.db.models.invoice import Invoice

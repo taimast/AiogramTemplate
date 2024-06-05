@@ -1,10 +1,9 @@
 import asyncio
 import json
 import ssl
-import certifi
-
 from typing import Optional
 
+import certifi
 from aiohttp import ClientSession, TCPConnector
 from aiohttp.typedefs import StrOrURL
 
@@ -22,7 +21,7 @@ class BaseClient:
             It will be created on a first API request.
             The second request will use the same `self._session`.
         '''
-        self._loop = asyncio.get_event_loop() 
+        self._loop = asyncio.get_event_loop()
         self._session: Optional[ClientSession] = None
 
     def get_session(self):
@@ -59,7 +58,6 @@ class BaseClient:
             raise PayokAPIError(code, desc)
 
         return response
-
 
     def __del__(self):
         if self._session:

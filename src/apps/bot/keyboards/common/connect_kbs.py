@@ -23,6 +23,7 @@ def connect(user_id: int, l10n: TranslatorRunner) -> InlineKeyboardMarkup:
     # )
     return builder.as_markup()
 
+
 def is_done() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     builder.button(

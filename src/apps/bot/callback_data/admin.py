@@ -5,9 +5,9 @@ from .mixins import ActionMixin
 
 
 class AdminCallback(ActionMixin, prefix="admin"):
-    id:int|None = None
+    id: int | None = None
     action: Action | AdminAction
-    data: str |None = None
+    data: str | None = None
 
     @classmethod
     def stats(cls):

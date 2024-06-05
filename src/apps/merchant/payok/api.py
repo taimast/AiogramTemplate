@@ -9,17 +9,17 @@ __all__ = [
 ]
 __version__ = "0.1"
 __author__ = "except - lolz.guru/members/2977610"
+
 import hashlib
 import urllib.parse
 
 import requests
 
 
-
 def getBalance(
         API_ID: int,
         API_KEY: str
-    ) -> dict[float,float]:
+) -> dict[float, float]:
     """
     Args:
         API_ID (int): ID вашего ключа API
@@ -69,9 +69,9 @@ def getTransaction(
         API_ID: int,
         API_KEY: str,
         shop: int,
-        payment = None,
+        payment=None,
         offset: int = None
-    ) -> dict:
+) -> dict:
     """
     Args:
         API_ID (int): ID вашего ключа API
@@ -114,7 +114,7 @@ def getPayout(
         API_KEY: str,
         payout_id: int = None,
         offset: int = None
-    ) -> dict:
+) -> dict:
     """
     Args:
         API_ID (int): ID вашего ключа API
@@ -149,6 +149,7 @@ def getPayout(
             response
         )
 
+
 def createPayout(
         API_ID: int,
         API_KEY: str,
@@ -157,7 +158,7 @@ def createPayout(
         reciever: str,
         comission_type: str,
         webhook_url: str = None
-    ) -> dict:
+) -> dict:
     """
     Args:
         API_ID (int): ID вашего ключа API
@@ -197,19 +198,20 @@ def createPayout(
             response
         )
 
+
 def createPay(
-    secret : str,
-    amount: float,
-    payment: str,
-    shop: int,
-    desc: str,
-    currency: str = "RUB",
-    email: str = None,
-    success_url: str = None,
-    method: str = None,
-    lang: str = None,
-    custom = None,
-    ) -> str:
+        secret: str,
+        amount: float,
+        payment: str,
+        shop: int,
+        desc: str,
+        currency: str = "RUB",
+        email: str = None,
+        success_url: str = None,
+        method: str = None,
+        lang: str = None,
+        custom=None,
+) -> str:
     """
     Args:
         secret (str): SECRET KEY (Узнайте свой секретный ключ в личном кабинете)
@@ -228,12 +230,12 @@ def createPay(
         str: url
     """
     data = [
-           amount,
-           payment,
-           shop,
-           currency,
-           desc,
-           secret
+        amount,
+        payment,
+        shop,
+        currency,
+        desc,
+        secret
     ]
     sign = hashlib.md5(
         "|".join(
@@ -244,8 +246,7 @@ def createPay(
         ).encode("utf-8")
     ).hexdigest()
     desc = urllib.parse.quote_plus(desc)
-    success_url= urllib.parse.quote_plus(success_url)
+    success_url = urllib.parse.quote_plus(success_url)
     lang = urllib.parse.quote_plus(lang)
     url = f"https://payok.io/pay?amount={amount}&payment={payment}&desc={desc}&shop={shop}&sign={sign}&email={email}&success_url=&method={method}&customparam={custom}"
     return url
-

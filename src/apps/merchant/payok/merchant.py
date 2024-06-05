@@ -9,8 +9,7 @@ from pydantic import validator, field_serializer
 from pypayment import PaymentStatus
 
 from src.apps.merchant.base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
-from src.apps.merchant.betatransfer.betatransfer import BetaTrans
-from src.apps.merchant.betatransfer.methods import BTPaymentType, BTPaymentTypeRUB
+from src.apps.merchant.betatransfer.methods import BTPaymentTypeRUB
 from src.apps.merchant.payok.aiopayok import Payok
 
 if typing.TYPE_CHECKING:
@@ -19,7 +18,7 @@ if typing.TYPE_CHECKING:
 
 class PayokPay(BaseMerchant):
     api_id: int
-    secret:str
+    secret: str
     client: Optional[Payok] = None
     merchant: Literal[MerchantEnum.PAYOK]
 
@@ -36,9 +35,11 @@ class PayokPay(BaseMerchant):
             return Payok(api_id, api_key, secret, shop_id)
 
         return v
+
     @field_serializer('client')
     def serialize_cp(cp: Payok | None) -> typing.Any:
         return None
+
     async def create_invoice(
             self,
             user_id: int,

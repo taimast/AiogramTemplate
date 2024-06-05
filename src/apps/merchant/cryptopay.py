@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 import datetime
+import typing
 from typing import Literal, Any
-from unittest.mock import Mock
+
 from CryptoPayAPI import CryptoPay as CryptoPayAPI, schemas
-
-
 from pydantic import validator, field_serializer
 
 from .base import BaseMerchant, MerchantEnum, PAYMENT_LIFETIME
-import typing
 
 if typing.TYPE_CHECKING:
     from ...db.models.invoice import Invoice
@@ -26,7 +24,6 @@ class CryptoPay(BaseMerchant):
     @field_serializer('cp')
     def serialize_cp(cp: CryptoPayAPI | None) -> Any:
         return None
-
 
     async def create_invoice(
             self,

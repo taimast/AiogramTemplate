@@ -54,8 +54,10 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
                 d[field_key] = field_value
         return d
 
+
 class BotTexts(BaseModel):
-    start_message:str = Field(default="Привет! Выберите действие: 🎈", title="Приветственное сообщение")
+    start_message: str = Field(default="Привет! Выберите действие: 🎈", title="Приветственное сообщение")
+
 
 class BotSettings(BaseModel):
     token: SecretStr

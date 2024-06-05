@@ -3,7 +3,6 @@ from aiogram.filters import Command, StateFilter, CommandObject
 from aiogram.fsm.context import FSMContext
 
 from src.config import Settings
-from src.db.models import User
 from ...callback_data.actions import Action, AdminAction
 from ...callback_data.admin import AdminCallback
 from ...commands.bot_commands import AdminCommands
@@ -122,9 +121,8 @@ async def sm(message: types.Message, command: CommandObject, settings: Settings)
     sm = await message.answer("Отправлено")
 
 
-
 @on.callback_query(AdminCallback.filter(F.action == AdminAction.EDIT_TEXTS))
-async def edit_texts(call: types.CallbackQuery,settings:Settings, state: FSMContext):
+async def edit_texts(call: types.CallbackQuery, settings: Settings, state: FSMContext):
     await call.message.answer(
         "Выберите кнопку для редактирования",
         reply_markup=admin_kbs.edit_texts(settings)

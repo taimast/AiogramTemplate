@@ -13,7 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ....callback_data.connect import ConnectCallback, ConnectAction
 from ....commands.bot_commands import BaseCommands
 from ....filters.is_connect import IsConnectedFilter
-from ....keyboards.common import connect_kbs, helper_kbs, common_kbs
+from ....keyboards.common import connect_kbs, helper_kbs
 from ......config import Settings
 from ......db.models import User
 

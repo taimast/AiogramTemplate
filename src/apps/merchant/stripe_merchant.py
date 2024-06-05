@@ -90,6 +90,7 @@ class StripeMerchant(BaseMerchant):
 
 import asyncio
 
+
 async def main():
     api_key = "api_key"
     stripe = StripeMerchant(api_key=api_key, merchant=MerchantEnum.STRIPE)
@@ -101,5 +102,7 @@ async def main():
         if invoice.payment_status == "paid":
             break
         await asyncio.sleep(1)
+
+
 if __name__ == '__main__':
     asyncio.run(main())
