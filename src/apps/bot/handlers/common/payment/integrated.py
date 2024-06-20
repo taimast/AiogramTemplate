@@ -14,8 +14,10 @@ async def process_callback_pay(call: types.CallbackQuery):
     await call.message.answer_invoice(
         title='Оплата подписки',
         description='Оплата подписки на 1 месяц',
-        provider_token=PAYMENT_PROVIDE_TOKEN,
-        currency='rub',
+        # provider_token=PAYMENT_PROVIDE_TOKEN,
+        provider_token='',
+        # currency='rub',
+        currency='XTR',
         prices=[
             types.LabeledPrice(label='1 месяц', amount=10 * 100),
             # types.LabeledPrice(label='Test2', amount=20000)

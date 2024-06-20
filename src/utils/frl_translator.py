@@ -29,6 +29,24 @@ class Serializer(FluentSerializer):
         return parts
 
 
+def fix_ftl_variables(text):
+    # Регулярное выражение для поиска FTL переменных, которые не закрыты
+    # Последовательность ищет переменные, которые начинаются на '{ $', за которыми следует слово, но не заканчиваются на '}'
+    pattern = r"{\s*\$[\w]+\s*}(?![}])|{\s*\$[\w]+\s*(?![}])"
+
+    # Функция для замены найденных переменных
+    def replace_func(match):
+        # Если уже есть закрывающая скобка, возвращаем без изменений
+        if match.group(0).endswith('}'):
+            return match.group(0)
+        # Иначе, добавляем закрывающую скобку
+        return match.group(0) + "}"
+
+    # Применяем замену с помощью регулярного выражения
+    corrected_text = re.sub(pattern, replace_func, text)
+    return corrected_text
+
+
 def prepare_chunk(
         chunk: str,
         gt: deep_translator.GoogleTranslator,
@@ -63,6 +81,9 @@ def prepare_chunk(
     if "uni-" in variable:
         return strip_chunk
 
+    if "language-" in variable:
+        return strip_chunk
+
     text = strip_chunk.replace(variable, "")
 
     # replace numbers to include variables
@@ -75,12 +96,18 @@ def prepare_chunk(
     text = text.replace("</code>", "</c>")
 
     print("PRE_TEXT", variable, text)
-    translated_text = gt.translate(text)
+    translated_text = gt.translate(text) or text
     print("POST_TEXT", variable, translated_text)
     # replace back numbers to include variables
     for i, var in enumerate(include_variables):
+        # if "}" not in translated_text:
+        #     translated_text = translated_text.replace("{ $" + str(i), "{ $" + str(i) + " }")
+        translated_text = fix_ftl_variables(translated_text)
         if target_locale == "de":
             translated_text = re.sub(r"\{\s?\$" + str(i) + r"\s?\}?", "{ $" + var + " }", translated_text)
+        elif target_locale == "tr":
+            translated_text = re.sub(r"\{\s?\$" + str(i) + r"\s?\}", "{ $" + var + " }", translated_text)
+            translated_text = re.sub(r"\{\s?" + str(i) + r"\s?\$\s?\}", "{ $" + var + " }", translated_text)
         else:
             translated_text = re.sub(r"\{\s?\$" + str(i) + r"\s?\}", "{ $" + var + " }", translated_text)
 
@@ -120,12 +147,26 @@ def main():
     origin_locale = "ru"
     origin_locale_dir = Path(LOCALES_DIR, origin_locale)
     # Хинди, немецкий, француский, испанский, etc.
-    target_locales = ["en", "hi", "de", "fr", "es", "it", "ja", "ko", "pt"]
-    # target_locales = ["de"]
+    # target_locales = ["en", "hi", "de", "fr", "es", "it", "ja", "ko", "pt"]
+    target_locales = [
+        "en",
+        "ar",
+        "zh-CN",
+        "es",
+        "fr",
+        "de",
+        "hi",
+        "ja",
+        "pt",
+        "tr",
+        "uk",
+    ]
+    # target_locales = ["tr"]
     # only_files = ["common.ftl", "payment.ftl"]
     # Проверить измененные файлы в git
     # only_files = ["common.ftl", "payment.ftl", "admin.ftl", "user.ftl", "post.ftl", "channel.ftl", "channel_post.ftl"]
-    only_files = get_changed_files(origin_locale_dir)
+    # only_files = get_changed_files(origin_locale_dir)
+    only_files = ["admin.ftl"]
     only_variables = []
     for target_locale in target_locales:
         google_translator = deep_translator.GoogleTranslator(
@@ -137,7 +178,7 @@ def main():
         )
 
         logger.info(f"[{origin_locale} -> {target_locale}] Translating...")
-        target_locale_dir = Path(LOCALES_DIR, target_locale)
+        target_locale_dir = Path(LOCALES_DIR, target_locale.split("-")[0])
         if not target_locale_dir.exists():
             target_locale_dir.mkdir()
         for file in origin_locale_dir.iterdir():
@@ -175,3 +216,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+    # print(fix_ftl_variables("""
+# conversation-connect-user_already_connected =
+#     ❌💬 { $name } } kullanıcısı zaten operatöre bağlı
+#     """))

@@ -8,6 +8,7 @@ services:
       - ./config.yml:/app/config.yml
       - ./logs:/app/logs
       - ./database:/app/database
+      - ./media:/app/media
 #     - ./alembic:/app/alembic
 #     - ./alembic.ini:/app/alembic.ini
 #    environment:

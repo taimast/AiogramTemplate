@@ -10,7 +10,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
 uvloop = { version = ">=0.17.0", markers = "sys_platform != 'win32'" }
-aiogram = "^3.6.0"
+aiogram = "^3.7.0"
 pydantic = "^2.7.1"
 loguru = "^0.7.0"
 PyYAML = "^6.0"
