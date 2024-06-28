@@ -50,8 +50,8 @@ class ActionCreateMixin(CallbackData, prefix="action_copy_mixin"):
         return cls(action=Action.GET, id=id)
 
     @classmethod
-    def new_delete(cls) -> Self:
-        return cls(action=Action.DELETE)
+    def new_delete(cls, id: int) -> Self:
+        return cls(action=Action.DELETE, id=id)
 
     @classmethod
     def new_all(cls) -> Self:
