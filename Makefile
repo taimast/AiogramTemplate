@@ -1,5 +1,5 @@
 # Команды Docker Compose
-DC=docker-compose
+DC=docker compose
 
 # Файлы Docker Compose
 COMPOSE_FILES=-f docker-compose.yml
