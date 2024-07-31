@@ -55,23 +55,3 @@ async def start(
     )
     await msg.react([ReactionTypeEmoji(emoji="👍")])
 
-@on.message()
-async def start(
-        msg: types.Message | types.CallbackQuery,
-        session: AsyncSession,
-):
-    print("message")
-    pprint(msg.model_dump())
-    await asyncio.sleep(4)
-    await msg.delete()
-
-@on.channel_post()
-async def start(
-        msg: types.Message | types.CallbackQuery,
-        session: AsyncSession,
-):
-    print("channel_post")
-    pprint(msg.pinned_message)
-    await asyncio.sleep(4)
-    await msg.delete()
-
