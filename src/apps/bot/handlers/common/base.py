@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from typing import TYPE_CHECKING
 
 from aiogram import Router, types, F, Bot
@@ -7,11 +8,10 @@ from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReactionTypeEmoji
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from src.apps.bot.commands.bot_commands import BaseCommands
 from src.apps.bot.keyboards.common import common_kbs
 from src.db.models import User
-
+from pprint import pprint
 if TYPE_CHECKING:
     from src.locales.stubs.ru.stub import TranslatorRunner
 
@@ -35,6 +35,8 @@ async def deep_start(
     await start(msg, session, l10n, state)
 
 
+
+
 @on.message(Command(BaseCommands.START))
 @on.message(F.text.startswith("«"))
 @on.callback_query(F.data == "start")
@@ -49,6 +51,27 @@ async def start(
         msg = msg.message
     sm = await msg.answer(
         l10n.start(name=msg.from_user.full_name),
-        reply_markup=common_kbs.inline_start()
+        reply_markup=common_kbs.start()
     )
     await msg.react([ReactionTypeEmoji(emoji="👍")])
+
+@on.message()
+async def start(
+        msg: types.Message | types.CallbackQuery,
+        session: AsyncSession,
+):
+    print("message")
+    pprint(msg.model_dump())
+    await asyncio.sleep(4)
+    await msg.delete()
+
+@on.channel_post()
+async def start(
+        msg: types.Message | types.CallbackQuery,
+        session: AsyncSession,
+):
+    print("channel_post")
+    pprint(msg.pinned_message)
+    await asyncio.sleep(4)
+    await msg.delete()
+

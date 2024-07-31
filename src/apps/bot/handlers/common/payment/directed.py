@@ -6,14 +6,14 @@ from aiogram import Router, types, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
 from loguru import logger
+from multi_merchant.merchants.base import MerchantEnum
+from multi_merchant import Currency, YooKassa
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.apps.bot.keyboards.common import payment_kbs
-from src.apps.merchant import YooKassa
-from src.apps.merchant.base import MerchantEnum
 from src.config import Settings
-from src.db.models import Invoice, User, Currency
+from src.db.models import Invoice, User
 
 on = Router()
 

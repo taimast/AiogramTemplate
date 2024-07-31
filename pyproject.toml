@@ -22,15 +22,10 @@ aiosqlite = "^0.19.0"
 pydantic-settings = "^2.0.2"
 alembic = "^1.13.0"
 cachetools = "^5.3.2"
-glqiwiapi = {git = "https://github.com/dipwave/glQiwiApi.git"}
-yoomoney = "^0.1.0"
 requests = "^2.31.0"
 bs4 = "^0.0.2"
 lxml = "^5.1.0"
-stripe = "^8.7.0"
-aaioapi = "^2.5.6"
-pypayment = "^1.7.14"
-pycryptopay-sdk = {git = "https://github.com/taimast/pyCryptoPayAPI.git"}
+multi-merchant = {git = "https://github.com/taimast/multi-merchant.git"}
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^3.0.0"

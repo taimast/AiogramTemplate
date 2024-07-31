@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+from multi_merchant import MerchantAnnotated
+from multi_merchant.merchants.base import MerchantEnum
 from pydantic import BaseModel, Field, SecretStr, field_serializer, model_validator
 from pydantic.fields import FieldInfo
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict as _SettingsConfigDict
@@ -11,8 +13,6 @@ from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, Settings
 from .consts import BASE_DIR
 from .db import SqliteDB, PostgresDB
 from .webhook import Webhook
-from ..apps.merchant import MerchantAnnotated
-from ..apps.merchant.base import MerchantEnum
 
 
 # seconds

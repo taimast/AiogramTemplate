@@ -1,5 +1,4 @@
 from __future__ import annotations
-from __future__ import annotations
 
 import datetime
 import typing
@@ -38,7 +37,7 @@ class User(BaseUser):
 
     @property
     def link(self):
-        user_link = md.hlink(user.full_name, f"tg://user?id={self.id}")
+        user_link = md.hlink(self.full_name, f"tg://user?id={self.id}")
         if self.username:
-            user_link = md.hlink(user.full_name, f"https://t.me/{self.username}")
+            user_link = md.hlink(self.full_name, f"https://t.me/{self.username}")
         return user_link

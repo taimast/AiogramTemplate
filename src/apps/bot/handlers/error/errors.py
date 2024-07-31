@@ -11,7 +11,7 @@ on = Router(name=__name__)
 
 
 @on.errors()
-async def error_handler(event: ErrorEvent, bot: Bot, event_from_user: User):
+async def error_handler(event: ErrorEvent):
     # text = ("Произошла ошибка при обработке сообщения.\n"
     #         "Попробуйте еще раз или обратитесь к администратору.\n"
     #         "Сообщение об ошибке:\n"

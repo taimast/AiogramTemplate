@@ -11,6 +11,14 @@ from src.config import Settings
 on = Router(name=__name__)
 
 
+@on.chat_member()
+async def chat_member(update: types.ChatMemberUpdated, bot: Bot):
+    print(update, "chat_member")
+
+@on.my_chat_member()
+async def my_chat_member(update: types.ChatMemberUpdated, bot: Bot):
+    print(update, "my_chat_member")
+
 @on.my_chat_member(ChatMemberUpdatedFilter(ADMINISTRATOR))
 async def my_chat_member(update: types.Message, bot: Bot, settings: Settings):
     logger.info(f"Chat id: {update.chat.id} saved")

@@ -4,7 +4,7 @@ import os
 import time
 import zipfile
 from dataclasses import dataclass, field
-from typing import Any, Awaitable, Callable, TypeVar, Generic
+from typing import Any, Awaitable, Callable, TypeVar, Generic, Iterable
 
 from aiogram import types, Bot
 from loguru import logger
@@ -48,7 +48,7 @@ T = TypeVar('T')
 @dataclass
 class BatchExecutor(Generic[T]):
     func: Callable[[T, Any], Awaitable[Any]]
-    objs: list[T]
+    objs: Iterable[T]
     args: tuple = ()
     kwargs: dict = field(default_factory=dict)
     batch_size: int = 30
