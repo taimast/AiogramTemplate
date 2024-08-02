@@ -47,6 +47,17 @@ T = TypeVar('T')
 # Структура для вызова функции по банчам
 @dataclass
 class BatchExecutor(Generic[T]):
+    """
+    Пример использования:
+        bot = Bot(...)
+        user_ids = [1, 2, 3, 4, 5]
+        batch_executor = BatchExecutor(
+            func=bot.send_message,
+            objs=user_ids,
+            args=("Вы приглашены в чат",)
+        )
+        await batch_executor.batched_call()
+    """
     func: Callable[[T, Any], Awaitable[Any]]
     objs: Iterable[T]
     args: tuple = ()
