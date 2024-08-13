@@ -42,8 +42,8 @@ class ActionCreateMixin(CallbackData, prefix="action_copy_mixin"):
         return self.model_copy(update={'action': Action.DELETE})
 
     @classmethod
-    def new_create(cls) -> Self:
-        return cls(action=Action.CREATE)
+    def new_create(cls, id: int = None) -> Self:
+        return cls(action=Action.CREATE, id=id)
 
     @classmethod
     def new_get(cls, id: int) -> Self:
