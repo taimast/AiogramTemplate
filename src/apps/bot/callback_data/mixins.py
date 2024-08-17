@@ -1,3 +1,4 @@
+from enum import StrEnum
 from typing import Self
 
 from aiogram import F
@@ -25,6 +26,9 @@ class FilterActionMixin(CallbackData, prefix="filter_action_mixin"):
     def filter_get(cls) -> Self:
         return cls.filter(F.action == Action.GET)
 
+    @classmethod
+    def filter_with_action(cls, action: StrEnum) -> Self:
+        return cls.filter(F.action == action)
 
 class ActionCreateMixin(CallbackData, prefix="action_copy_mixin"):
     action: Action
@@ -57,6 +61,9 @@ class ActionCreateMixin(CallbackData, prefix="action_copy_mixin"):
     def new_all(cls) -> Self:
         return cls(action=Action.ALL)
 
+    @classmethod
+    def with_action(cls, action: StrEnum, **kwargs) -> Self:
+        return cls(action=action, **kwargs)
 
 # Общий класс для миксинов
 class ActionMixin(ActionCreateMixin, FilterActionMixin, CallbackData, prefix="action_mixin"):

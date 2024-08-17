@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from itertools import cycle, chain
 from typing import Self
 
 from aiogram.filters.callback_data import CallbackData
@@ -12,7 +12,7 @@ from aiogram.types import (
 from aiogram.utils import markdown as md
 from aiogram.utils.keyboard import (
     ReplyKeyboardBuilder as _ReplyKeyboardBuilder,
-    InlineKeyboardBuilder as _InlineKeyboardBuilder
+    InlineKeyboardBuilder as _InlineKeyboardBuilder, ButtonType, KeyboardBuilder
 )
 
 IKB = InlineKeyboardButton
@@ -41,6 +41,53 @@ class CustomInlineKeyboardBuilder(_InlineKeyboardBuilder):
     def one_row(self):
         return self.adjust(1)
 
+    def adjust(
+            self,
+            *sizes: int,
+            repeat: bool = False,
+            reverse: bool = False
+    ) -> KeyboardBuilder[ButtonType]:
+        """
+        If reverse=True is passed - sizes will be applied from bottom to top.
+        """
+
+        if not reverse:
+            return super().adjust(*sizes, repeat=repeat)
+
+        if not sizes:
+            sizes = (self.max_width,)
+
+        validated_sizes = list(map(self._validate_size, sizes))
+
+        if repeat:
+            sizes_iter = cycle(validated_sizes)
+        else:
+            sizes_iter = iter(
+                validated_sizes + [validated_sizes[-1]] * (len(list(self.buttons)) - len(validated_sizes)))
+
+        buttons = list(self.buttons)
+
+        if reverse:
+            buttons.reverse()
+
+        markup = []
+        row: list[ButtonType] = []
+        size = next(sizes_iter)
+
+        for button in buttons:
+            if len(row) >= size:
+                markup.append(row)
+                size = next(sizes_iter)
+                row = []
+            row.append(button)
+        if row:
+            markup.append(row)
+
+        if reverse:
+            markup.reverse()
+
+        self._markup = markup
+        return self
 
 class CustomReplyKeyboardBuilder(_ReplyKeyboardBuilder):
 

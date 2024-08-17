@@ -47,10 +47,18 @@ def add_buttons() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-def mailing_cancel():
+def mailing_control():
     builder = CustomInlineKeyboardBuilder()
-    builder.button(text="🔴 Отменить", callback_data="mailing_cancel")
+    builder.button(
+        text="🔄 Обновить статистику",
+        callback_data="update_mailing_stats"
+    )
+    builder.button(
+        text="🔴 Отменить",
+        callback_data="mailing_cancel"
+    )
     return builder.as_markup()
+
 
 
 def admins(admins: Iterable[int]) -> InlineKeyboardMarkup:

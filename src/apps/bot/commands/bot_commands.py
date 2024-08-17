@@ -6,7 +6,7 @@ from aiogram.filters import Command
 from aiogram.types import BotCommand
 
 
-def command_wrapper(on: Router, command: BotCommand):
+def command_wrapper(on: Router, command: BotCommand, *filters):
     def decorator(func):
         @functools.wraps(func)
         async def wrapper(*args, **kwargs):
@@ -14,9 +14,9 @@ def command_wrapper(on: Router, command: BotCommand):
             result = await func(*args, **kwargs)
             return result
 
-        on.message.register(wrapper, Command(command))
-        on.message.register(wrapper, F.text.startswith(command.description[0]))
-        on.callback_query.register(wrapper, F.data == command.command)
+        on.message.register(wrapper, Command(command), *filters)
+        on.message.register(wrapper, F.text.startswith(command.description[0]), *filters)
+        on.callback_query.register(wrapper, F.data == command.command, *filters)
         return func
 
     return decorator

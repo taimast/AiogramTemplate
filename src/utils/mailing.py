@@ -53,6 +53,14 @@ class Mailing:
         except Exception as e:
             logger.warning(f"Error while updating status message: {e}")
 
+    async def send_status(self, message: types.Message):
+        self.current_emoji = "⏳ In progress" if self.current_emoji == "⌛ In progress" else "⌛ In progress"
+        await message.answer(
+            self.status_template,
+            reply_markup=self.cancel_markup
+        )
+
+
     async def live_updating_status(self):
         while True:
             await asyncio.sleep(self.update_interval)

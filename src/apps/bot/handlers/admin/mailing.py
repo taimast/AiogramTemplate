@@ -3,6 +3,7 @@ import asyncio
 from aiogram import Router, types, Bot, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.context import FSMContext
+from fluentogram import TranslatorRunner
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -16,7 +17,7 @@ on = Router(name=__name__)
 
 
 @on.callback_query(AdminCallback.filter_mailing())
-async def mailing(call: types.CallbackQuery, state: FSMContext):
+async def mailing(call: types.CallbackQuery, state: FSMContext, l10n:TranslatorRunner):
     await call.message.answer(
         "Напишите или перешлите сообщение, которое хотите разослать.",
         reply_markup=helper_kbs.custom_back_kb("admin")
@@ -76,9 +77,9 @@ async def mailing_send(call: types.CallbackQuery, session: AsyncSession, bot: Bo
         data = await state.get_data()
         interval = data.get("interval", 0.4)
         mailing_obj = Mailing(
-            update_interval=60,
+            update_interval=60 * 3,
             send_interval=interval,
-            cancel_markup=admin_kbs.mailing_cancel()
+            cancel_markup=admin_kbs.mailing_control()
         )
         await mailing_obj.init_status_message(message)
         mailing_status_task = asyncio.create_task(mailing_obj.live_updating_status())
@@ -169,10 +170,10 @@ async def mailing_cancel(call: types.CallbackQuery, state: FSMContext):
 
 
 @on.callback_query(F.data == "update_mailing_stats")
-async def mailing_cancel(call: types.CallbackQuery, state: FSMContext):
+async def mailing_update(call: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     mailing_obj: Mailing = data.get("mailing_obj")
     if mailing_obj:
-        await mailing_obj.update_status()
+        await mailing_obj.send_status(call.message)
     else:
         await call.answer("Нет активных рассылок")
