@@ -11,7 +11,7 @@ class BaseUser(Base, TimestampMixin):
     first_name: Mapped[str | None] = mapped_column(String(100))
     last_name: Mapped[str | None] = mapped_column(String(100))
     is_bot: Mapped[bool] = mapped_column(default=False)
-    is_premium: Mapped[bool | None]
+    is_premium: Mapped[bool] = mapped_column(default=False)
 
     @property
     def full_name(self) -> str:

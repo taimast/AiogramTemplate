@@ -76,11 +76,20 @@ class BotSettings(BaseModel):
         return v.get_secret_value()
 
 
+class WebAdminSettings(BaseModel):
+    host: str = "127.0.0.1"
+    port: int = 8083
+    secret_key: SecretStr = SecretStr("adminsecret")
+    password: SecretStr = SecretStr("admin")
+
+
 class Settings(BaseSettings):
     bot: BotSettings
     db: PostgresDB | SqliteDB
     webhook: Webhook | None = None
+    webadmin: WebAdminSettings = WebAdminSettings()
     merchants: list[MerchantAnnotated] = Field(default_factory=list)
+
     model_config = SettingsConfigDict(
         env_file=r"..\..\.env",
         env_file_encoding='utf-8',

@@ -1,5 +1,5 @@
 from loguru import logger
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncEngine
 from sqlalchemy.orm import close_all_sessions
 
 from src.db.models import Base

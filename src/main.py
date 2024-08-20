@@ -9,6 +9,8 @@ from loguru import logger
 
 from src import setup
 from src.config import Settings
+from src.setup.opts import SetupOpts
+from src.setup.webadmin import setup_webadmin
 from src.utils.other import send_start_info
 
 
@@ -44,6 +46,18 @@ async def main():
         )
     )
     storage = MemoryStorage()
+
+
+    base_l10n = translator_hub.get_translator_by_locale("ru")
+
+    # Setup options
+    opts = SetupOpts(
+        session_maker=session_maker,
+        bot=bot,
+        settings=settings,
+        l10n=base_l10n,
+    )
+
     dp = Dispatcher(
         storage=storage,
         settings=settings,
@@ -68,6 +82,9 @@ async def main():
 
     # Set bot commands
     await setup.set_commands(bot, settings)
+
+    # setup web admin
+    await setup_webadmin(opts)
 
     # Start bot
     try:

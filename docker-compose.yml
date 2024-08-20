@@ -4,6 +4,8 @@ services:
     build: ./
     restart: unless-stopped
     command: python src/main.py -m prod
+    ports:
+      - "8083:8083" # web admin
     volumes:
       - ./config.yml:/app/config.yml
       - ./logs:/app/logs

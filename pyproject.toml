@@ -26,6 +26,7 @@ requests = "^2.31.0"
 bs4 = "^0.0.2"
 lxml = "^5.1.0"
 multi-merchant = {git = "https://github.com/taimast/multi-merchant.git"}
+sqladmin = {extras = ["full"], version = "^0.18.0"}
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^3.0.0"
