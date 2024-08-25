@@ -44,7 +44,6 @@ async def send_start_info(settings: Settings, bot: Bot, only_text: bool = True):
 T = TypeVar('T')
 
 
-# Структура для вызова функции по банчам
 @dataclass
 class BatchExecutor(Generic[T]):
     """
