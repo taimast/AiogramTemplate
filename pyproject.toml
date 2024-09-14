@@ -3,9 +3,11 @@ name = "aiogramtemplate"
 version = "0.1.0"
 description = ""
 authors = ["taimast <charlskenno@gmail.com>"]
-packages = [
-    { include = "src" }
-]
+packages = [{ include = "src" }]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
@@ -25,14 +27,33 @@ cachetools = "^5.3.2"
 requests = "^2.31.0"
 bs4 = "^0.0.2"
 lxml = "^5.1.0"
-multi-merchant = {git = "https://github.com/taimast/multi-merchant.git"}
-sqladmin = {extras = ["full"], version = "^0.18.0"}
+multi-merchant = { git = "https://github.com/taimast/multi-merchant.git" }
+sqladmin = { extras = ["full"], version = "^0.18.0" }
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^3.0.0"
 sqlalchemy-utils = "^0.41.1"
 jurigged = "^0.5.7"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[tool.ruff]
+# Allow lines to be as long as 99 characters.
+line-length = 99
+
+# Enable all rules.
+[tool.ruff.lint]
+select = [
+    # "C", # TODO: mccabe - code complecity
+    "C4",
+    "E",
+    "F",
+    "T10",
+    "T20",
+    "Q",
+    "RET",
+    "F401",
+]
