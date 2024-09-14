@@ -14,12 +14,12 @@ from src.config import Settings
 
 def get_archive():
     buffer = io.BytesIO()
-    with zipfile.ZipFile(buffer, 'w') as zip_file:
-        for root, dirs, files in os.walk('.'):
+    with zipfile.ZipFile(buffer, "w") as zip_file:
+        for root, dirs, files in os.walk("."):
             for file in files:
                 zip_file.write(os.path.join(root, file))
     buffer.seek(0)
-    document = types.BufferedInputFile(buffer.getvalue(), filename='archive.zip')
+    document = types.BufferedInputFile(buffer.getvalue(), filename="archive.zip")
     return document
 
 
@@ -41,11 +41,11 @@ async def send_start_info(settings: Settings, bot: Bot, only_text: bool = True):
     )
 
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 @dataclass
-class BatchExecutor(Generic[T]):
+class BatchExecutor[T]:
     """
     Пример использования:
         bot = Bot(...)
@@ -57,6 +57,7 @@ class BatchExecutor(Generic[T]):
         )
         await batch_executor.batched_call()
     """
+
     func: Callable[[T, Any], Awaitable[Any]]
     objs: Iterable[T]
     args: tuple = ()
@@ -88,3 +89,12 @@ class BatchExecutor(Generic[T]):
                 await asyncio.sleep(next_sleep)
 
         return results
+
+    @classmethod
+    async def create_and_call(
+        cls: type[T],
+        func: Callable[[T, Any], Awaitable[Any]],
+        objs: Iterable[T],
+    ) -> list[Any]:
+        be = BatchExecutor(func, objs)
+        return await be.batched_call()
