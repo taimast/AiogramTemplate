@@ -28,10 +28,11 @@ bs4 = "^0.0.2"
 lxml = "^5.1.0"
 multi-merchant = { git = "https://github.com/taimast/multi-merchant.git" }
 sqladmin = { extras = ["full"], version = "^0.18.0" }
-ftl-translator = {git = "https://github.com/taimast/ftl-translator.git"}
+ftl-translator = { git = "https://github.com/taimast/ftl-translator.git" }
+fluentogram = "^1.1.7"
 
 [tool.poetry.group.dev.dependencies]
-watchdog = "^3.0.0"
+watchdog = ">=2.3.0,<3.0.0"
 sqlalchemy-utils = "^0.41.1"
 jurigged = "^0.5.7"
 
