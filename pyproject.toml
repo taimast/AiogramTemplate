@@ -10,14 +10,13 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<4.0"
+python = ">=3.12,<4.0"
 uvloop = { version = ">=0.17.0", markers = "sys_platform != 'win32'" }
 aiogram = "^3.7.0"
 pydantic = "^2.7.1"
 loguru = "^0.7.0"
 PyYAML = "^6.0"
 APScheduler = { version = "^4.0.0a4", allow-prereleases = true }
-fluentogram = "^1.1.6"
 sqlalchemy = "^2.0.9"
 psycopg2 = "^2.9.6"
 aiosqlite = "^0.19.0"
@@ -29,6 +28,7 @@ bs4 = "^0.0.2"
 lxml = "^5.1.0"
 multi-merchant = { git = "https://github.com/taimast/multi-merchant.git" }
 sqladmin = { extras = ["full"], version = "^0.18.0" }
+ftl-translator = {git = "https://github.com/taimast/ftl-translator.git"}
 
 [tool.poetry.group.dev.dependencies]
 watchdog = "^3.0.0"
