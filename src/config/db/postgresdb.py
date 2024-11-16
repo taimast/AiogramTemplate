@@ -17,10 +17,12 @@ class PostgresDB(BaseModel):
 
     @property
     def url(self):
-        return (f"postgresql+{self.dialect}://"
-                f"{self.user}:{self.password.get_secret_value()}"
-                f"@{self.host}:{self.port}"
-                f"/{self.database}")
+        return (
+            f"postgresql+{self.dialect}://"
+            f"{self.user}:{self.password.get_secret_value()}"
+            f"@{self.host}:{self.port}"
+            f"/{self.database}"
+        )
 
     @property
     def sqlite_url(self):
@@ -28,15 +30,17 @@ class PostgresDB(BaseModel):
 
     @property
     def sync_url(self):
-        return (f"postgresql://"
-                f"{self.user}:{self.password.get_secret_value()}"
-                f"@{self.host}:{self.port}"
-                f"/{self.database}")
+        return (
+            f"postgresql://"
+            f"{self.user}:{self.password.get_secret_value()}"
+            f"@{self.host}:{self.port}"
+            f"/{self.database}"
+        )
 
     @classmethod
     def default(cls) -> Self:
         return cls(
             user="postgres",
-            password="postgres",
+            password=SecretStr("postgres"),
             database="src",
         )

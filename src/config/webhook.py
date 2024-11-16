@@ -2,7 +2,7 @@ import ssl
 from typing import Optional
 
 from aiogram.types import FSInputFile
-from pydantic import BaseModel, validator, FilePath
+from pydantic import BaseModel, FilePath, field_validator
 
 
 class SSL(BaseModel):
@@ -18,20 +18,18 @@ class SSL(BaseModel):
         return ssl_context
 
 
-class Webhook(BaseModel):
+class WebhookSettings(BaseModel):
     domain: str
-    path: Optional[str]
+    path: str
     host: str = "0.0.0.0"
     port: int = 443
 
     ssl_cert: Optional[SSL]
 
-    @validator("path", always=True, )
+    @field_validator("path", mode="after")
     def webhook_path_validator(cls, v, values):
-        if v is None:
-            return "/webhook/bot/{}".format(values["token"])
-            # return "/webhook/bot"
-
+        if "{bot_token}" not in v:
+            raise ValueError("Path must contain '{bot_token}'")
         if v.startswith("/"):
             return v
         return "/" + v
@@ -43,9 +41,9 @@ class Webhook(BaseModel):
     def get_ssl_context(self) -> Optional[ssl.SSLContext]:
         if self.ssl_cert:
             return self.ssl_cert.get_ssl_context()
-        return
+        return None
 
     def get_certfile(self) -> Optional[FSInputFile]:
         if self.ssl_cert:
             return self.ssl_cert.get_certfile()
-        return
+        return None
