@@ -2,7 +2,7 @@
 
 **A flexible template for creating bots using Aiogram 3, featuring powerful tools for admin management, payments, localization, and more.**
 
-## ✨ Features
+### ✨ Features
 
 - **Admin Panel**: Comprehensive and easy-to-use admin interface.
 - **Middleware**: Custom middlewares to handle user sessions, localization, and database interactions.
@@ -16,7 +16,7 @@
 - **Persistence Sessions**: Efficient handling of user data across multiple persistence sessions.
 - **Support Sessions**: Direct communication between users and support moderators through structured threads.
 
-## 📦 Usage
+### 📦 Usage
 1. **Configure the Project:**
    - Fill in the `config.yml` with your specific settings.
 
@@ -30,7 +30,7 @@
 2. **Rebuild and Restart:**
    - Use `docker compose up -d --build` to rebuild and restart the containers.
 
-## 🗂️ Project Structure
+### 🗂️ Project Structure
 
 - **`src/apps`**: Contains bot-related logic, including handlers, middlewares, and localization.
 - **`src/config`**: Configuration files and environment settings.
@@ -38,24 +38,24 @@
 - **`src/setup`**: Scripts for setting up the bot, including logging, scheduling, routers, and more.
 - **`src/utils`**: Utility scripts for tasks like localization, callback generation, and more.
 
-## 🌍 Localization
+### 🌍 Localization
 
 Localization is handled via [Fluent](https://projectfluent.org/fluent/guide). Default localization files are located in the `src/locales` directory.
 
-## Utilities for Localization
+### Utilities for Localization
 
 - **Live Stub Generation**: `src/utils/ftl_parser_cli.py` – Automatically generates stubs for localization as you work.
 - **Automatic Translation**: `src/utils/ftl_translator.py` – Translates localizations into multiple languages using Google Translate and generates corresponding FTL files.
 
 
-## 🔧 Support Sessions
+### 🔧 Support Sessions
 - **SupportSession Management**: `src/utils/support.py` – Facilitates direct communication between users and support moderators through structured threads.
   - **Seamless Support**: Manage user support requests effectively by utilizing the `SupportConnector`, which tracks and manages active support sessions.
   - **Session Handling**: Automatically create and manage communication threads for each support request, enabling efficient handling and resolution of user queries.
   - **Modular Integration**: Easily integrate into existing bots for enhanced user support capabilities.
 
 
-## 💾 Persistence and Configuration
+### 💾 Persistence and Configuration
 **Manager (`PersistenceSessionManager`)**: `src/db/persistence_session/manager.py`
    - Acts as a coordinator for handling both light and rich models across the different persistence sessions.
    - Initializes and synchronizes "light" user data (i.e., cached or minimal data structure) with "rich" data stored in the relational database.
@@ -63,7 +63,7 @@ Localization is handled via [Fluent](https://projectfluent.org/fluent/guide). De
    - Uses SQLAlchemy sessions for interacting with the database and potentially Redis for caching purposes.
 
 
-## 🚀 Additional Functionalities
+### 🚀 Additional Functionalities
 
 - **Callback Data Generator**: `src/utils/generate_callback.py` – Dynamically generates callback data classes for your bot.
 - **Mailing System**: `src/utils/mailing.py` – Handles mass mailing and notifications to users with detailed progress tracking.
