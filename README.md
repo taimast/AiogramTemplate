@@ -38,16 +38,32 @@
 
 Localization is handled via [Fluent](https://projectfluent.org/fluent/guide). Default localization files are located in the `src/locales` directory.
 
-### Utilities for Localization
+## Utilities for Localization
 
 - **Live Stub Generation**: `src/utils/ftl_parser_cli.py` – Automatically generates stubs for localization as you work.
 - **Automatic Translation**: `src/utils/ftl_translator.py` – Translates localizations into multiple languages using Google Translate and generates corresponding FTL files.
+
+
+## 🔧 Support Sessions
+
+- **SupportSession Management**: `src/utils/support.py` – Facilitates direct communication between users and support moderators through structured threads.
+  - **Seamless Support**: Manage user support requests effectively by utilizing the `SupportConnector`, which tracks and manages active support sessions.
+  - **Session Handling**: Automatically create and manage communication threads for each support request, enabling efficient handling and resolution of user queries.
+  - **Modular Integration**: Easily integrate into existing bots for enhanced user support capabilities.
+
+## 💾 Persistence and Configuration
+**Manager (`PersistenceSessionManager`)**: `src/db/persistence_session/manager.py`
+   - Acts as a coordinator for handling both light and rich models across the different persistence sessions.
+   - Initializes and synchronizes "light" user data (i.e., cached or minimal data structure) with "rich" data stored in the relational database.
+   - Ensures that whenever a session is instantiated, it is ready to sync in-memory or Redis-stored data with the database.
+   - Uses SQLAlchemy sessions for interacting with the database and potentially Redis for caching purposes.
+
 
 ## ⚙️ Setup and Installation
 
 1. **Configure the Project:**
    - Fill in the `config.yml` with your specific settings.
-   
+
 2. **Run the Project:**
    - Start the project using Docker: `docker compose up -d`.
 
@@ -55,7 +71,7 @@ Localization is handled via [Fluent](https://projectfluent.org/fluent/guide). De
 
 1. **Stop the Containers:**
    - Run `docker compose stop` to stop the running containers.
-   
+
 2. **Rebuild and Restart:**
    - Use `docker compose up -d --build` to rebuild and restart the containers.
 

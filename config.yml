@@ -21,7 +21,9 @@ db:
 #   port: 8083
 #   secret_key: '**********'
 #   password: '**********'
-
+# Support chat id
+# support:
+# chat_id: 123456789
 # Detailed information in the config folder
 #webhook:
 #  domain: 195.22.712.246:8443
