@@ -9,7 +9,6 @@ backup
 #scripts
 *.sql*
 *.db
-
-
-merged_files.txt
-to_one_file.py
+.vscode
+media
+Makefile

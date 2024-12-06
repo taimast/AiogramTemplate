@@ -1,14 +1,20 @@
 import asyncio
 from pprint import pformat
 
-from aiogram import Bot, F, Dispatcher
+from aiogram import Bot, Dispatcher, F
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.strategy import FSMStrategy
 from loguru import logger
+from redis.asyncio import Redis
 
 from src import setup
 from src.config import Settings
+from src.db.persistence_session.manager import PersistenceSessionManager
+from src.db.persistence_session.memory import MemoryPersistenceSession
+from src.db.persistence_session.redis import RedisPersistenceSession
+from src.setup.cli import Mode
 from src.setup.opts import SetupOpts
 from src.setup.webadmin import setup_webadmin
 from src.utils.other import send_start_info
@@ -30,25 +36,37 @@ async def main():
     setup.init_logging(cli_settings.log)
 
     # Initialize settings
-    settings = Settings()
+    settings = Settings()  # type: ignore
     logger.info(f"Settings:\n{pformat(settings.model_dump())}")
 
     # Initialize database
-    session_maker = await setup.init_db(settings.db)
+    session_maker = await setup.init_db(settings.db, echo=cli_settings.mode == Mode.DEV)
 
     # Initialize translator
     translator_hub = setup.init_translator_hub()
+
     # Initialize bot, storage and dispatcher
     bot = Bot(
         token=settings.bot.token.get_secret_value(),
-        default=DefaultBotProperties(
-            parse_mode="html"
-        )
+        default=DefaultBotProperties(parse_mode="html"),
+        session=AiohttpSession(proxy=settings.bot.proxy),
     )
-    storage = MemoryStorage()
-
+    # Setup scheduler
+    scheduler = await setup.setup_scheduler()
 
     base_l10n = translator_hub.get_translator_by_locale("ru")
+
+    if settings.redis:
+        redis = Redis.from_url(url=settings.redis.url)
+        light_persistence_session = RedisPersistenceSession(redis)
+    else:
+        light_persistence_session = MemoryPersistenceSession()
+
+    session_manager = PersistenceSessionManager(
+        db_sessionmaker=session_maker,
+        light=light_persistence_session,
+    )
+    await session_manager.initialize()
 
     # Setup options
     opts = SetupOpts(
@@ -58,11 +76,14 @@ async def main():
         l10n=base_l10n,
     )
 
+    storage = MemoryStorage()
     dp = Dispatcher(
         storage=storage,
         settings=settings,
+        session_manager=session_manager,
         translator_hub=translator_hub,
-        fsm_strategy=FSMStrategy.GLOBAL_USER
+        scheduler=scheduler,
+        fsm_strategy=FSMStrategy.GLOBAL_USER,
     )
     # Register startup and shutdown handlers
     dp.startup.register(on_startup)
@@ -75,16 +96,14 @@ async def main():
     await setup.setup_routers(dp, settings)
 
     # Setup middlewares
-    setup.setup_middlewares(dp, session_maker)
-
-    # Setup scheduler
-    scheduler = await setup.setup_scheduler()
+    setup.setup_middlewares(dp, session_manager)
 
     # Set bot commands
     await setup.set_commands(bot, settings)
 
     # setup web admin
-    await setup_webadmin(opts)
+    if settings.webadmin:
+        await setup_webadmin(opts)
 
     # Start bot
     try:
@@ -95,12 +114,13 @@ async def main():
                 bot,
                 skip_updates=True,
                 allowed_updates=dp.resolve_used_update_types(),
-                scheduler=scheduler,
             )
 
-        else:
+        elif settings.webhook:
             logger.info("Start bot in webhook mode")
-            await setup.start_webhook(bot, dp, settings)
+            await setup.start_webhook(bot, dp, settings.webhook)
+        else:
+            raise ValueError("Cli webhook is True, but settings.webhook is False")
 
     finally:
         await bot.session.close()
@@ -110,7 +130,8 @@ async def main():
 
 def start_runner():
     try:
-        import uvloop
+        import uvloop  # type: ignore
+
         with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
             runner.run(main())
     except ImportError:

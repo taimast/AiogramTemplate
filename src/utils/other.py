@@ -4,9 +4,9 @@ import os
 import time
 import zipfile
 from dataclasses import dataclass, field
-from typing import Any, Awaitable, Callable, TypeVar, Generic, Iterable
+from typing import Any, Awaitable, Callable, Sequence, TypeVar
 
-from aiogram import types, Bot
+from aiogram import Bot, types
 from loguru import logger
 
 from src.config import Settings
@@ -59,7 +59,7 @@ class BatchExecutor[T]:
     """
 
     func: Callable[[T, Any], Awaitable[Any]]
-    objs: Iterable[T]
+    objs: Sequence[T]
     args: tuple = ()
     kwargs: dict = field(default_factory=dict)
     batch_size: int = 30
@@ -94,7 +94,7 @@ class BatchExecutor[T]:
     async def create_and_call(
         cls: type[T],
         func: Callable[[T, Any], Awaitable[Any]],
-        objs: Iterable[T],
+        objs: Sequence[T],
     ) -> list[Any]:
         be = BatchExecutor(func, objs)
         return await be.batched_call()

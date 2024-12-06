@@ -4,8 +4,6 @@ bot:
     - 000000000
 db:
   path: ./database/db.sqlite3
-
-
 #db:
 #  user: postgres
 #  password: aiogramtemplate
@@ -13,6 +11,16 @@ db:
 #  host: localhost
 #  port: 5432
 
+# Redis settings
+# redis:
+# url: redis://127.0.0.1:6379
+
+# Web admin settings
+# webadmin:
+#   host: 127.0.0.1
+#   port: 8083
+#   secret_key: '**********'
+#   password: '**********'
 
 # Detailed information in the config folder
 #webhook:
@@ -24,7 +32,6 @@ db:
 #  ssl_cert:
 #    certfile: cert.pem
 #    keyfile: private.key
-
 
 #merchants:
 #  - merchant: yookassa

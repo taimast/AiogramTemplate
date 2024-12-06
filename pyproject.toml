@@ -12,7 +12,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.dependencies]
 python = ">=3.12,<4.0"
 uvloop = { version = ">=0.17.0", markers = "sys_platform != 'win32'" }
-aiogram = "^3.7.0"
+aiogram = "^3.14.0"
 pydantic = "^2.7.1"
 loguru = "^0.7.0"
 PyYAML = "^6.0"
@@ -30,6 +30,10 @@ multi-merchant = { git = "https://github.com/taimast/multi-merchant.git" }
 sqladmin = { extras = ["full"], version = "^0.18.0" }
 ftl-translator = { git = "https://github.com/taimast/ftl-translator.git" }
 fluentogram = "^1.1.7"
+aiohttp-socks = "^0.9.0"
+redis = {extras = ["hiredis"], version = "^5.2.0"}
+sqlmodel = "^0.0.22"
+aiocsv = "^1.3.2"
 
 [tool.poetry.group.dev.dependencies]
 watchdog = ">=2.3.0,<3.0.0"
@@ -40,21 +44,3 @@ jurigged = "^0.5.7"
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
-
-[tool.ruff]
-# Allow lines to be as long as 99 characters.
-line-length = 99
-
-# Enable all rules.
-[tool.ruff.lint]
-select = [
-    # "C", # TODO: mccabe - code complecity
-    "C4",
-    "E",
-    "F",
-    "T10",
-    "T20",
-    "Q",
-    "RET",
-    "F401",
-]

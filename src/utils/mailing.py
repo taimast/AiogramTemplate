@@ -3,13 +3,14 @@ from collections import deque
 from dataclasses import dataclass, field
 from typing import ClassVar, Self
 
-from aiogram import types, Bot
+from aiogram import Bot, types
 from aiogram.exceptions import TelegramRetryAfter
 from aiogram.utils import markdown as md
 from loguru import logger
 
 ChatID = int
 MessageID = int
+MessageInfo = tuple[ChatID, MessageID]
 
 
 @dataclass
@@ -23,7 +24,7 @@ class Mailing:
     delete_interval: float = 0.2
 
     cancel_markup: types.InlineKeyboardMarkup | None = None
-    messages: list[(ChatID, MessageID)] = field(default_factory=list)
+    messages: list[MessageInfo] = field(default_factory=list)
     mailings: ClassVar[deque[Self]] = deque(maxlen=1)
 
     @classmethod
@@ -32,34 +33,30 @@ class Mailing:
 
     @property
     def status_template(self):
-        return f"📨 Total: {md.hcode(self.success + self.failed)}\n" \
-               f"✅ Success: {md.hcode(self.success)}\n" \
-               f"🚫 Failed: {md.hcode(self.failed)}\n\n" \
-               f"{self.current_emoji}\n"
+        return (
+            f"📨 Total: {md.hcode(self.success + self.failed)}\n"
+            f"✅ Success: {md.hcode(self.success)}\n"
+            f"🚫 Failed: {md.hcode(self.failed)}\n\n"
+            f"{self.current_emoji}\n"
+        )
 
     async def init_status_message(self, message: types.Message):
         self.status_message = await message.answer(
             self.status_template,
-            reply_markup=self.cancel_markup
+            reply_markup=self.cancel_markup,
         )
 
     async def update_status(self):
-        self.current_emoji = "⏳ In progress" if self.current_emoji == "⌛ In progress" else "⌛ In progress"
-        try:
-            await self.status_message.edit_text(
-                self.status_template,
-                reply_markup=self.cancel_markup
-            )
-        except Exception as e:
-            logger.warning(f"Error while updating status message: {e}")
-
-    async def send_status(self, message: types.Message):
-        self.current_emoji = "⏳ In progress" if self.current_emoji == "⌛ In progress" else "⌛ In progress"
-        await message.answer(
-            self.status_template,
-            reply_markup=self.cancel_markup
+        self.current_emoji = (
+            "⏳ In progress" if self.current_emoji == "⌛ In progress" else "⌛ In progress"
         )
-
+        if self.status_message:
+            try:
+                await self.status_message.edit_text(
+                    self.status_template, reply_markup=self.cancel_markup
+                )
+            except Exception as e:
+                logger.warning(f"Error while updating status message: {e}")
 
     async def live_updating_status(self):
         while True:
@@ -67,12 +64,7 @@ class Mailing:
             await self.update_status()
 
     async def send(self, bot: Bot, user_id: int, message: types.Message, rm=None):
-        sm = await bot.copy_message(
-            user_id,
-            message.chat.id,
-            message.message_id,
-            reply_markup=rm
-        )
+        sm = await bot.copy_message(user_id, message.chat.id, message.message_id, reply_markup=rm)
         self.messages.append((user_id, sm.message_id))
         self.success += 1
 
@@ -80,9 +72,6 @@ class Mailing:
         for user in user_ids:
             try:
                 await self.send(bot, user, message)
-            except Exception as e:
-                self.failed += 1
-                logger.warning(f"Error while sending message to {user}: {e}")
 
             except TelegramRetryAfter as e:
                 logger.warning(f"Telegram API limit exceeded: {e}")
@@ -92,16 +81,27 @@ class Mailing:
                 except Exception as e:
                     self.failed += 1
                     logger.error(f"Error while sending message to {user}: {e}")
+
+            except Exception as e:
+                self.failed += 1
+                logger.warning(f"Error while sending message to {user}: {e}")
+
             finally:
                 await asyncio.sleep(self.send_interval)
 
-    async def send_notifications(self, bot: Bot, user_ids: list[int], message: types.Message, rm=None):
+    async def send_notifications(
+        self,
+        bot: Bot,
+        user_ids: list[int],
+        message: types.Message,
+        rm=None,
+    ):
         batch_size = 25  # количество сообщений в одной партии
         sleep_time = 1  # время паузы в секундах между партиями
 
         for i in range(0, len(user_ids), batch_size):
             tasks = []
-            for user in user_ids[i:i + batch_size]:
+            for user in user_ids[i : i + batch_size]:
                 tasks.append(asyncio.create_task(self.send(bot, user, message, rm)))
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -117,19 +117,22 @@ class Mailing:
             await asyncio.sleep(next_sleep)
 
     async def done(self):
-        await self.status_message.edit_text(
-            self.status_template.replace(self.current_emoji, "✅ Done")
-        )
+        if self.status_message:
+            await self.status_message.edit_text(
+                self.status_template.replace(self.current_emoji, "✅ Done")
+            )
 
     async def cancel(self):
-        await self.status_message.edit_text(
-            self.status_template.replace(self.current_emoji, "🚫 Canceled")
-        )
+        if self.status_message:
+            await self.status_message.edit_text(
+                self.status_template.replace(self.current_emoji, "🚫 Canceled")
+            )
 
     async def retracted_status(self):
-        await self.status_message.edit_text(
-            self.status_template.replace(self.current_emoji, "🔄 Retracted")
-        )
+        if self.status_message:
+            await self.status_message.edit_text(
+                self.status_template.replace(self.current_emoji, "🔄 Retracted")
+            )
 
     # Отменить последную рассылку
     # Также запускается как send и обновляет статусы обратно
@@ -143,8 +146,6 @@ class Mailing:
                 self.messages.remove((chat_id, message_id))
             except Exception as e:
                 self.failed += 1
-                logger.warning(
-                    f"Error while deleting message {message_id} from {chat_id}: {e}"
-                )
+                logger.warning(f"Error while deleting message {message_id} from {chat_id}: {e}")
             finally:
                 await asyncio.sleep(self.delete_interval)

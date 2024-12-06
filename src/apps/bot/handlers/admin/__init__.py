@@ -1,11 +1,12 @@
 from aiogram import Router
 
-from . import menu, mailing, stats, users
+from . import mailing, menu, moderator, stats, users
 
 on = Router(name="admin")
 on.include_routers(
     menu.on,
     mailing.on,
     stats.on,
-    users.on
+    users.on,
+    moderator.on,
 )

@@ -2,18 +2,14 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.client.default import DefaultBotProperties
 from aiogram.webhook.aiohttp_server import (
-    SimpleRequestHandler,
     TokenBasedRequestHandler,
     setup_application,
 )
 from aiohttp import web
 from loguru import logger
-from pprint import pformat
-from src.config import WebhookSettings
 
-from ..config import Settings
+from src.config import WebhookSettings
 
 
 async def start_webhook(

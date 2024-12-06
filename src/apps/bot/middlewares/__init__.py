@@ -1,11 +1,13 @@
 from .db import DBSessionMiddleware
 from .l10n import TranslatorRunnerMiddleware
 from .throttling import ThrottlingMiddleware
-from .user import UserMiddleware
+from .user.light import LightUserMiddleware
+from .user.rich import RichUserMiddleware
 
 __all__ = (
     "ThrottlingMiddleware",
-    "UserMiddleware",
+    "RichUserMiddleware",
+    "LightUserMiddleware",
     "TranslatorRunnerMiddleware",
     "DBSessionMiddleware",
 )

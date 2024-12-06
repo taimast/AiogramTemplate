@@ -11,11 +11,16 @@ from pydantic.fields import FieldInfo
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
+)
+from pydantic_settings import (
     SettingsConfigDict as _SettingsConfigDict,
 )
 
+from src.apps.bot.callback_data.moderator import ModeratorPermission
+from src.config.moderator import Moderator
+
 from .consts import BASE_DIR
-from .db import SqliteDB, PostgresDB
+from .db import PostgresDB, SqliteDB
 from .webhook import WebhookSettings
 
 
@@ -45,7 +50,7 @@ class YamlConfigSettingsSource(PydanticBaseSettingsSource):
 
     def __call__(self) -> dict[str, Any]:
         d: dict[str, Any] = {}
-        self.file_content = load_yaml(self.config["config_file"])
+        self.file_content = load_yaml(self.config["config_file"])  # type: ignore
         for field_name, field in self.settings_cls.model_fields.items():
             field_value, field_key, value_is_complex = self.get_field_value(field, field_name)
             field_value = self.prepare_field_value(
@@ -65,8 +70,11 @@ class BotTexts(BaseModel):
 
 class BotSettings(BaseModel):
     token: SecretStr
+    proxy: str | None = None
     admins: set[int] = Field(default_factory=set)
     super_admins: list[int] = Field(default_factory=list)
+    moderators: dict[int, Moderator] = Field(default_factory=dict)
+
     texts: BotTexts = Field(default_factory=BotTexts)
 
     @model_validator(mode="after")
@@ -79,6 +87,18 @@ class BotSettings(BaseModel):
     def serialize_token(self, v: SecretStr) -> str:
         return v.get_secret_value()
 
+    def have_perm(self, user_id: int, permission: ModeratorPermission) -> bool:
+        if user_id in self.admins:
+            return True
+
+        if moder := self.moderators.get(user_id):
+            return moder.have_permission(permission)
+
+        return False
+
+    def is_admin(self, user_id: int) -> bool:
+        return user_id in self.admins
+
 
 class WebAdminSettings(BaseModel):
     host: str = "127.0.0.1"
@@ -86,12 +106,21 @@ class WebAdminSettings(BaseModel):
     secret_key: SecretStr = SecretStr("adminsecret")
     password: SecretStr = SecretStr("admin")
 
+    @field_serializer("secret_key", "password")
+    def serialize_secret_key(self, v: SecretStr) -> str:
+        return v.get_secret_value()
+
+
+class RedisSettings(BaseModel):
+    url: str = "redis://127.0.0.1:6379"
+
 
 class Settings(BaseSettings):
     bot: BotSettings
     db: PostgresDB | SqliteDB
+    redis: RedisSettings | None = None
     webhook: WebhookSettings | None = None
-    webadmin: WebAdminSettings = WebAdminSettings()
+    webadmin: WebAdminSettings | None = None
     merchants: list[MerchantAnnotated] = Field(default_factory=list)
 
     model_config = SettingsConfigDict(
@@ -126,7 +155,8 @@ class Settings(BaseSettings):
         return None
 
     def dump(self):
-        with open(BASE_DIR / self.model_config["config_file"], "w", encoding="utf-8") as f:
+        file_path = BASE_DIR / self.model_config["config_file"]  # type: ignore
+        with open(file_path, "w", encoding="utf-8") as f:
             yaml.dump(
                 self.model_dump(mode="json", exclude_none=True),
                 f,

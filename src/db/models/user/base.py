@@ -17,4 +17,4 @@ class BaseUser(Base, TimestampMixin):
     def full_name(self) -> str:
         if self.last_name:
             return f"{self.first_name} {self.last_name}"
-        return self.first_name
+        return self.first_name or "[unknown_name][id={self.id}]"

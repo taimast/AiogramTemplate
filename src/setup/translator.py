@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from fluent_compiler.bundle import FluentBundle
-from fluentogram import TranslatorHub, FluentTranslator
+from fluentogram import FluentTranslator, TranslatorHub
 from loguru import logger
 
 from ..config import LOCALES_DIR
@@ -28,24 +28,21 @@ def init_translator_hub() -> TranslatorHub:
     :return:
     """
 
-    locales_map = {
-        locale: (locale, "ru", "en")
-        for locale in Locale
-    }
+    locales_map = {locale: (locale, "ru", "en") for locale in Locale}
 
     translators = [
         FluentTranslator(
             locale,
             translator=FluentBundle.from_files(
-                locale,
-                filenames=get_ftl_paths(LOCALES_DIR / locale))
+                locale, filenames=get_ftl_paths(LOCALES_DIR / locale)
+            ),
         )
         for locale in Locale
     ]
 
     translator_hub = TranslatorHub(
-        locales_map=locales_map,
-        translators=translators,
+        locales_map=locales_map,  # type: ignore
+        translators=translators,  # type: ignore
     )
     logger.info("Successfully loaded locales : " + ", ".join(translator_hub.locales_map))
     return translator_hub
