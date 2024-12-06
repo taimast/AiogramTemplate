@@ -7,24 +7,29 @@
 - **Admin Panel**: Comprehensive and easy-to-use admin interface.
 - **Middleware**: Custom middlewares to handle user sessions, localization, and database interactions.
 - **Localization**: Fluent localization system for multiple languages.
-- **Payments**: Integrated support for multiple payment providers:
-  - [CryptoCloud](https://cryptocloud.plus/)
-  - [CryptoPay](https://github.com/LulzLoL231/pyCryptoPayAPI)
-  - [Qiwi](https://qiwi.com/p2p-admin/api/)
-  - [YooKassa](https://yookassa.ru/developers/)
-  - USDT
-  - [Payeer](https://payeer.com/)
-  - [Cryptomus](https://cryptomus.com/)
-  - [WalletPay](https://pay.wallet.tg/)
-  - [Payok](https://payok.io/)
-  - [Aaio](https://aaio.so/)
-  - [BetaTransfer](https://betatransfer.io/)
-
+- **Payments**: Integrated support for multiple payment providers with [multi-merchant](https://github.com/taimast/multi-merchant).
 - **Command Line Interface (CLI)**: Simplified management and configuration via command line.
 - **Webhook Configuration**: Easy setup and management of webhooks for efficient bot operation.
 - **Database ORM**: Fully integrated with [SQLAlchemy](https://github.com/sqlalchemy/sqlalchemy) for database management.
 - **DB Migration**: Database versioning with [Alembic](https://github.com/sqlalchemy/alembic).
 - **Configuration Management**: Robust configuration handling using [Pydantic](https://github.com/pydantic/pydantic).
+- **Persistence Sessions**: Efficient handling of user data across multiple persistence sessions.
+- **Support Sessions**: Direct communication between users and support moderators through structured threads.
+
+# 📦 Usage
+1. **Configure the Project:**
+   - Fill in the `config.yml` with your specific settings.
+
+2. **Run the Project:**
+   - Start the project using Docker: `docker compose up -d`.
+
+### Updating the Project
+
+1. **Stop the Containers:**
+   - Run `docker compose stop` to stop the running containers.
+
+2. **Rebuild and Restart:**
+   - Use `docker compose up -d --build` to rebuild and restart the containers.
 
 ## 🗂️ Project Structure
 
@@ -45,11 +50,11 @@ Localization is handled via [Fluent](https://projectfluent.org/fluent/guide). De
 
 
 ## 🔧 Support Sessions
-
 - **SupportSession Management**: `src/utils/support.py` – Facilitates direct communication between users and support moderators through structured threads.
   - **Seamless Support**: Manage user support requests effectively by utilizing the `SupportConnector`, which tracks and manages active support sessions.
   - **Session Handling**: Automatically create and manage communication threads for each support request, enabling efficient handling and resolution of user queries.
   - **Modular Integration**: Easily integrate into existing bots for enhanced user support capabilities.
+
 
 ## 💾 Persistence and Configuration
 **Manager (`PersistenceSessionManager`)**: `src/db/persistence_session/manager.py`
@@ -58,22 +63,6 @@ Localization is handled via [Fluent](https://projectfluent.org/fluent/guide). De
    - Ensures that whenever a session is instantiated, it is ready to sync in-memory or Redis-stored data with the database.
    - Uses SQLAlchemy sessions for interacting with the database and potentially Redis for caching purposes.
 
-
-## ⚙️ Setup and Installation
-
-1. **Configure the Project:**
-   - Fill in the `config.yml` with your specific settings.
-
-2. **Run the Project:**
-   - Start the project using Docker: `docker compose up -d`.
-
-### Updating the Project
-
-1. **Stop the Containers:**
-   - Run `docker compose stop` to stop the running containers.
-
-2. **Rebuild and Restart:**
-   - Use `docker compose up -d --build` to rebuild and restart the containers.
 
 ## 🚀 Additional Functionalities
 
