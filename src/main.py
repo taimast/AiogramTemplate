@@ -1,7 +1,7 @@
 import asyncio
 from pprint import pformat
 
-from aiogram import Bot, Dispatcher, F
+from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -18,6 +18,7 @@ from src.setup.cli import Mode
 from src.setup.opts import SetupOpts
 from src.setup.webadmin import setup_webadmin
 from src.utils.other import send_start_info
+from src.utils.support import SupportConnector
 
 
 async def on_startup(settings: Settings, bot: Bot):
@@ -75,12 +76,16 @@ async def main():
         settings=settings,
         l10n=base_l10n,
     )
-
+    if settings.support:
+        support_connector = SupportConnector(bot, settings.support.chat_id)
+    else:
+        support_connector = None
     storage = MemoryStorage()
     dp = Dispatcher(
         storage=storage,
         settings=settings,
         session_manager=session_manager,
+        support_connector=support_connector,
         translator_hub=translator_hub,
         scheduler=scheduler,
         fsm_strategy=FSMStrategy.GLOBAL_USER,
@@ -88,9 +93,6 @@ async def main():
     # Register startup and shutdown handlers
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
-
-    # Setup filter for private messages only
-    dp.message.filter(F.chat.type == "private")
 
     # Setup routers
     await setup.setup_routers(dp, settings)

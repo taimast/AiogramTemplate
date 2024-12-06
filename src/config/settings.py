@@ -115,9 +115,14 @@ class RedisSettings(BaseModel):
     url: str = "redis://127.0.0.1:6379"
 
 
+class SupportSettings(BaseModel):
+    chat_id: int = Field(title="Chat ID")
+
+
 class Settings(BaseSettings):
     bot: BotSettings
     db: PostgresDB | SqliteDB
+    support: SupportSettings | None = None
     redis: RedisSettings | None = None
     webhook: WebhookSettings | None = None
     webadmin: WebAdminSettings | None = None

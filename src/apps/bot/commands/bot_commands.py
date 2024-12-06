@@ -1,7 +1,7 @@
 import functools
 from typing import NamedTuple
 
-from aiogram import Router, F
+from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import BotCommand
 
@@ -24,6 +24,7 @@ def command_wrapper(on: Router, command: BotCommand, *filters):
 
 class _BaseCommands(NamedTuple):
     START: BotCommand = BotCommand(command="start", description="🏠 Главное меню")
+    HELP: BotCommand = BotCommand(command="help", description="📖 Помощь")
 
 
 class _AdminCommands(NamedTuple):

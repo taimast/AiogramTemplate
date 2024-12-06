@@ -9,6 +9,7 @@ from aiogram.types import User as TgUser
 
 from src.apps.bot.commands.bot_commands import BaseCommands
 from src.apps.bot.keyboards.common import common_kbs
+from src.utils.support import SupportConnector
 
 if TYPE_CHECKING:
     from src.locales.stubs.ru.stub import TranslatorRunner
@@ -59,3 +60,22 @@ async def start(
     #     f"{event_from_user.mention_html(name="XB")} брателла",
     # )
     # await msg.react([ReactionTypeEmoji(emoji="👍")])
+
+
+@on.message(Command(BaseCommands.HELP))
+async def help(
+    msg: types.Message,
+    l10n: TranslatorRunner,
+    state: FSMContext,
+    support_connector: SupportConnector | None,
+):
+    if not support_connector:
+        return await msg.answer("В данный момент невозможно подключиться к службе поддержки")
+    if not msg.from_user:
+        return await msg.answer("Не удалось получить информацию о пользователе")
+
+    await support_connector.create_thread(msg.from_user)
+
+    return await msg.answer(
+        "Вы создали новую тему в чате поддержки, введите ваш вопрос",
+    )
