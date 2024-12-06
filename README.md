@@ -16,20 +16,17 @@
 - **Persistence Sessions**: Efficient handling of user data across multiple persistence sessions.
 - **Support Sessions**: Direct communication between users and support moderators through structured threads.
 
-# 📦 Usage
-1. **Configure the Project:**
-   - Fill in the `config.yml` with your specific settings.
+## 📦 Usage
+**Configure the Project:**
+- Fill in the `config.yml` with your specific settings.
+**Run the Project:**
+- Start the project using Docker: `docker compose up -d`.
 
-2. **Run the Project:**
-   - Start the project using Docker: `docker compose up -d`.
-
-### Updating the Project
-
-1. **Stop the Containers:**
-   - Run `docker compose stop` to stop the running containers.
-
-2. **Rebuild and Restart:**
-   - Use `docker compose up -d --build` to rebuild and restart the containers.
+#### Updating the Project
+**Stop the Containers:**
+- Run `docker compose stop` to stop the running containers.
+**Rebuild and Restart:**
+- Use `docker compose up -d --build` to rebuild and restart the containers.
 
 ## 🗂️ Project Structure
 
