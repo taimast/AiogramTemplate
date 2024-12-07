@@ -85,15 +85,7 @@ async def main():
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    #
-    # @todo #234:15m/DEV This is something to do later
-    #  in one of the next releases. I can't figure out
-    #  how to implement it now, that's why the puzzle.
-    #  The text can be so long, as needed, just use
-    #  the same anount of spaces, as the second line.
-    # This text will be not a part of the puzzle, as
-    # it has less spaces.
-    #
+    # TODO: #TEST-21:30min Puzzle description
     await setup.setup_routers(dp, settings)
 
     # Setup middlewares
