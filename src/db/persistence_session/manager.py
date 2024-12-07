@@ -14,7 +14,7 @@ class PersistenceSessionManager[LightKeyT]:
     db_sessionmaker: async_sessionmaker[AsyncSession]
     light: BasePersistenceSession[LightKeyT]
 
-    async def initialize(self: PersistenceSessionManager[str]):
+    async def initialize_light_cache(self: PersistenceSessionManager[str]):
         from src.db.models.user.light import LightUser
 
         async with self.db_sessionmaker() as session:

@@ -4,6 +4,7 @@ bot:
     - 000000000
 db:
   path: ./database/db.sqlite3
+# ** DB settings **
 #db:
 #  user: postgres
 #  password: aiogramtemplate
@@ -11,30 +12,33 @@ db:
 #  host: localhost
 #  port: 5432
 
-# Redis settings
+# ** Redis settings **
 # redis:
 # url: redis://127.0.0.1:6379
 
-# Web admin settings
+# ** Web server settings **
 # webadmin:
 #   host: 127.0.0.1
 #   port: 8083
 #   secret_key: '**********'
 #   password: '**********'
-# Support chat id
+
+# ** Support Chat settings **
 # support:
 # chat_id: 123456789
-# Detailed information in the config folder
+
+# ** Webhook settings **
 #webhook:
 #  domain: 195.22.712.246:8443
 #  port: 8443
-#
 
+## Webhook SSL certificate
 ## create certificate - `openssl req -newkey rsa:2048 -sha256 -nodes -keyout private.key -x509 -days 3650 -out cert.pem`
 #  ssl_cert:
 #    certfile: cert.pem
 #    keyfile: private.key
 
+# ** Merchant settings **
 #merchants:
 #  - merchant: yookassa
 #    shop_id: 123123

@@ -7,13 +7,9 @@ from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.strategy import FSMStrategy
 from loguru import logger
-from redis.asyncio import Redis
 
 from src import setup
 from src.config import Settings
-from src.db.persistence_session.manager import PersistenceSessionManager
-from src.db.persistence_session.memory import MemoryPersistenceSession
-from src.db.persistence_session.redis import RedisPersistenceSession
 from src.setup.cli import Mode
 from src.setup.opts import SetupOpts
 from src.setup.webadmin import setup_webadmin
@@ -33,6 +29,7 @@ async def main():
     # Parse command line arguments
     cli_settings = setup.parse_args()
     cli_settings.update_settings(Settings)
+
     # Initialize logging
     setup.init_logging(cli_settings.log)
 
@@ -53,24 +50,10 @@ async def main():
         session=AiohttpSession(proxy=settings.bot.proxy),
     )
 
-    bot.get_star_transactions
-
     # Setup scheduler
     scheduler = await setup.setup_scheduler()
 
     base_l10n = translator_hub.get_translator_by_locale("ru")
-
-    if settings.redis:
-        redis = Redis.from_url(url=settings.redis.url)
-        light_persistence_session = RedisPersistenceSession(redis)
-    else:
-        light_persistence_session = MemoryPersistenceSession()
-
-    session_manager = PersistenceSessionManager(
-        db_sessionmaker=session_maker,
-        light=light_persistence_session,
-    )
-    await session_manager.initialize()
 
     # Setup options
     opts = SetupOpts(
@@ -79,10 +62,15 @@ async def main():
         settings=settings,
         l10n=base_l10n,
     )
+
+    # Setup session manager
+    session_manager = await setup.setup_session_manager(opts)
+
     if settings.support:
         support_connector = SupportConnector(bot, settings.support.chat_id)
     else:
         support_connector = None
+
     storage = MemoryStorage()
     dp = Dispatcher(
         storage=storage,

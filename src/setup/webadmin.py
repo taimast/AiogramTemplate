@@ -17,7 +17,9 @@ async def setup_webadmin(opts: SetupOpts):
     authentication_backend = AdminAuth(secret_key=wb_settings.secret_key.get_secret_value())
     authentication_backend.password = wb_settings.password.get_secret_value()
     admin = Admin(
-        app, session_maker=opts.session_maker, authentication_backend=authentication_backend
+        app,
+        session_maker=opts.session_maker,
+        authentication_backend=authentication_backend,
     )
     admin.add_view(UserAdmin)
 

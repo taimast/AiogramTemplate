@@ -6,6 +6,7 @@ from aiogram.dispatcher.flags import get_flag
 from aiogram.types import CallbackQuery, Message
 from loguru import logger
 
+from src.apps.bot.types.user import TgUser
 from src.db.models import User
 from src.db.models.user.light import LightUser
 from src.db.persistence_session.manager import PersistenceSessionManager
@@ -24,30 +25,17 @@ class LightUserMiddleware(BaseMiddleware):
         event: Message | CallbackQuery,
         data: dict[str, Any],
     ) -> Any:
-        user = event.from_user
-        if not user:
+        tg_user = event.from_user
+        if not tg_user:
             return await handler(event, data)
-        print(data["event_from_user"], "EVENT_FROM_USER")
-        # TODO: Использоваь pipeline для блокировки вставки при множетсвенных запросах
-        exists = await self.session_manager.light.exists(LightUser, LightUser.make_key(user.id))
 
-        if not exists:
-            logger.debug("Light user for User {} not found", user.id)
-            tg_user_data = user.model_dump(exclude={"language_code"})
-            rich_user = User()
-            rich_user.update(**tg_user_data)
-            light_user = LightUser.from_tg_user(user).as_(self.session_manager)
-            try:
-                await LightUser.create_rich(rich_user, self.session_manager)
-            except sqlalchemy.exc.IntegrityError as e:
-                logger.warning("User already exists in rich: {}", e)
-            await LightUser.create_light(self.session_manager, light_user)
+        await self.initialize_user_records(tg_user)
 
         light_user_flag = get_flag(data, "light_user")
         if light_user_flag:
-            logger.debug("Get light user for User {}", user.id)
+            logger.debug("Get light user for User {}", tg_user.id)
 
-            light_user = await LightUser.get_light(self.session_manager, user.id)
+            light_user = await LightUser.get_light(self.session_manager, tg_user.id)
             data["light_user"] = light_user
 
             if isinstance(light_user_flag, dict):
@@ -57,3 +45,21 @@ class LightUserMiddleware(BaseMiddleware):
                         return await handler(event, data)
 
         return await handler(event, data)
+
+    async def initialize_user_records(self, tg_user: TgUser):
+        # TODO: Использоваь pipeline для блокировки вставки при множетсвенных запросах
+        exists = await self.session_manager.light.exists(
+            LightUser,
+            LightUser.make_key(tg_user.id),
+        )
+        if not exists:
+            logger.debug("Light user for User {} not found", tg_user.id)
+            tg_user_data = tg_user.model_dump(exclude={"language_code"})
+            rich_user = User()
+            rich_user.update(**tg_user_data)
+            light_user = LightUser.from_tg_user(tg_user).as_(self.session_manager)
+            try:
+                await LightUser.create_rich(rich_user, self.session_manager)
+            except sqlalchemy.exc.IntegrityError as e:
+                logger.warning("User already exists in rich: {}", e)
+            await LightUser.create_light(self.session_manager, light_user)
