@@ -15,7 +15,7 @@ from src.apps.bot.types.message import (
     NonEmptyMessageCallbackQuery,
     NonEmptyTextMessage,
 )
-from src.db.models.user.light import LightUser
+from src.apps.bot.types.user import TgUser
 
 from .....config import Settings
 from .....db.models import User
@@ -242,8 +242,8 @@ async def mailing_send_confirm(
 async def retract_last_mailing(
     call: NonEmptyMessageCallbackQuery,
     settings: Settings,
-    light_user: LightUser,
     bot: Bot,
+    event_from_user: TgUser,
     l10n: TranslatorRunner,
 ):
     mailing_obj = Mailing.get_last()
@@ -272,7 +272,7 @@ async def retract_last_mailing(
         await call.message.edit_text(
             l10n.get("admin-mailing-retracted"),
             reply_markup=admin_kbs.admin_start(
-                light_user.id,
+                event_from_user.id,
                 settings.bot,
                 l10n,
             ),

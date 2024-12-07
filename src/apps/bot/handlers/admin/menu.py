@@ -6,8 +6,8 @@ from aiogram.fsm.context import FSMContext
 from fluentogram import TranslatorRunner
 
 from src.apps.bot.types.message import NonEmptyBotMessage, NonEmptyTextMessage
+from src.apps.bot.types.user import TgUser
 from src.config import Settings
-from src.db.models.user.light import LightUser
 
 from ...callback_data.actions import Action, AdminAction
 from ...callback_data.admin import AdminCallback
@@ -23,7 +23,7 @@ on = Router(name=__name__)
 async def admin_start(
     message: types.CallbackQuery | types.Message,
     edit: Callable,
-    light_user: LightUser,
+    event_from_user: TgUser,
     settings: Settings,
     state: FSMContext,
     l10n: TranslatorRunner,
@@ -31,7 +31,11 @@ async def admin_start(
     await state.clear()
     await edit(
         l10n.get("admin-menu"),
-        reply_markup=admin_kbs.admin_start(light_user.id, settings.bot, l10n),
+        reply_markup=admin_kbs.admin_start(
+            event_from_user.id,
+            settings.bot,
+            l10n,
+        ),
     )
 
 

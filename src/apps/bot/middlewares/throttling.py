@@ -2,8 +2,9 @@ from typing import Any, Awaitable, Callable, Dict
 
 from aiogram import BaseMiddleware
 from aiogram.types import Update
-from aiogram.types import User as TgUser
 from cachetools import TTLCache
+
+from src.apps.bot.types.user import TgUser
 
 
 class ThrottlingMiddleware(BaseMiddleware):

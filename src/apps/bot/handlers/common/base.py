@@ -5,10 +5,10 @@ from typing import TYPE_CHECKING
 from aiogram import Bot, F, Router, types
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
-from aiogram.types import User as TgUser
 
 from src.apps.bot.commands.bot_commands import BaseCommands
 from src.apps.bot.keyboards.common import common_kbs
+from src.apps.bot.types.user import TgUser
 from src.utils.support import SupportConnector
 
 if TYPE_CHECKING:
@@ -55,11 +55,6 @@ async def start(
         event_from_user.mention_html(),
         reply_markup=common_kbs.inline_start(),
     )
-    # await msg.bot.send_message(
-    #     "@taimastSan",
-    #     f"{event_from_user.mention_html(name="XB")} брателла",
-    # )
-    # await msg.react([ReactionTypeEmoji(emoji="👍")])
 
 
 @on.message(Command(BaseCommands.HELP))

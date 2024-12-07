@@ -47,12 +47,14 @@ def generate_class_code(*action_enums: type[StrEnum], gen_action: bool = False):
             action_source = inspect.getsource(enum)
         else:
             action_source = ""
-        prefix = base_class_name.replace('Action', '').lower()
+        prefix = base_class_name.replace("Action", "").lower()
         class_template = f"""
 {action_source}
 
 class {prefix.title()}Callback(ActionMixin, CallbackData, prefix="{prefix}"):
+    id: int | None = None
     action: Action | {base_class_name}
+    data: str | None = None
 {"".join(methods)}
     """
         template += class_template.strip() + "\n\n\n"
@@ -65,16 +67,21 @@ class {prefix.title()}Callback(ActionMixin, CallbackData, prefix="{prefix}"):
 # path = r"G:\CodeProjects\PycharmProjects\AiogramProjectTemplate\project\src\apps\bot\callback_data\admin.py"
 # Path(path).write_text(generated_code, "utf-8")
 
+
 def generate_all_callbacks(action_name: str = "Action"):
     # Получаем список всех actions из файла actions.py
-    actions = [obj for name, obj in inspect.getmembers(sys.modules[__name__]) if
-               inspect.isclass(obj) and issubclass(obj, StrEnum)]
+    actions = [
+        obj
+        for name, obj in inspect.getmembers(sys.modules[__name__])
+        if inspect.isclass(obj) and issubclass(obj, StrEnum)
+    ]
     # filter out all Action classes
     actions = [action for action in actions if action_name in action.__name__]
-
+    print(actions)
+    return
     # Для каждого action генерируем Callback и сохраняем в новый модуль
     for action in actions:
-        module_name = action.__name__.replace('Action', '').lower()
+        module_name = action.__name__.replace("Action", "").lower()
         callback_path = BASE_DIR / f"src/apps/bot/callback_data/{module_name}.py"
         # if callback_path.exists():
         #     print(f"Callback module {module_name} already exists")
@@ -87,5 +94,5 @@ def main():
     generate_all_callbacks()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

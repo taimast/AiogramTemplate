@@ -8,14 +8,13 @@ from loguru import logger
 
 from src.db.models import User
 from src.db.models.user.light import LightUser
-from src.db.models.user.user import Locale
 from src.db.persistence_session.manager import PersistenceSessionManager
 
 
 class LightUserMiddleware(BaseMiddleware):
     def __init__(
         self,
-        session_manager: PersistenceSessionManager[str, LightUser],
+        session_manager: PersistenceSessionManager[str],
     ):
         self.session_manager = session_manager
 
@@ -28,26 +27,16 @@ class LightUserMiddleware(BaseMiddleware):
         user = event.from_user
         if not user:
             return await handler(event, data)
-
-        logger.debug("Get light user for User {}", user.id)
+        print(data["event_from_user"], "EVENT_FROM_USER")
         # TODO: Использоваь pipeline для блокировки вставки при множетсвенных запросах
-        exists = await self.session_manager.light.exists(LightUser, LightUser.get_key(user.id))
-        if exists:
-            logger.debug("Light user for User {} found", user.id)
-            light_user = await LightUser.get_light(self.session_manager, user.id)
-            light_user._as(self.session_manager)
-        else:
-            logger.debug("Light user for User {} not found", user.id)
+        exists = await self.session_manager.light.exists(LightUser, LightUser.make_key(user.id))
 
+        if not exists:
+            logger.debug("Light user for User {} not found", user.id)
             tg_user_data = user.model_dump(exclude={"language_code"})
             rich_user = User()
             rich_user.update(**tg_user_data)
-            light_user = LightUser(
-                id=user.id,
-                username=user.username,
-                language_code=user.language_code or Locale.RUSSIAN,
-            )
-            light_user._as(self.session_manager)
+            light_user = LightUser.from_tg_user(user).as_(self.session_manager)
             try:
                 await LightUser.create_rich(rich_user, self.session_manager)
             except sqlalchemy.exc.IntegrityError as e:
@@ -55,16 +44,16 @@ class LightUserMiddleware(BaseMiddleware):
             await LightUser.create_light(self.session_manager, light_user)
 
         light_user_flag = get_flag(data, "light_user")
-        data["light_user"] = light_user
+        if light_user_flag:
+            logger.debug("Get light user for User {}", user.id)
 
-        if isinstance(light_user_flag, dict):
-            if light_user_flag.get("with_rich"):
-                async with light_user.with_rich() as rich_user:
-                    data["user"] = rich_user
-                    return await handler(event, data)
+            light_user = await LightUser.get_light(self.session_manager, user.id)
+            data["light_user"] = light_user
 
-        # async with light_user.with_rich() as rich_user:
-        #     data["user"] = rich_user
-        #     return await handler(event, data)
+            if isinstance(light_user_flag, dict):
+                if light_user_flag.get("with_rich"):
+                    async with light_user.with_rich() as rich_user:
+                        data["user"] = rich_user
+                        return await handler(event, data)
 
         return await handler(event, data)

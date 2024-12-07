@@ -1,14 +1,13 @@
 from aiogram.types import (
     CopyTextButton,
-    ReplyKeyboardMarkup,
     InlineKeyboardMarkup,
+    ReplyKeyboardMarkup,
     WebAppInfo,
-    KeyboardButtonRequestUsers,
 )
 
 from src.apps.bot.keyboards.common.helper_kbs import (
-    CustomReplyKeyboardBuilder,
     CustomInlineKeyboardBuilder,
+    CustomReplyKeyboardBuilder,
 )
 
 
@@ -18,7 +17,6 @@ def start() -> ReplyKeyboardMarkup:
     text = "Hello, World!"
     share_link_part = f"share/url?text={text}&url={start_app_url}"
     share_link = f"https://t.me/{share_link_part}"
-    print(share_link)
     builder.button(
         text="share",
         # web_app=WebAppInfo(url=share_link)
@@ -49,7 +47,7 @@ def inline_start() -> InlineKeyboardMarkup:
     share_link_part = f"share/url?text={text}&url={start_app_url}&button=share"
     share_link = f"https://t.me/{share_link_part}"
     builder.button(text="share", url=share_link)
-    builder.button(text="give", copy_text={"text": "KJKJKJK"})
+    builder.button(text="give", copy_text=CopyTextButton(text="KO"))
     builder.adjust(1)
     # builder.add_start_back()
     return builder.as_markup(resize_keyboard=True)

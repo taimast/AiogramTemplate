@@ -52,6 +52,9 @@ async def main():
         default=DefaultBotProperties(parse_mode="html"),
         session=AiohttpSession(proxy=settings.bot.proxy),
     )
+
+    bot.get_star_transactions
+
     # Setup scheduler
     scheduler = await setup.setup_scheduler()
 

@@ -20,6 +20,7 @@ from src.apps.bot.keyboards.admin import admin_kbs
 from src.apps.bot.keyboards.common import helper_kbs
 from src.apps.bot.keyboards.common.helper_kbs import md
 from src.apps.bot.types.message import NonEmptyMessageCallbackQuery, NonEmptyTextMessage
+from src.apps.bot.types.user import TgUser
 from src.config import MEDIA_DIR, Settings
 from src.db.models import User
 from src.db.models.user.light import LightUser
@@ -232,7 +233,7 @@ async def delete_confirm(
     message: NonEmptyTextMessage,
     edit: Callable,
     state: FSMContext,
-    session_manager: PersistenceSessionManager[str, LightUser],
+    session_manager: PersistenceSessionManager[str],
     l10n: TranslatorRunner,
 ):
     data = await state.get_data()
@@ -289,9 +290,9 @@ async def add_info(
 async def add_info_edit(
     message: types.Message,
     edit: Callable,
-    light_user: LightUser,
+    event_from_user: TgUser,
     state: FSMContext,
-    session_manager: PersistenceSessionManager[str, LightUser],
+    session_manager: PersistenceSessionManager[str],
     l10n: TranslatorRunner,
 ):
     data = await state.get_data()
@@ -303,7 +304,7 @@ async def add_info_edit(
     assert callback_data.id is not None, "callback_data.id is None"
     lu = await LightUser.get_light(session_manager, callback_data.id)
     async with lu.with_rich() as rich_user:
-        username = light_user.username or f"ID:{lu.id}"
+        username = event_from_user.username or f"ID:{lu.id}"
         rich_user.add_note(username, note)
 
     await state.clear()
@@ -322,7 +323,7 @@ async def delete_info(
     edit: Callable,
     callback_data: UserCallback,
     state: FSMContext,
-    session_manager: PersistenceSessionManager[str, LightUser],
+    session_manager: PersistenceSessionManager[str],
     l10n: TranslatorRunner,
 ):
     assert callback_data.id is not None, "callback_data.id is None"

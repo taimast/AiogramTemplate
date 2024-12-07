@@ -9,9 +9,9 @@ from src.apps.bot.callback_data.admin import AdminCallback
 from src.apps.bot.filters.moderator_permission import ModeratorPermissionFilter
 from src.apps.bot.keyboards.admin import admin_kbs
 from src.apps.bot.keyboards.common import helper_kbs
+from src.apps.bot.types.user import TgUser
 from src.config import Settings
 from src.db.models import User
-from src.db.models.user.light import LightUser
 
 on = Router(name=__name__)
 
@@ -20,14 +20,18 @@ on = Router(name=__name__)
 async def stats_menu(
     call: types.CallbackQuery,
     edit,
-    light_user: LightUser,
     settings: Settings,
+    event_from_user: TgUser,
     state: FSMContext,
     l10n,
 ):
     await edit(
         l10n.get("admin-stats-menu-select"),
-        reply_markup=admin_kbs.stats(light_user.id, settings.bot, l10n),
+        reply_markup=admin_kbs.stats(
+            event_from_user.id,
+            settings.bot,
+            l10n,
+        ),
     )
 
 

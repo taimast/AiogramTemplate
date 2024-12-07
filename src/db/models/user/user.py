@@ -32,13 +32,6 @@ class User(BaseUser, ReferralMixin):
     def pretty(self):
         return f"{self.full_name} @{self.username}"
 
-    @property
-    def link(self):
-        user_link = md.hlink(self.full_name, f"tg://user?id={self.id}")
-        if self.username:
-            user_link = md.hlink(self.full_name, f"https://t.me/{self.username}")
-        return user_link
-
     @classmethod
     async def get_users_with_referral_counts(
         cls,
@@ -46,7 +39,8 @@ class User(BaseUser, ReferralMixin):
         *expr,
     ) -> typing.Sequence[tuple[User, int]]:
         """
-        Асинхронный классовый метод для получения списка всех пользователей с количеством их рефералов.
+        Асинхронный классовый метод для получения
+          списка всех пользователей с количеством их рефералов.
         Возвращает список кортежей (User, referral_count).
         """
         # Создаем псевдоним для таблицы User

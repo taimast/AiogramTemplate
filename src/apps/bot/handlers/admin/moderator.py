@@ -71,7 +71,7 @@ async def get_moderator(
     call: NonEmptyMessageCallbackQuery,
     callback_data: ModeratorCallback,
     settings: Settings,
-    session_manager: PersistenceSessionManager[str, LightUser],
+    session_manager: PersistenceSessionManager[str],
     l10n,
 ):
     assert callback_data.id is not None, "callback_data.id is None"

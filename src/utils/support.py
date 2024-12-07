@@ -1,4 +1,3 @@
-import asyncio
 from dataclasses import dataclass, field
 from typing import TypeAlias
 
@@ -66,16 +65,3 @@ class SupportConnector:
     async def close_thread(self, user: User):
         thread_id = self.sessions.pop(user.id)
         await self.bot.close_forum_topic(self.chat_id, thread_id)
-
-
-async def main():
-    data = bidict()
-    thread_id = 11
-    user_id = 22
-    data[user_id] = thread_id
-    print(data)
-    print(2 in data.inv)
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

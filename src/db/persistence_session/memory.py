@@ -1,13 +1,13 @@
-from typing import Any, Iterable, Type, TypeVar
+from typing import Any, Iterable, Type
 
-from pydantic import BaseModel
+from src.db.persistence_session.base import (
+    BasePersistenceSession,
+    DataInconsistencyError,
+    PydanticModelT,
+)
 
-from src.db.persistence_session.base import BasePersistenceSession, DataInconsistencyError
 
-PydanticModelT = TypeVar("PydanticModelT", bound=BaseModel)
-
-
-class MemoryPersistenceSession(BasePersistenceSession[str, PydanticModelT]):
+class MemoryPersistenceSession(BasePersistenceSession[str]):
     def __init__(self):
         self.data: dict[str, Any] = {}
 
@@ -15,7 +15,7 @@ class MemoryPersistenceSession(BasePersistenceSession[str, PydanticModelT]):
         self,
         model_class: Type[PydanticModelT],
         key: str,
-    ):
+    ) -> PydanticModelT:
         data = self.data.get(key, None)
         if data is None:
             raise DataInconsistencyError(f"Object with id {key} not found")

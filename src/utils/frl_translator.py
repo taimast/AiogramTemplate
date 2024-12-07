@@ -1,7 +1,8 @@
 import asyncio
 from pathlib import Path
 
-from ftl_translator import Locale as TranslateLocale, TranslateOpts, translate
+from ftl_translator import Locale as TranslateLocale
+from ftl_translator import TranslateOpts, translate
 
 BASE_DIR = Path(__file__).parent.parent
 LOCALES_DIR = BASE_DIR / "locales"
@@ -31,7 +32,6 @@ async def main():
         origin_locale=TranslateLocale(origin_locale),
         target_locales=[TranslateLocale(locale) for locale in target_locales],
     )
-    print(opts)
     # return
     await translate(opts)
 

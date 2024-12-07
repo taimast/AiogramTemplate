@@ -6,7 +6,7 @@ from src.db.persistence_session.base import BasePersistenceSession, DataInconsis
 from src.db.persistence_session.memory import PydanticModelT
 
 
-class RedisPersistenceSession(BasePersistenceSession[str, PydanticModelT]):
+class RedisPersistenceSession(BasePersistenceSession[str]):
     def __init__(self, redis: Redis):
         self.redis = redis.json()
 
