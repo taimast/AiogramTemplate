@@ -85,6 +85,7 @@ async def main():
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
+    # TODO: TEST TODO
     # Setup routers
     await setup.setup_routers(dp, settings)
 
