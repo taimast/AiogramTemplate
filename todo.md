@@ -5,7 +5,7 @@
 - **07.12.2022 3:05**: Replace Loguru with the standard logger
 - **11.12.2022 20:04** [Done]: Rename `init` to `initialize`
 - **12.12.2022 16:43** [Done]: Move settings from AutoAnswer to config
-
+  # TODO
 ## February 2023
 - **27.02.2023 2:44**: Fix data retrieval via fluentogram attributes
 
@@ -46,3 +46,4 @@
 - Add library `sqlmodel` with the capability to create SQLAlchemy models from Pydantic models
 - Implement support through topics
 - Utilize mentions
+- Use adv Ftl localization

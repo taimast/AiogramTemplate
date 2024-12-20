@@ -89,3 +89,49 @@ class RareLimiter[T]:
     ) -> list[Any]:
         rl = RareLimiter()
         return await rl(func, *args, **kwargs)
+
+
+class LockManager:
+    def __init__(
+        self,
+        cleanup_interval: int = 60 * 5,
+        lock_timeout: int = 5,
+    ):
+        self.locks = {}
+        self.global_lock = asyncio.Lock()
+        self.cleanup_interval = cleanup_interval
+        self.lock_timeout = lock_timeout
+        self.cleanup_task = asyncio.create_task(self.cleanup_locks())
+
+    async def get_lock(self, user_id: int) -> asyncio.Lock:
+        async with self.global_lock:
+            if user_id not in self.locks:
+                self.locks[user_id] = asyncio.Lock()
+            return self.locks[user_id]
+
+    async def release_lock(self, user_id: int):
+        async with self.global_lock:
+            if user_id in self.locks:
+                del self.locks[user_id]
+
+    async def clear_all_locks(self):
+        async with self.global_lock:
+            self.locks.clear()
+
+    async def cleanup_locks(self):
+        while True:
+            await asyncio.sleep(self.cleanup_interval)
+            async with self.global_lock:
+                for user_id, lock in list(self.locks.items()):
+                    if lock.locked():
+                        try:
+                            # Wait until the lock is released or timeout occurs
+                            async with asyncio.timeout(self.lock_timeout):
+                                await lock.acquire()
+                            lock.release()
+                        except asyncio.TimeoutError:
+                            logger.warning(
+                                "Timeout waiting for lock release for user {}", user_id
+                            )
+                    del self.locks[user_id]
+                logger.debug("Locks cleanup completed")

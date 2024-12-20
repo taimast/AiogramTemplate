@@ -30,6 +30,29 @@ async def process_callback_pay(call: NonEmptyMessageCallbackQuery):
     )
 
 
+@on.callback_query(F.data == "payments2")
+async def process_callback_pay(call: NonEmptyMessageCallbackQuery):
+    invoice = await call.bot.create_invoice_link(
+        title="Оплата подписки",
+        description="Оплата подписки на 1 месяц",
+        # provider_token=PAYMENT_PROVIDE_TOKEN,
+        provider_token="",
+        # currency="rub",
+        currency="XTR",
+        prices=[
+            types.LabeledPrice(label="1 месяц", amount=1),
+            # types.LabeledPrice(label="Test2", amount=20000)
+        ],
+        is_flexible=False,
+        payload="test-invoice",
+        subscription_period=2592000,
+        # max_tip_amount=100,
+        # suggested_tip_amounts=[10, 20, 50, 100],
+    )
+
+    await call.message.answer(invoice)
+
+
 @on.shipping_query()
 async def process_shipping_query(shipping_query: types.ShippingQuery):
     logger.info("process_shipping_query")
@@ -38,7 +61,9 @@ async def process_shipping_query(shipping_query: types.ShippingQuery):
         ok=True,
         shipping_options=[
             types.ShippingOption(
-                id="1", title="Test", prices=[types.LabeledPrice(label="Что такое", amount=10000)]
+                id="1",
+                title="Test",
+                prices=[types.LabeledPrice(label="Что такое", amount=10000)],
             ),
             types.ShippingOption(
                 id="2",
@@ -61,4 +86,6 @@ async def process_pre_checkout_query(pre_checkout_query: types.PreCheckoutQuery)
 async def process_successful_payment(message: types.Message):
     logger.info("process_successful_payment")
     logger.info(pformat(message.model_dump()))
-    await message.answer("Спасибо за покупку! {}".format(message.successful_payment.total_amount))
+    await message.answer(
+        "Спасибо за покупку! {}".format(message.successful_payment.total_amount)
+    )

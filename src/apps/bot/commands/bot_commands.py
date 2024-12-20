@@ -24,16 +24,15 @@ def command_wrapper(on: Router, command: BotCommand, *filters):
 
 class _BaseCommands(NamedTuple):
     START: BotCommand = BotCommand(command="start", description="🏠 Главное меню")
-    HELP: BotCommand = BotCommand(command="help", description="📖 Помощь")
+    HELP: BotCommand = BotCommand(command="help", description="🆘 Помощь")
 
 
 class _AdminCommands(NamedTuple):
-    ADMIN: BotCommand = BotCommand(command="admin", description="👮‍♂️ Админка")
+    ADMIN: BotCommand = BotCommand(command="admin", description="🔧 Админка")
 
 
 class _SuperAdminCommands(NamedTuple):
-    SUPER_ADMIN: BotCommand = BotCommand(command="super_admin", description="👮‍♂️ Супер админка")
-
+    SUPER_ADMIN: BotCommand = BotCommand(command="super_admin", description="👑 Супер админка")
 
 BaseCommands = _BaseCommands()
 AdminCommands = _AdminCommands()

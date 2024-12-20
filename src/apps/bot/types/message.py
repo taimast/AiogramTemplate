@@ -12,4 +12,5 @@ class NonEmptyTextMessage(NonEmptyBotMessage):
 
 class NonEmptyMessageCallbackQuery(CallbackQuery):
     data: str  # type: ignore
+    bot: Bot  # type: ignore
     message: Message  # type: ignore

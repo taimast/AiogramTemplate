@@ -109,13 +109,17 @@ class PaginatorCallback[T](CallbackData, prefix="paginator"):
 
         next5offset = self.offset + 5 * self.limit
         has5next = self.has_next(length, 5)
-        has5next_cd = self.make(next5offset) if has5next else self.switch_to_last(length)
+        has5next_cd = (
+            self.make(next5offset) if has5next else self.switch_to_last(length)
+        )
 
         has1prev_cd = self.prev() if self.has_prev() else self.switch_to_last(length)
         has1next_cd = self.next() if self.has_next(length) else self.switch_to_first()
         builder.row(
             # В самое начало
-            IKButton(text=PAGE_BIG_BACK_SYMBOL, callback_data=self.switch_to_first().pack()),
+            IKButton(
+                text=PAGE_BIG_BACK_SYMBOL, callback_data=self.switch_to_first().pack()
+            ),
             # Назад на 5 страниц
             IKButton(text=f"{PAGE_BACK_SYMBOL} 5", callback_data=has5prev_cd.pack()),
             # Назад на 1 страницу
@@ -126,7 +130,8 @@ class PaginatorCallback[T](CallbackData, prefix="paginator"):
             IKButton(text=f"5{PAGE_FORWARD_SYMBOL}", callback_data=has5next_cd.pack()),
             # В самый конец
             IKButton(
-                text=PAGE_BIG_FORWARD_SYMBOL, callback_data=self.switch_to_last(length).pack()
+                text=PAGE_BIG_FORWARD_SYMBOL,
+                callback_data=self.switch_to_last(length).pack(),
             ),
         )
         first_page = self.offset // self.limit

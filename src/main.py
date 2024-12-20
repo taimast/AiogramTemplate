@@ -13,8 +13,8 @@ from src.config import Settings
 from src.setup.cli import Mode
 from src.setup.opts import SetupOpts
 from src.setup.webadmin import setup_webadmin
+from src.utils.limiter import LockManager
 from src.utils.other import send_start_info
-from src.utils.support import SupportConnector
 
 
 async def on_startup(settings: Settings, bot: Bot):
@@ -66,10 +66,8 @@ async def main():
     # Setup session manager
     session_manager = await setup.setup_session_manager(opts)
 
-    if settings.support:
-        support_connector = SupportConnector(bot, settings.support.chat_id)
-    else:
-        support_connector = None
+    support_connector = await setup.setup_support_connector(opts)
+    lock_manager = LockManager()
 
     storage = MemoryStorage()
     dp = Dispatcher(
@@ -79,6 +77,7 @@ async def main():
         support_connector=support_connector,
         translator_hub=translator_hub,
         scheduler=scheduler,
+        lock_manager=lock_manager,
         fsm_strategy=FSMStrategy.GLOBAL_USER,
     )
     # Register startup and shutdown handlers

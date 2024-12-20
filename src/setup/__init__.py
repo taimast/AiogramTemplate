@@ -6,6 +6,7 @@ from .middlewares import setup_middlewares
 from .routers import setup_routers
 from .scheduler import setup_scheduler
 from .session_manager import setup_session_manager
+from .support_connector import setup_support_connector
 from .translator import init_translator_hub
 from .webhook import start_webhook
 
@@ -21,4 +22,5 @@ __all__ = (
     "init_translator_hub",
     "start_webhook",
     "setup_session_manager",
+    "setup_support_connector",
 )

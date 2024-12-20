@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from pprint import pformat
 
 from aiogram import Bot, F, Router, types
 from aiogram.filters import Command, CommandObject, CommandStart
 from aiogram.fsm.context import FSMContext
+from fluentogram import TranslatorRunner
+from loguru import logger
 
 from src.apps.bot.commands.bot_commands import BaseCommands
 from src.apps.bot.keyboards.common import common_kbs
+from src.apps.bot.types.message import NonEmptyBotMessage
 from src.apps.bot.types.user import TgUser
 from src.utils.support import SupportConnector
-
-if TYPE_CHECKING:
-    from src.locales.stubs.ru.stub import TranslatorRunner
 
 on = Router(name=__name__)
 
@@ -26,12 +26,15 @@ async def deep_start(
     state: FSMContext,
 ):
     """Deep link start handler"""
-    if command.args:
-        referrer_id = int(command.args)
-        # if user.set_referrer(referrer_id):
-        #     await session.commit()
+    logger.info(
+        f"Deep link start: {pformat(msg.model_dump(exclude_none=True, exclude_unset=True))}"
+    )
+    # if command.args:
+    #     referrer_id = int(command.args)
+    #     # if user.set_referrer(referrer_id):
+    #     #     await session.commit()
 
-    await start(msg, l10n, state)
+    # await start(msg, l10n, state)
 
 
 @on.message(Command(BaseCommands.START))
@@ -43,6 +46,10 @@ async def start(
     state: FSMContext,
     event_from_user: TgUser,
 ):
+    logger.info(
+        f"Start: {pformat(msg.model_dump(exclude_none=True, exclude_unset=True))}"
+    )
+
     await state.clear()
     if isinstance(msg, types.CallbackQuery):
         assert isinstance(msg.message, types.Message), "msg.message is not a Message"
@@ -50,9 +57,17 @@ async def start(
 
     assert msg.from_user, "msg.from_user is None"
 
+    total_text = ""
+    total_text += l10n.get("emails", unreadEmails=0) + "\n"
+    total_text += l10n.get("emails", unreadEmails=1) + "\n"
+    total_text += l10n.get("emails", unreadEmails=42) + "\n"
+    total_text += l10n.get("emails", unreadEmails=43) + "\n"
+    total_text += l10n.get("dpi-ratio", ratio=43) + "\n"
+    # total_text += l10n.get("pref-page.title") + "\n"
     sm = await msg.answer(
-        # l10n.start(name=msg.from_user.full_name),
-        event_from_user.mention_html(),
+        total_text,
+        # event_from_user.mention_html(),
+        # reply_markup=common_kbs.languages(l10n),
         reply_markup=common_kbs.inline_start(),
     )
 
@@ -65,7 +80,9 @@ async def help(
     support_connector: SupportConnector | None,
 ):
     if not support_connector:
-        return await msg.answer("В данный момент невозможно подключиться к службе поддержки")
+        return await msg.answer(
+            "В данный момент невозможно подключиться к службе поддержки"
+        )
     if not msg.from_user:
         return await msg.answer("Не удалось получить информацию о пользователе")
 
@@ -74,3 +91,22 @@ async def help(
     return await msg.answer(
         "Вы создали новую тему в чате поддержки, введите ваш вопрос",
     )
+
+
+@on.message(Command("refund"))
+async def refund(msg: NonEmptyBotMessage):
+    transactions = await msg.bot.get_star_transactions()
+    for transaction in transactions.transactions:
+        print(pformat(transaction.model_dump(exclude_none=True, exclude_unset=True)))
+        # await msg.bot.refund_star_payment(transaction.source.user.id, transaction.id)
+
+
+@on.message(Command("get_mention"))
+async def get_mention(message: types.Message):
+    await message.answer(f"Your mention: {message.from_user.mention_html()}")
+    await message.answer(
+        f"Your mention: {message.from_user.mention_html()}", parse_mode=None
+    )
+    other_guy_link = "tg://user?id=7161347153"
+    hlink_text = f'<a href="{other_guy_link}">Other guy</a>'
+    await message.answer(f"Other guy: {hlink_text}")

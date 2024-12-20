@@ -1,4 +1,4 @@
-#permissions
+# permissions
 admin-perm-stats =
     📊 Общая Статистика
 admin-perm-export_users =
