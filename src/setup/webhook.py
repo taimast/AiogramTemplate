@@ -25,7 +25,7 @@ async def start_webhook(
     certificate = webhook.get_certfile()
     await bot.set_webhook(
         certificate=certificate,
-        url=webhook.path.format(bot_token=bot.token),
+        url=webhook.make_bot_path(bot.token),
         drop_pending_updates=True,
         allowed_updates=dp.resolve_used_update_types(),
     )
