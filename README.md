@@ -2,6 +2,18 @@
 
 **A flexible template for creating bots using Aiogram 3, featuring powerful tools for admin management, payments, localization, and more.**
 
+## ⚙️DEMO
+
+https://github.com/user-attachments/assets/40f5d8dd-0cb1-4072-8263-109dca9c6508
+
+
+
+
+
+
+
+
+
 ## ✨ Features
 
 - **Admin Panel**: Comprehensive and easy-to-use admin interface.
