@@ -96,6 +96,7 @@ async def help(
 @on.message(Command("refund"))
 async def refund(msg: NonEmptyBotMessage):
     transactions = await msg.bot.get_star_transactions()
+
     for transaction in transactions.transactions:
         print(pformat(transaction.model_dump(exclude_none=True, exclude_unset=True)))
         # await msg.bot.refund_star_payment(transaction.source.user.id, transaction.id)
