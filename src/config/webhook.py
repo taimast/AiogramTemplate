@@ -48,5 +48,6 @@ class WebhookSettings(BaseModel):
             return self.ssl_cert.get_certfile()
         return None
 
-    def make_bot_path(self, bot_token: str):
-        return self.path.format(bot_token=bot_token)
+    def make_bot_url(self, bot_token: str) -> str:
+        path = self.path.format(bot_token=bot_token)
+        return f"{self.domain}{path}"

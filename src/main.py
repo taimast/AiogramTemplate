@@ -17,8 +17,8 @@ from src.utils.limiter import LockManager
 from src.utils.other import send_start_info
 
 
-async def on_startup(settings: Settings, bot: Bot):
-    _task = asyncio.create_task(send_start_info(settings, bot, only_text=True))
+async def on_startup(settings: Settings, main_bot: Bot):
+    _task = asyncio.create_task(send_start_info(settings, main_bot, only_text=True))
 
 
 async def on_shutdown(bot: Bot):
@@ -79,6 +79,7 @@ async def main():
         scheduler=scheduler,
         lock_manager=lock_manager,
         fsm_strategy=FSMStrategy.GLOBAL_USER,
+        main_bot=bot,
     )
     # Register startup and shutdown handlers
     dp.startup.register(on_startup)
