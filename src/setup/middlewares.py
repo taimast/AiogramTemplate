@@ -31,7 +31,8 @@ def setup_middlewares(
     # dp.callback_query.middleware(user_middleware)
 
     light_user_middleware = LightUserMiddleware(session_manager=session_manager)
-    dp.message.middleware(light_user_middleware)
+    # TODO: [2025-02-25 01:27] taimast: тут хз, outer или inner middleware
+    dp.message.outer_middleware(light_user_middleware)
     dp.callback_query.middleware(light_user_middleware)
 
     # Translator middleware

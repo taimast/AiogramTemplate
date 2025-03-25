@@ -59,3 +59,5 @@
 - Implement support through topics
 - Utilize mentions
 - Use adv Ftl localization
+
+# todo Rename apps to services

@@ -7,16 +7,22 @@ from ..config import Settings
 
 
 async def setup_routers(
-        dp: Dispatcher,
-        settings: Settings,
+    dp: Dispatcher,
+    settings: Settings,
 ):
     # Handling errors
     dp.include_router(error.on)
 
     # Admin handlers
     admin.on.message.filter(~CommandStart())
-    admin.on.message.filter(F.from_user.id.in_(settings.bot.admins))
-    admin.on.callback_query.filter(F.from_user.id.in_(settings.bot.admins))
+    admin.on.message.filter(
+        F.from_user.id.in_(settings.bot.admins)
+        | F.from_user.id.in_(settings.bot.moderators)
+    )
+    admin.on.callback_query.filter(
+        F.from_user.id.in_(settings.bot.admins)
+        | F.from_user.id.in_(settings.bot.moderators)
+    )
     dp.include_router(admin.on)
 
     # Common handlers

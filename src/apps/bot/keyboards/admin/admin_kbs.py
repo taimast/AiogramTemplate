@@ -3,7 +3,12 @@ from typing import Iterable
 from aiogram.types import InlineKeyboardMarkup
 from fluentogram import TranslatorRunner
 
-from src.apps.bot.callback_data.actions import Action, AdminAction, ModeratorAction, UserAction
+from src.apps.bot.callback_data.actions import (
+    Action,
+    AdminAction,
+    ModeratorAction,
+    UserAction,
+)
 from src.apps.bot.callback_data.admin import AdminCallback
 from src.apps.bot.callback_data.moderator import ModeratorCallback, ModeratorPermission
 from src.apps.bot.callback_data.user import UserCallback
@@ -33,7 +38,9 @@ def admin_start(user_id: int, stts: BotSettings, l10n: TranslatorRunner):
 
     for perm in PERMS:
         if stts.have_perm(user_id, perm):
-            builder.button(text=perm.get_text(l10n), callback_data=AdminCallback(action=perm))
+            builder.button(
+                text=perm.get_text(l10n), callback_data=AdminCallback(action=perm)
+            )
 
     if user_id in stts.admins:
         builder.button(
@@ -52,7 +59,9 @@ def stats(user_id: int, stts: BotSettings, l10n: TranslatorRunner):
     builder = CustomInlineKeyboardBuilder()
     for perm in STATS_PERMS:
         if stts.have_perm(user_id, perm):
-            builder.button(text=perm.get_text(l10n), callback_data=AdminCallback(action=perm))
+            builder.button(
+                text=perm.get_text(l10n), callback_data=AdminCallback(action=perm)
+            )
     builder.adjust(1)
     builder.add_admin_back()
     return builder.as_markup()
@@ -130,7 +139,9 @@ def created_buttons(text: str):
 
 def add_buttons(l10n: TranslatorRunner) -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
-    builder.button(text=l10n.get("admin-mailing-button-skip"), callback_data="send_mailing")
+    builder.button(
+        text=l10n.get("admin-mailing-button-skip"), callback_data="send_mailing"
+    )
     builder.add_admin_back()
     return builder.as_markup()
 
@@ -201,7 +212,9 @@ def mailing(l10n: TranslatorRunner):
 
 def mailing_language(l10n: TranslatorRunner) -> InlineKeyboardMarkup:
     builder = CustomInlineKeyboardBuilder()
-    builder.button(text=l10n.get("admin-mailing-button-all"), callback_data="mailing:locale:all")
+    builder.button(
+        text=l10n.get("admin-mailing-button-all"), callback_data="mailing:locale:all"
+    )
     builder.button(
         text=l10n.get("admin-mailing-button-private"),
         callback_data="mailing:locale:private",
@@ -218,7 +231,9 @@ def mailing_language(l10n: TranslatorRunner) -> InlineKeyboardMarkup:
 
 def mailing_cancel(l10n: TranslatorRunner):
     builder = CustomInlineKeyboardBuilder()
-    builder.button(text=l10n.get("admin-mailing-button-cancel"), callback_data="mailing_cancel")
+    builder.button(
+        text=l10n.get("admin-mailing-button-cancel"), callback_data="mailing_cancel"
+    )
     return builder.as_markup()
 
 

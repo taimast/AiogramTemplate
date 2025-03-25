@@ -1,0 +1,17 @@
+title = "Gitleaks Configuration"
+
+[extend]
+useDefault = true
+[allowlist]
+paths = [
+    ".venv",
+    ".git",
+    ".github",
+    ".gitignore",
+    "__pycache__",
+    "node_modules",
+    ".log",
+    ".yml",
+    ".yaml",
+    ".idea",
+]
