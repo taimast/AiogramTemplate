@@ -1,5 +1,6 @@
 # Use a Python image with uv pre-installed
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
+RUN apt-get update && apt-get install -y git
 
 # Install the project into `/app`
 WORKDIR /app
@@ -23,8 +24,12 @@ COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
+COPY src src
+COPY README.md README.md
+
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONPATH="/app"
 
 # Reset the entrypoint, don't invoke `uv`
 ENTRYPOINT []

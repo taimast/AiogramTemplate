@@ -31,6 +31,7 @@ dependencies = [
     "psycopg2>=2.9.10",
     "ftl-translator",
     "multi-merchant",
+    "psycopg2-binary>=2.9.10",
 ]
 
 [dependency-groups]
