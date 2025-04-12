@@ -61,3 +61,4 @@
 - Use adv Ftl localization
 
 # todo Rename apps to services
+# TODO: [2025-03-25 17:41] taimast: Добавить обновленные модели под try delete для message чтобы не выскакивала ошибка

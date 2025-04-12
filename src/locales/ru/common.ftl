@@ -1,4 +1,7 @@
--bot-name = Apples Bot
+
+
+-bot-name = Apples Bot { $brandName }
+bot-name2 = Apples Bot { $brandName }
 dpi-ratio = Your DPI ratio is { NUMBER($ratio, minimumFractionDigits: 3) }
 pref-page =
     .title = { PLATFORM() ->
@@ -10,7 +13,9 @@ emails = { $unreadEmails ->
         [42] You have { $unreadEmails } unread emails. So Long, and Thanks for All the Fish.
        *[other] You have { $unreadEmails } unread emails.
     }
-start = Привет { $name }. {-bot-name}.
+# start = Привет {-bot-name(brandName: "Appele")}. {bot-name2}
+start = Привет  { bot-name2(brandName: "appe") }
+
 button-back = «
 button-cancel = 🚫 Отмена
 button-back_to_prev = « Назад

@@ -30,8 +30,8 @@ async def process_callback_pay(call: NonEmptyMessageCallbackQuery):
     )
 
 
-@on.callback_query(F.data == "payments2")
-async def process_callback_pay(call: NonEmptyMessageCallbackQuery):
+@on.callback_query(F.data == "payments-link")
+async def process_callback_pay_link(call: NonEmptyMessageCallbackQuery):
     invoice = await call.bot.create_invoice_link(
         title="Оплата подписки",
         description="Оплата подписки на 1 месяц",

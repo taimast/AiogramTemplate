@@ -1,4 +1,5 @@
 import asyncio
+import sys
 from pprint import pformat
 
 from aiogram import Bot, Dispatcher
@@ -121,19 +122,22 @@ async def main():
         await setup.close_db()
 
 
-def start_runner():
+def run():
     try:
-        import uvloop  # type: ignore
+        if sys.platform == "win32":
+            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
-        with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
-            runner.run(main())
-    except ImportError:
-        logger.warning("uvloop is not installed")
-        asyncio.run(main())
+        try:
+            import uvloop  # type: ignore
+
+            with asyncio.Runner(loop_factory=uvloop.new_event_loop) as runner:
+                runner.run(main())
+        except ImportError:
+            logger.warning("uvloop is not installed")
+            asyncio.run(main())
+    except (KeyboardInterrupt, SystemExit):
+        logger.info("Bot stopped")
 
 
 if __name__ == "__main__":
-    try:
-        start_runner()
-    except (KeyboardInterrupt, SystemExit):
-        logger.info("Bot stopped")
+    run()

@@ -70,6 +70,19 @@ async def start(
         # reply_markup=common_kbs.languages(l10n),
         reply_markup=common_kbs.inline_start(),
     )
+    await msg.answer(l10n.get("start"))
+    await msg.answer(
+        l10n.get("bot-name2"),
+    )
+
+    await msg.answer(
+        l10n.get("-bot-name"),
+    )
+
+
+@on.callback_query(F.data == "probe_some")
+async def probe_some(call: types.CallbackQuery, l10n: TranslatorRunner):
+    await call.answer("htttps://vk.com\nvk.com", show_alert=True)
 
 
 @on.message(Command(BaseCommands.HELP))

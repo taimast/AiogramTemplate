@@ -32,12 +32,15 @@ def inline_start() -> InlineKeyboardMarkup:
     builder.button(text="start", url="https://t.me/")
     builder.button(
         text="webapp",
-        web_app=WebAppInfo(url="https://preferably-fit-asp.ngrok-free.app"),
+        web_app=WebAppInfo(
+            url="https://directions-races-dictionary-az.trycloudflare.com/main"
+        ),
     )
 
     builder.button(text="Taimast", web_app=WebAppInfo(url="https://taimast.ru"))
     builder.button(text="payment", callback_data="payments")
     builder.button(text="payment2", callback_data="payments2")
+    builder.button(text="probe_some", callback_data="probe_some")
     builder.button(
         text="Добавить бота в канал админом",
         url="https://t.me/WaterMarkTgBot?start=123456789",
